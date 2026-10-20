@@ -1,9 +1,45 @@
+export const wa = "/assets/pust_logo-BLYLUpZA.png";
+export const vcPortrait = "/assets/vc_abul_hasnat_shamim.png";
+export const Ia = "/assets/615395049_122219081894306424_5887109760029984744_n-BOeBTVce.jpg";
+export const La = "/assets/1778991184DSC05122-DR5DHwQE.jpeg";
+export const Ra = "/assets/1778991857DSC05306__1_-Bl7-Lfr0.jpeg";
+export const za = "/assets/1779011792PUST_train_2026-D7yqNHH4.jpg";
+export const Ba = "/assets/612594246_122218424870306424_3652612665065691841_n-DBl6A9z0.jpg";
+export const Va = "/assets/National_High_school_programming_contest_up-M2I5cSj0.jpg";
+export const Ha = "/assets/fresher_s_reception_2026-VNfpIasg.jpg";
+export const Ua = "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM-G_1y-8IQ.jpeg";
+export const Wa = "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM__1_-MyA59s-v.jpeg";
+export const Ga = "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM-CNp3I0tK.jpeg";
+export const Ka = "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__1_-Ce5e4mLS.jpeg";
+export const qa = "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__2_-0fp2ZTdb.jpeg";
+export const Ja = "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM-CPUs16yN.jpeg";
+export const Ya = "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM__1_-DcD11DjP.jpeg";
+export const Xa = "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM-bVegn0pL.jpeg";
+export const Za = "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM__1_-Dx0GuzIF.jpeg";
+export const Qa = "/assets/WhatsApp_Image_2026-09-15_at_3.15.08_PM-DlZuJ16J.jpeg";
+
+export const createInitialsAvatar = (name = "", role = "alumni") => {
+  const clean = (name || "").replace(/^(Dr\.|Prof\.|Engr\.|Mr\.|Ms\.|Mrs\.)\s*/i, "").trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  const initials = (parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0]?.slice(0, 2) || "PA").toUpperCase();
+  const palettes = {
+    alumni: ["#0284c7", "#0369a1"],
+    student: ["#0ea5e9", "#0284c7"],
+    faculty: ["#7c3aed", "#4c1d95"],
+    employer: ["#b45309", "#d97706"],
+    admin: ["#d97706", "#b45309"],
+  };
+  const [c1, c2] = palettes[role] || ["#0284c7", "#0369a1"];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120"><defs><linearGradient id="g_${initials}_${role}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs><rect width="120" height="120" rx="60" fill="url(#g_${initials}_${role})"/><circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/><text x="50%" y="54%" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="44" fill="#ffffff" text-anchor="middle" dominant-baseline="central" letter-spacing="-1">${initials}</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
+
 export const pa = [
   {
     id: 1,
     name: `Dr. Rafiqul Islam`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Dr. Rafiqul Islam`, `alumni`),
     dept: `Computer Science & Engineering`,
     batch: `2008`,
     location: `Dhaka, Bangladesh`,
@@ -14,14 +50,45 @@ export const pa = [
     mentorAvailable: true,
     industry: `Technology`,
     connections: 342,
-    bio: `Leading tech innovation in Bangladesh's fastest-growing software company.`,
+    bio: `Leading tech innovation in Bangladesh's fastest-growing software company. Passionate about empowering PUST graduates to excel in global engineering roles.`,
     email: `rafiq@example.com`,
+    experience: [
+      {
+        title: "Software Architect",
+        company: "Brain Station 23",
+        period: "2020 - Present",
+        description: "Leading architecture and cloud transformation for enterprise microservices across telecom and fintech clients.",
+      },
+      {
+        title: "Senior Software Engineer",
+        company: "TigerIT Bangladesh",
+        period: "2014 - 2020",
+        description: "Engineered scalable biometric authentication engines and distributed identity infrastructure.",
+      },
+    ],
+    education: [
+      {
+        degree: "Ph.D. in Computer Science",
+        institution: "BUET",
+        year: "2018",
+      },
+      {
+        degree: "B.Sc. in Computer Science & Engineering",
+        institution: "Pabna University of Science & Technology",
+        year: "2008 - 2012",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/rafiqul-islam-pust",
+      github: "https://github.com/rafiqul-islam",
+      website: "https://rafiqul.dev",
+    },
   },
   {
     id: 2,
     name: `Nusrat Jahan Akter`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Nusrat Jahan Akter`, `alumni`),
     dept: `Electrical & Electronic Engineering`,
     batch: `2012`,
     location: `Chittagong, Bangladesh`,
@@ -32,14 +99,39 @@ export const pa = [
     mentorAvailable: true,
     industry: `Energy`,
     connections: 218,
-    bio: `Transforming Bangladesh's power grid one project at a time.`,
+    bio: `Transforming Bangladesh's power grid one project at a time. Actively mentoring young engineers in grid automation.`,
     email: `nusrat@example.com`,
+    experience: [
+      {
+        title: "Power Systems Engineer",
+        company: "BPDB",
+        period: "2018 - Present",
+        description: "Supervising regional grid substation automation, telemetry integration, and high-voltage distribution networks.",
+      },
+      {
+        title: "Assistant Electrical Engineer",
+        company: "Summit Power International",
+        period: "2014 - 2018",
+        description: "Managed plant protection relays and switchgear maintenance operations.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Sc. in Electrical & Electronic Engineering",
+        institution: "Pabna University of Science & Technology",
+        year: "2012 - 2016",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/nusrat-jahan-eee",
+      twitter: "https://twitter.com/nusrat_pust",
+    },
   },
   {
     id: 3,
     name: `Mahmudul Hasan`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Mahmudul Hasan`, `alumni`),
     dept: `Mathematics`,
     batch: `2010`,
     location: `London, UK`,
@@ -50,28 +142,92 @@ export const pa = [
     mentorAvailable: false,
     industry: `Finance`,
     connections: 487,
-    bio: `Applying mathematical rigour to global financial models.`,
+    bio: `Applying mathematical rigour to global financial models and risk analytics.`,
+    email: `mahmudul@example.com`,
+    experience: [
+      {
+        title: "Senior Data Scientist",
+        company: "HSBC Global",
+        period: "2019 - Present",
+        description: "Developing algorithmic credit risk models and probabilistic forecasting systems using PySpark and statistical estimators.",
+      },
+      {
+        title: "Quantitative Risk Analyst",
+        company: "Standard Chartered Bank",
+        period: "2015 - 2019",
+        description: "Built portfolio stress-testing pipelines and asset liability assessment frameworks.",
+      },
+    ],
+    education: [
+      {
+        degree: "M.Sc. in Financial Mathematics",
+        institution: "University of Warwick",
+        year: "2016",
+      },
+      {
+        degree: "B.Sc. in Mathematics",
+        institution: "Pabna University of Science & Technology",
+        year: "2010 - 2014",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/mahmudul-hasan-quant",
+      github: "https://github.com/mhasan-stats",
+    },
   },
   {
     id: 4,
     name: `Shahina Begum`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Shahina Begum`, `alumni`),
     dept: `Chemistry`,
     batch: `2007`,
     location: `Pabna, Bangladesh`,
     headline: `Associate Professor, PUST`,
     verified: true,
     skills: [`Research`, `Organic Chemistry`, `Teaching`],
+    company: `PUST`,
     mentorAvailable: true,
     industry: `Academia`,
     connections: 163,
+    bio: `Dedicated researcher and educator at PUST. Guiding the next wave of chemical science innovators.`,
+    email: `shahina@pust.ac.bd`,
+    experience: [
+      {
+        title: "Associate Professor",
+        company: "Pabna University of Science & Technology",
+        period: "2021 - Present",
+        description: "Directing departmental organic synthesis research and supervising postgraduate student theses in green chemistry.",
+      },
+      {
+        title: "Assistant Professor",
+        company: "PUST",
+        period: "2014 - 2021",
+        description: "Lectured core thermodynamics and polymer chemistry courses.",
+      },
+    ],
+    education: [
+      {
+        degree: "Ph.D. in Organic Chemistry",
+        institution: "University of Dhaka",
+        year: "2017",
+      },
+      {
+        degree: "B.Sc. in Chemistry",
+        institution: "Pabna University of Science & Technology",
+        year: "2007 - 2011",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/dr-shahina-begum-chem",
+      website: "https://pust.ac.bd/faculty/shahina",
+    },
   },
   {
     id: 5,
     name: `Tahmid Chowdhury`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Tahmid Chowdhury`, `alumni`),
     dept: `Business Administration`,
     batch: `2015`,
     location: `Toronto, Canada`,
@@ -82,12 +238,44 @@ export const pa = [
     mentorAvailable: true,
     industry: `Technology`,
     connections: 602,
+    bio: `Building merchant-facing commerce systems. Available for product management mentorship.`,
+    email: `tahmid@example.com`,
+    experience: [
+      {
+        title: "Product Manager",
+        company: "Shopify",
+        period: "2021 - Present",
+        description: "Leading international checkout experiences and merchant onboarding workflows for multi-currency storefronts.",
+      },
+      {
+        title: "Product Operations Lead",
+        company: "Pathao",
+        period: "2017 - 2021",
+        description: "Spearheaded driver partner dispatch algorithms and loyalty reward mechanics.",
+      },
+    ],
+    education: [
+      {
+        degree: "MBA in Management Information Systems",
+        institution: "IBA, University of Dhaka",
+        year: "2018",
+      },
+      {
+        degree: "BBA in Marketing & Management",
+        institution: "Pabna University of Science & Technology",
+        year: "2015 - 2019",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/tahmid-chowdhury-pm",
+      twitter: "https://twitter.com/tahmid_pm",
+    },
   },
   {
     id: 6,
     name: `Rumana Islam`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Rumana Islam`, `alumni`),
     dept: `Physics`,
     batch: `2011`,
     location: `Rajshahi, Bangladesh`,
@@ -98,12 +286,37 @@ export const pa = [
     mentorAvailable: false,
     industry: `Research`,
     connections: 89,
+    bio: `Specializing in experimental condensed matter physics and clean energy materials.`,
+    email: `rumana@example.com`,
+    experience: [
+      {
+        title: "Research Scientist",
+        company: "BCSIR",
+        period: "2018 - Present",
+        description: "Conducting materials physics research focusing on thin film semiconductors and solar cell photovoltaic efficiency.",
+      },
+    ],
+    education: [
+      {
+        degree: "M.Sc. in Applied Physics",
+        institution: "University of Rajshahi",
+        year: "2016",
+      },
+      {
+        degree: "B.Sc. in Physics",
+        institution: "Pabna University of Science & Technology",
+        year: "2011 - 2015",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/rumana-islam-phys",
+    },
   },
   {
     id: 7,
     name: `Imran Hossain`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Imran Hossain`, `alumni`),
     dept: `Civil Engineering`,
     batch: `2013`,
     location: `Dhaka, Bangladesh`,
@@ -114,21 +327,308 @@ export const pa = [
     mentorAvailable: true,
     industry: `Infrastructure`,
     connections: 271,
+    bio: `Overseeing civic infrastructure construction and resilient urban engineering across Bangladesh.`,
+    email: `imran@example.com`,
+    experience: [
+      {
+        title: "Project Director",
+        company: "LGED",
+        period: "2019 - Present",
+        description: "Managing rural infrastructure modernization, bridge structural integrity surveys, and environmental assessments.",
+      },
+      {
+        title: "Executive Structural Engineer",
+        company: "Concord Group",
+        period: "2015 - 2019",
+        description: "Designed earthquake-resistant high-rise foundational piles and pre-stressed concrete slab assemblies.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Sc. in Civil Engineering",
+        institution: "Pabna University of Science & Technology",
+        year: "2013 - 2017",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/engr-imran-hossain-ce",
+    },
   },
   {
     id: 8,
     name: `Fariha Sultana`,
     role: `alumni`,
-    avatar: `https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Fariha Sultana`, `alumni`),
     dept: `English`,
     batch: `2016`,
     location: `Dhaka, Bangladesh`,
     headline: `Content Strategist, The Daily Star`,
     verified: true,
     skills: [`Content Strategy`, `Journalism`, `SEO`],
+    company: `The Daily Star`,
     mentorAvailable: false,
     industry: `Media`,
     connections: 144,
+    bio: `Bridging storytelling and digital distribution for national journalism.`,
+    email: `fariha@example.com`,
+    experience: [
+      {
+        title: "Content Strategist",
+        company: "The Daily Star",
+        period: "2021 - Present",
+        description: "Curating investigative multimedia features, editorial guidelines, and audience engagement retention initiatives.",
+      },
+      {
+        title: "Senior Sub-Editor",
+        company: "Dhaka Tribune",
+        period: "2018 - 2021",
+        description: "Edited op-ed columns and produced weekly culture features.",
+      },
+    ],
+    education: [
+      {
+        degree: "M.A. in English Literature",
+        institution: "Jahangirnagar University",
+        year: "2019",
+      },
+      {
+        degree: "B.A. (Hons) in English",
+        institution: "Pabna University of Science & Technology",
+        year: "2016 - 2020",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/fariha-sultana-media",
+      twitter: "https://twitter.com/fariha_writer",
+    },
+  },
+  {
+    id: 9,
+    name: `Farhan Tanvir`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Farhan Tanvir`, `alumni`),
+    dept: `Architecture`,
+    batch: `2014`,
+    location: `Dhaka, Bangladesh`,
+    headline: `Principal Architect, Studio Vitti`,
+    verified: true,
+    skills: [`BIM`, `Sustainable Design`, `AutoCAD`],
+    company: `Studio Vitti`,
+    mentorAvailable: true,
+    industry: `Infrastructure`,
+    connections: 185,
+    bio: `Pioneering eco-friendly sustainable public architecture across South Asia.`,
+    email: `farhan@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Principal Architect",
+        company: "Studio Vitti",
+        period: "2019 - Present",
+        description: "Leading master planning and bioclimatic campus design projects.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Arch in Architecture",
+        institution: "Pabna University of Science & Technology",
+        year: "2014 - 2019",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/farhan-tanvir-arch",
+    },
+  },
+  {
+    id: 10,
+    name: `Dr. Anika Rahman`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Dr. Anika Rahman`, `alumni`),
+    dept: `Pharmacy`,
+    batch: `2013`,
+    location: `Dhaka, Bangladesh`,
+    headline: `Senior Formulation Scientist, Beximco Pharma`,
+    verified: true,
+    skills: [`Drug Formulation`, `Pharmacovigilance`, `HPLC`],
+    company: `Beximco Pharma`,
+    mentorAvailable: true,
+    industry: `Healthcare`,
+    connections: 310,
+    bio: `Advancing pharmaceutical dosage formulation and biosimilar delivery mechanisms.`,
+    email: `anika@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Senior Formulation Scientist",
+        company: "Beximco Pharmaceuticals Ltd.",
+        period: "2018 - Present",
+        description: "Formulation optimization for controlled-release therapeutic formulations.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Pharm (Professional)",
+        institution: "Pabna University of Science & Technology",
+        year: "2013 - 2017",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/anika-rahman-pharma",
+    },
+  },
+  {
+    id: 11,
+    name: `Tanvir Ahmed`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Tanvir Ahmed`, `alumni`),
+    dept: `Information & Communication Engineering`,
+    batch: `2015`,
+    location: `Dhaka, Bangladesh`,
+    headline: `Cloud & Network Engineer, Grameenphone`,
+    verified: true,
+    skills: [`5G Networks`, `Kubernetes`, `Cybersecurity`],
+    company: `Grameenphone`,
+    mentorAvailable: true,
+    industry: `Technology`,
+    connections: 275,
+    bio: `Building next-generation telecommunications and telco cloud infrastructure.`,
+    email: `tanvir.ice@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Cloud & Network Engineer",
+        company: "Grameenphone Ltd.",
+        period: "2020 - Present",
+        description: "Deploying carrier-grade virtualization and 5G packet core networks.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Sc. in Information & Communication Engineering",
+        institution: "Pabna University of Science & Technology",
+        year: "2015 - 2019",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/tanvir-ahmed-ice",
+    },
+  },
+  {
+    id: 12,
+    name: `Sadia Afrin`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Sadia Afrin`, `alumni`),
+    dept: `Economics`,
+    batch: `2017`,
+    location: `Dhaka, Bangladesh`,
+    headline: `Assistant Director, Bangladesh Bank`,
+    verified: true,
+    skills: [`Macroeconomics`, `Monetary Policy`, `Econometrics`],
+    company: `Bangladesh Bank`,
+    mentorAvailable: true,
+    industry: `Finance`,
+    connections: 220,
+    bio: `Engaged in macroprudential policy analysis and financial stability research.`,
+    email: `sadia.afrin@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Assistant Director",
+        company: "Bangladesh Bank",
+        period: "2021 - Present",
+        description: "Monetary policy analysis and banking sector risk monitoring.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.S.S. in Economics",
+        institution: "Pabna University of Science & Technology",
+        year: "2017 - 2021",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sadia-afrin-econ",
+    },
+  },
+  {
+    id: 13,
+    name: `Mehedi Hasan`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Mehedi Hasan`, `alumni`),
+    dept: `Urban and Regional Planning`,
+    batch: `2016`,
+    location: `Dhaka, Bangladesh`,
+    headline: `Urban Planner, RAJUK`,
+    verified: true,
+    skills: [`GIS Mapping`, `Urban Planning`, `Zoning`],
+    company: `RAJUK`,
+    mentorAvailable: false,
+    industry: `Infrastructure`,
+    connections: 195,
+    bio: `Formulating master zoning plans and transit-oriented development for metropolitan Dhaka.`,
+    email: `mehedi.urp@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Urban Planner",
+        company: "RAJUK",
+        period: "2021 - Present",
+        description: "Detailed area plan review and spatial GIS zoning compliance.",
+      },
+    ],
+    education: [
+      {
+        degree: "BURP in Urban & Regional Planning",
+        institution: "Pabna University of Science & Technology",
+        year: "2016 - 2020",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/mehedi-hasan-urp",
+    },
+  },
+  {
+    id: 14,
+    name: `Sabrina Mostafa`,
+    role: `alumni`,
+    avatar: createInitialsAvatar(`Sabrina Mostafa`, `alumni`),
+    dept: `Geography and Environment`,
+    batch: `2018`,
+    location: `Pabna, Bangladesh`,
+    headline: `Environmental GIS Analyst, CEGIS`,
+    verified: true,
+    skills: [`Remote Sensing`, `ArcGIS`, `Climate Resilience`],
+    company: `CEGIS`,
+    mentorAvailable: true,
+    industry: `Research`,
+    connections: 160,
+    bio: `Spatial hydrological modeling and climate disaster resilience analysis.`,
+    email: `sabrina.geo@example.com`,
+    status: `active`,
+    joined: `2024`,
+    experience: [
+      {
+        title: "Environmental GIS Analyst",
+        company: "CEGIS",
+        period: "2022 - Present",
+        description: "River morphology satellite tracking and wetland conservation mapping.",
+      },
+    ],
+    education: [
+      {
+        degree: "B.Sc. in Geography and Environment",
+        institution: "Pabna University of Science & Technology",
+        year: "2018 - 2022",
+      },
+    ],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sabrina-mostafa-geo",
+    },
   },
 ];
 export const ma = [
@@ -136,7 +636,7 @@ export const ma = [
     id: 101,
     name: `Ariful Islam`,
     role: `student`,
-    avatar: `https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Ariful Islam`, `student`),
     dept: `Computer Science & Engineering`,
     batch: `2022`,
     location: `Pabna, Bangladesh`,
@@ -147,7 +647,7 @@ export const ma = [
     id: 102,
     name: `Sumaiya Khatun`,
     role: `student`,
-    avatar: `https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Sumaiya Khatun`, `student`),
     dept: `Electrical & Electronic Engineering`,
     batch: `2023`,
     location: `Pabna, Bangladesh`,
@@ -158,7 +658,7 @@ export const ma = [
     id: 103,
     name: `Nahid Hasan`,
     role: `student`,
-    avatar: `https://images.unsplash.com/photo-1463453091185-61582044d556?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Nahid Hasan`, `student`),
     dept: `Mathematics`,
     batch: `2024`,
     location: `Pabna, Bangladesh`,
@@ -171,7 +671,7 @@ export const ha = [
     id: 201,
     name: `Prof. Dr. Abdul Karim`,
     role: `faculty`,
-    avatar: `https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Prof. Dr. Abdul Karim`, `faculty`),
     dept: `Computer Science & Engineering`,
     location: `Pabna, Bangladesh`,
     headline: `Professor & Head, CSE Department | IEEE Member`,
@@ -182,7 +682,7 @@ export const ha = [
     id: 202,
     name: `Dr. Nasrin Akhter`,
     role: `faculty`,
-    avatar: `https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Dr. Nasrin Akhter`, `faculty`),
     dept: `Physics`,
     location: `Pabna, Bangladesh`,
     headline: `Associate Professor | Quantum Materials Researcher`,
@@ -434,7 +934,7 @@ export const _a = [
     online: false,
     spots: 500,
     registered: 312,
-    img: `https://images.unsplash.com/photo-1675716921224-e087a0cca69a?w=600&h=380&fit=crop&auto=format`,
+    img: qa,
     desc: `Annual reunion bringing together all PUST alumni across Bangladesh and globally.`,
     organizer: `PUST Alumni Association`,
   },
@@ -448,7 +948,7 @@ export const _a = [
     online: false,
     spots: 800,
     registered: 620,
-    img: `https://images.unsplash.com/photo-1561489413-985b06da5bee?w=600&h=380&fit=crop&auto=format`,
+    img: Va,
     desc: `Meet 40+ top tech companies actively hiring PUST graduates and students.`,
     organizer: `CSE Department`,
   },
@@ -462,7 +962,7 @@ export const _a = [
     online: true,
     spots: 2e3,
     registered: 847,
-    img: `https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&h=380&fit=crop&auto=format`,
+    img: za,
     desc: `Leading PUST alumni in AI and data science share insights on Bangladesh's tech future.`,
     organizer: `Alumni Tech Network`,
   },
@@ -476,7 +976,7 @@ export const _a = [
     online: true,
     spots: 200,
     registered: 156,
-    img: `https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=380&fit=crop&auto=format`,
+    img: Ha,
     desc: `Intensive two-day mentorship sessions connecting senior alumni with recent graduates.`,
     organizer: `PUST Mentorship Cell`,
   },
@@ -576,7 +1076,7 @@ export const ya = [
     category: `Career Journey`,
     date: `Sept 2026`,
     readTime: `7 min`,
-    img: `https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop&auto=format`,
+    img: Ha,
     excerpt: `How five years at PUST prepared me for a career spanning three continents and one of the world's most competitive product companies.`,
     featured: true,
   },
@@ -587,7 +1087,7 @@ export const ya = [
     category: `Social Impact`,
     date: `Aug 2026`,
     readTime: `5 min`,
-    img: `https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&h=380&fit=crop&auto=format`,
+    img: Ka,
     excerpt: `How my PUST foundation powered a career bringing electricity to millions of Bangladeshis.`,
     featured: false,
   },
@@ -598,7 +1098,7 @@ export const ya = [
     category: `Academia`,
     date: `Jul 2026`,
     readTime: `9 min`,
-    img: `https://images.unsplash.com/photo-1529148482759-b35b25c5f217?w=600&h=380&fit=crop&auto=format`,
+    img: Wa,
     excerpt: `What PUST's rigorous mathematics program taught me about discipline, curiosity, and global academia.`,
     featured: false,
   },
@@ -692,7 +1192,7 @@ export const Sa = [
     id: 301,
     name: `Sazzad Hossain`,
     role: `employer`,
-    avatar: `https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Sazzad Hossain`, `employer`),
     dept: `Recruiter`,
     location: `Dhaka, Bangladesh`,
     headline: `Head of Talent, Brain Station 23`,
@@ -703,7 +1203,7 @@ export const Sa = [
     id: 302,
     name: `Farjana Akter`,
     role: `employer`,
-    avatar: `https://images.unsplash.com/photo-1598550880863-4e8aa3d0edb4?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Farjana Akter`, `employer`),
     dept: `HR`,
     location: `Dhaka, Bangladesh`,
     headline: `HR Manager, Dutch-Bangla Bank`,
@@ -714,7 +1214,7 @@ export const Sa = [
     id: 303,
     name: `Karim Ahmed`,
     role: `employer`,
-    avatar: `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Karim Ahmed`, `employer`),
     dept: `Recruitment`,
     location: `Chittagong, Bangladesh`,
     headline: `Talent Acquisition Lead, BPDB`,
@@ -723,206 +1223,23 @@ export const Sa = [
   },
 ];
 export const Ca = [
-  {
-    id: 1,
-    url: `https://images.unsplash.com/photo-1775623914545-3227d584f0d7?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1775623914545-3227d584f0d7?w=400&h=300&fit=crop&auto=format`,
-    category: `Convocation`,
-    title: `Convocation 2024 — Hat Toss`,
-    year: 2024,
-    likes: 342,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 2,
-    url: `https://images.unsplash.com/photo-1775623914519-71b3143f86a1?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1775623914519-71b3143f86a1?w=400&h=300&fit=crop&auto=format`,
-    category: `Convocation`,
-    title: `Class of 2024 — Ceremony Highlights`,
-    year: 2024,
-    likes: 289,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 3,
-    url: `https://images.unsplash.com/photo-1775623914576-e7f58589a00e?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1775623914576-e7f58589a00e?w=400&h=300&fit=crop&auto=format`,
-    category: `Convocation`,
-    title: `Graduation Day Joy`,
-    year: 2023,
-    likes: 198,
-    stakeholder: `students`,
-  },
-  {
-    id: 4,
-    url: `https://images.unsplash.com/photo-1722871514923-9318d7eeaf03?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1722871514923-9318d7eeaf03?w=400&h=300&fit=crop&auto=format`,
-    category: `Convocation`,
-    title: `Faculty & Students on Stage`,
-    year: 2023,
-    likes: 415,
-    stakeholder: `faculty`,
-  },
-  {
-    id: 5,
-    url: `https://images.unsplash.com/photo-1622604647545-0cada2f34470?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1622604647545-0cada2f34470?w=400&h=300&fit=crop&auto=format`,
-    category: `Alumni Reunion`,
-    title: `Homecoming 2025 — Campus Gathering`,
-    year: 2025,
-    likes: 512,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 6,
-    url: `https://images.unsplash.com/photo-1693608231470-25e1b16a23b9?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1693608231470-25e1b16a23b9?w=400&h=300&fit=crop&auto=format`,
-    category: `Alumni Reunion`,
-    title: `Batch 2012 Reunion Photo`,
-    year: 2025,
-    likes: 278,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 7,
-    url: `https://images.unsplash.com/photo-1662148931823-b0f72b89a6fc?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1662148931823-b0f72b89a6fc?w=400&h=300&fit=crop&auto=format`,
-    category: `Alumni Reunion`,
-    title: `Annual Reunion — Open Air Gathering`,
-    year: 2024,
-    likes: 391,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 8,
-    url: `https://images.unsplash.com/photo-1707944746058-4da338d0f827?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1707944746058-4da338d0f827?w=400&h=300&fit=crop&auto=format`,
-    category: `Research`,
-    title: `PUST Research Lab — Chemistry`,
-    year: 2025,
-    likes: 143,
-    stakeholder: `faculty`,
-  },
-  {
-    id: 9,
-    url: `https://images.unsplash.com/photo-1707944745899-104a4b12d945?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1707944745899-104a4b12d945?w=400&h=300&fit=crop&auto=format`,
-    category: `Research`,
-    title: `Physics Research Group at Work`,
-    year: 2025,
-    likes: 176,
-    stakeholder: `faculty`,
-  },
-  {
-    id: 10,
-    url: `https://images.unsplash.com/photo-1707944746042-e4c81c191812?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1707944746042-e4c81c191812?w=400&h=300&fit=crop&auto=format`,
-    category: `Research`,
-    title: `Interdisciplinary Lab Collaboration`,
-    year: 2024,
-    likes: 224,
-    stakeholder: `students`,
-  },
-  {
-    id: 11,
-    url: `https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1531058020387-3be344556be6?w=400&h=300&fit=crop&auto=format`,
-    category: `Events`,
-    title: `Tech Career Fair 2025`,
-    year: 2025,
-    likes: 388,
-    stakeholder: `employers`,
-  },
-  {
-    id: 12,
-    url: `https://images.unsplash.com/photo-1561489413-985b06da5bee?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1561489413-985b06da5bee?w=400&h=300&fit=crop&auto=format`,
-    category: `Events`,
-    title: `Alumni Career Networking Seminar`,
-    year: 2025,
-    likes: 267,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 13,
-    url: `https://images.unsplash.com/photo-1571645163064-77faa9676a46?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1571645163064-77faa9676a46?w=400&h=300&fit=crop&auto=format`,
-    category: `Events`,
-    title: `Leadership Summit — Panel Discussion`,
-    year: 2024,
-    likes: 445,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 14,
-    url: `https://images.unsplash.com/photo-1603478804503-dc909c7f5ce5?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1603478804503-dc909c7f5ce5?w=400&h=300&fit=crop&auto=format`,
-    category: `Events`,
-    title: `Industry Workshop — Employer Partners`,
-    year: 2024,
-    likes: 192,
-    stakeholder: `employers`,
-  },
-  {
-    id: 15,
-    url: `https://images.unsplash.com/photo-1720525200240-17cd4ffd127f?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1720525200240-17cd4ffd127f?w=400&h=300&fit=crop&auto=format`,
-    category: `Campus Life`,
-    title: `Students on the PUST Lawn`,
-    year: 2025,
-    likes: 308,
-    stakeholder: `students`,
-  },
-  {
-    id: 16,
-    url: `https://images.unsplash.com/photo-1764254811529-e6dcaad68924?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1764254811529-e6dcaad68924?w=400&h=300&fit=crop&auto=format`,
-    category: `Campus Life`,
-    title: `PUST Main Building — Heritage View`,
-    year: 2025,
-    likes: 534,
-    stakeholder: `students`,
-  },
-  {
-    id: 17,
-    url: `https://images.unsplash.com/photo-1775702764288-847dbb75a163?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1775702764288-847dbb75a163?w=400&h=300&fit=crop&auto=format`,
-    category: `Sports`,
-    title: `Inter-Departmental Football Tournament`,
-    year: 2025,
-    likes: 423,
-    stakeholder: `students`,
-  },
-  {
-    id: 18,
-    url: `https://images.unsplash.com/photo-1782007727055-ed44ee079183?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1782007727055-ed44ee079183?w=400&h=300&fit=crop&auto=format`,
-    category: `Sports`,
-    title: `PUST Annual Athletics Meet`,
-    year: 2024,
-    likes: 287,
-    stakeholder: `students`,
-  },
-  {
-    id: 19,
-    url: `https://images.unsplash.com/photo-1722932620084-8f308ab8ee9a?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1722932620084-8f308ab8ee9a?w=400&h=300&fit=crop&auto=format`,
-    category: `Convocation`,
-    title: `Women of PUST — Class of 2024`,
-    year: 2024,
-    likes: 618,
-    stakeholder: `alumni`,
-  },
-  {
-    id: 20,
-    url: `https://images.unsplash.com/photo-1662148932231-f75d645631c4?w=800&h=600&fit=crop&auto=format`,
-    thumb: `https://images.unsplash.com/photo-1662148932231-f75d645631c4?w=400&h=300&fit=crop&auto=format`,
-    category: `Campus Life`,
-    title: `Campus Walk — Early Morning`,
-    year: 2023,
-    likes: 261,
-    stakeholder: `students`,
-  },
+  { id: 1, url: Ia, thumb: Ia, category: "Convocation", title: "PUST Campus — Sunset View", year: 2026, likes: 342, stakeholder: "alumni" },
+  { id: 2, url: Ha, thumb: Ha, category: "Convocation", title: "Freshers Reception & Orientation", year: 2026, likes: 289, stakeholder: "students" },
+  { id: 3, url: La, thumb: La, category: "Convocation", title: "Academic Award Giving Ceremony", year: 2026, likes: 198, stakeholder: "alumni" },
+  { id: 4, url: Va, thumb: Va, category: "Events", title: "National High School Programming Contest", year: 2026, likes: 415, stakeholder: "students" },
+  { id: 5, url: za, thumb: za, category: "Research", title: "PUST Faculty Training & Pedagogy Workshop", year: 2026, likes: 512, stakeholder: "faculty" },
+  { id: 6, url: Ra, thumb: Ra, category: "Campus Life", title: "Vice Chancellor Office, PUST", year: 2026, likes: 278, stakeholder: "faculty" },
+  { id: 7, url: Ba, thumb: Ba, category: "Campus Life", title: "PUST Eagle Sculpture & Plaza", year: 2026, likes: 391, stakeholder: "alumni" },
+  { id: 8, url: Ka, thumb: Ka, category: "Campus Life", title: "Campus Lakeside Walkway & Green Lawn", year: 2026, likes: 143, stakeholder: "students" },
+  { id: 9, url: Wa, thumb: Wa, category: "Research", title: "Central Library & Knowledge Hub", year: 2026, likes: 176, stakeholder: "students" },
+  { id: 10, url: Xa, thumb: Xa, category: "Events", title: "PUST Main Academic Building", year: 2026, likes: 224, stakeholder: "alumni" },
+  { id: 11, url: qa, thumb: qa, category: "Alumni Reunion", title: "Shaheed Minar Chattar — Alumni Gathering", year: 2026, likes: 388, stakeholder: "alumni" },
+  { id: 12, url: Ja, thumb: Ja, category: "Events", title: "Faculty of Engineering & Technology", year: 2026, likes: 267, stakeholder: "faculty" },
+  { id: 13, url: Ya, thumb: Ya, category: "Research", title: "Dr. Wazed Miah Science Building Labs", year: 2026, likes: 445, stakeholder: "faculty" },
+  { id: 14, url: Za, thumb: Za, category: "Convocation", title: "Central Convocation Grounds", year: 2026, likes: 192, stakeholder: "alumni" },
+  { id: 15, url: Qa, thumb: Qa, category: "Campus Life", title: "PUST Central Field & Green Amphitheater", year: 2026, likes: 308, stakeholder: "students" },
+  { id: 16, url: Ua, thumb: Ua, category: "Campus Life", title: "Campus Green Boulevard & Trees", year: 2026, likes: 534, stakeholder: "students" },
+  { id: 17, url: Ga, thumb: Ga, category: "Campus Life", title: "PUST Administrative Building Plaza", year: 2026, likes: 423, stakeholder: "alumni" },
 ];
 export const O = [
   {
@@ -954,24 +1271,7 @@ export const O = [
     img: pa[2].avatar,
   },
 ];
-export const wa = "/assets/pust_logo-BLYLUpZA.png";
-export const Ia = `/assets/615395049_122219081894306424_5887109760029984744_n-BOeBTVce.jpg`;
-export const La = `/assets/1778991184DSC05122-DR5DHwQE.jpeg`;
-export const Ra = `/assets/1778991857DSC05306__1_-Bl7-Lfr0.jpeg`;
-export const za = `/assets/1779011792PUST_train_2026-D7yqNHH4.jpg`;
-export const Ba = `/assets/612594246_122218424870306424_3652612665065691841_n-DBl6A9z0.jpg`;
-export const Va = `/assets/National_High_school_programming_contest_up-M2I5cSj0.jpg`;
-export const Ha = `/assets/fresher_s_reception_2026-VNfpIasg.jpg`;
-export const Ua = `/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM-G_1y-8IQ.jpeg`;
-export const Wa = `/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM__1_-MyA59s-v.jpeg`;
-export const Ga = `/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM-CNp3I0tK.jpeg`;
-export const Ka = `/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__1_-Ce5e4mLS.jpeg`;
-export const qa = `/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__2_-0fp2ZTdb.jpeg`;
-export const Ja = `/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM-CPUs16yN.jpeg`;
-export const Ya = `/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM__1_-DcD11DjP.jpeg`;
-export const Xa = `/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM-bVegn0pL.jpeg`;
-export const Za = `/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM__1_-Dx0GuzIF.jpeg`;
-export const Qa = `/assets/WhatsApp_Image_2026-09-15_at_3.15.08_PM-DlZuJ16J.jpeg`;
+
 
 // Descriptive aliases for backend/API integration
 export const ALUMNI = pa;

@@ -90,7 +90,7 @@ export default function DashboardNetwork() {
                 <div className="flex gap-2 flex-shrink-0">
                   {e === `Connections` && (
                     <>
-                      <Link to="/dashboard/messages" className="btn btn-sm btn-ghost">Message</Link>
+                      <Link to={`/dashboard/messages?startWith=${t.id}`} className="btn btn-sm btn-ghost">Message</Link>
                       <button
                         onClick={() => r(n.filter((e) => e !== t.id))}
                         className="btn btn-sm btn-ghost text-red-500 hover:bg-red-50"

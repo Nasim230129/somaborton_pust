@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { api } from "../../services/api";
+import { createInitialsAvatar } from "../../data/mockData";
 
 var oc = [
   {
@@ -7,7 +8,7 @@ var oc = [
     name: `Sumaiya Islam`,
     dept: `EEE`,
     batch: `2019`,
-    avatar: `https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Sumaiya Islam`, `alumni`),
     submitted: `2 days ago`,
     docs: [`Transcript`, `Student ID`],
     note: `Graduated with Honours, CGPA 3.92`,
@@ -17,7 +18,7 @@ var oc = [
     name: `Arif Chowdhury`,
     dept: `CSE`,
     batch: `2024`,
-    avatar: `https://images.unsplash.com/photo-1463453091185-61582044d556?w=80&h=80&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Arif Chowdhury`, `student`),
     submitted: `1 day ago`,
     docs: [`Enrollment Letter`],
     note: `Current final year student`,
@@ -27,7 +28,7 @@ var oc = [
     name: `Dilruba Yasmin`,
     dept: `CHEM`,
     batch: `2016`,
-    avatar: `https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Dilruba Yasmin`, `alumni`),
     submitted: `4 days ago`,
     docs: [`Degree Certificate`, `NID Copy`],
     note: `Currently working as Lecturer at RUET`,
@@ -37,7 +38,7 @@ var oc = [
     name: `Nazmul Kabir`,
     dept: `MATH`,
     batch: `2018`,
-    avatar: `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Nazmul Kabir`, `alumni`),
     submitted: `5 days ago`,
     docs: [`Transcript`],
     note: `PhD student at Dhaka University`,
@@ -47,7 +48,7 @@ var oc = [
     name: `Tasnim Akter`,
     dept: `PHY`,
     batch: `2021`,
-    avatar: `https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&auto=format`,
+    avatar: createInitialsAvatar(`Tasnim Akter`, `student`),
     submitted: `3 hrs ago`,
     docs: [`Degree Certificate`, `Transcript`, `Passport`],
     note: `Currently in Japan for research`,
@@ -62,36 +63,91 @@ export default function AdminVerification() {
       })),
     ),
     [n, r] = useState({}),
+    [toastMsg, setToastMsg] = useState(""),
+    [previewDoc, setPreviewDoc] = useState(null),
+    showToast = (msg) => {
+      setToastMsg(msg);
+      setTimeout(() => setToastMsg(""), 3000);
+    },
     i = (n) => {
       api.updateVerification(n, `approved`);
       t(
-        e.map((e) =>
-          e.id === n
+        e.map((item) =>
+          item.id === n
             ? {
-                ...e,
+                ...item,
                 status: `approved`,
               }
-            : e,
+            : item,
         ),
       );
+      showToast("অ্যালামনাই প্রোফাইল সফলভাবে ভেরিফাই ও অনুমোদন করা হয়েছে!");
     },
     a = (n) => {
       api.updateVerification(n, `rejected`);
       t(
-        e.map((e) =>
-          e.id === n
+        e.map((item) =>
+          item.id === n
             ? {
-                ...e,
+                ...item,
                 status: `rejected`,
               }
-            : e,
+            : item,
         ),
       );
+      showToast("আবেদনটি বাতিল করা হয়েছে।");
+    },
+    handleRequestMoreInfo = (applicantName) => {
+      showToast(`অতিরিক্ত তথ্য চাওয়ার নোটিশ ${applicantName}-এর নিকট পাঠানো হয়েছে!`);
     },
     o = e.filter((e) => e.status === `pending`),
     s = e.filter((e) => e.status !== `pending`);
   return (
     <div className="space-y-5 max-w-5xl">
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0F172A] text-white px-5 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-700 animate-fade-in">
+          <span>✓</span>
+          <span>{toastMsg}</span>
+        </div>
+      )}
+
+      {/* Document Preview Modal */}
+      {previewDoc && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-bold text-[#0F172A] text-sm sm:text-base flex items-center gap-2">
+                <span>📎</span> {previewDoc.title}
+              </h3>
+              <button
+                onClick={() => setPreviewDoc(null)}
+                className="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center text-sm cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="py-8 text-center bg-slate-50 rounded-xl my-4 border border-dashed border-slate-300">
+              <span className="text-4xl">📄</span>
+              <p className="text-xs font-semibold text-[#0F172A] mt-2">
+                {previewDoc.title} · {previewDoc.applicant}
+              </p>
+              <p className="text-[11px] text-[#64748B] mt-1">
+                Official PUST Registrar & Exam Controller verification watermark verified.
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setPreviewDoc(null)}
+                className="btn btn-primary btn-sm cursor-pointer"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-2xl text-[#0F172A]">
@@ -154,21 +210,22 @@ export default function AdminVerification() {
                     <span className="text-xs font-semibold text-[#64748B]">
                       Documents:
                     </span>
-                    {e.docs.map((e) => (
+                    {e.docs.map((docName) => (
                       <button
-                        key={e}
+                        key={docName}
+                        onClick={() => setPreviewDoc({ title: docName, applicant: e.name })}
                         className="badge badge-blue text-[9px] hover:bg-blue-200 cursor-pointer"
+                        title="Click to preview document"
                       >
-                        {"\uD83D\uDCCE "}
-                        {e}
+                        📎 {docName}
                       </button>
                     ))}
                   </div>
                   <div className="mt-3 mb-2">
                     <input
                       className="input text-xs"
-                      placeholder="Add a rejection reason (required to reject)\u2026"
-                      value={n[e.id] || ``}
+                      placeholder="Add a rejection reason (required to reject)…"
+                      value={n[e.id] || ""}
                       onChange={(t) =>
                         r({
                           ...n,
@@ -180,18 +237,21 @@ export default function AdminVerification() {
                   <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => i(e.id)}
-                      className="btn btn-green btn-sm"
+                      className="btn btn-green btn-sm cursor-pointer"
                     >
                       ✓ Approve
                     </button>
                     <button
                       onClick={() => a(e.id)}
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger btn-sm cursor-pointer"
                       disabled={!n[e.id]}
                     >
                       ✕ Reject
                     </button>
-                    <button className="btn btn-ghost btn-sm">
+                    <button
+                      onClick={() => handleRequestMoreInfo(e.name)}
+                      className="btn btn-ghost btn-sm cursor-pointer"
+                    >
                       Request More Info
                     </button>
                   </div>

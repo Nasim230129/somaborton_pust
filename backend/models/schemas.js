@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
   {
-    id: { type: Number, required: true, unique: true },
+    id: { type: Number, default: () => Date.now() },
     name: { type: String, required: true },
     email: { type: String, lowercase: true, trim: true },
     password: { type: String },
@@ -25,6 +25,28 @@ const UserSchema = new mongoose.Schema(
     bio: { type: String, default: '' },
     status: { type: String, default: 'active' },
     joined: { type: String, default: '2026' },
+    experience: [
+      {
+        title: { type: String },
+        company: { type: String },
+        period: { type: String },
+        description: { type: String },
+      },
+    ],
+    education: [
+      {
+        degree: { type: String },
+        institution: { type: String },
+        year: { type: String },
+      },
+    ],
+    socialLinks: {
+      linkedin: { type: String, default: '' },
+      github: { type: String, default: '' },
+      twitter: { type: String, default: '' },
+      website: { type: String, default: '' },
+    },
+    savedProfiles: [{ type: Number }],
   },
   { timestamps: true }
 );
@@ -223,6 +245,49 @@ const VerificationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const ReportSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    targetType: { type: String, default: 'alumni' },
+    targetId: { type: Number, required: true },
+    targetName: { type: String, default: '' },
+    reporterEmail: { type: String, default: '' },
+    reason: { type: String, required: true },
+    details: { type: String, default: '' },
+    status: { type: String, default: 'pending' },
+  },
+  { timestamps: true }
+);
+
+const ConversationSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    participants: [{ type: Number, required: true }],
+    lastMessage: { type: String, default: '' },
+    lastMessageAt: { type: Date, default: Date.now },
+    lastSenderId: { type: Number },
+    unreadCounts: { type: Map, of: Number, default: {} },
+  },
+  { timestamps: true }
+);
+ConversationSchema.index({ participants: 1 });
+ConversationSchema.index({ updatedAt: -1 });
+
+const ChatMessageSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    conversationId: { type: Number, required: true, index: true },
+    senderId: { type: Number, required: true, index: true },
+    senderName: { type: String, default: '' },
+    senderAvatar: { type: String, default: '' },
+    text: { type: String, required: true, maxlength: 2000 },
+    read: { type: Boolean, default: false },
+    readAt: { type: Date, default: null },
+  },
+  { timestamps: true }
+);
+ChatMessageSchema.index({ conversationId: 1, createdAt: 1 });
+
 module.exports = {
   User: mongoose.models.User || mongoose.model('User', UserSchema),
   Department: mongoose.models.Department || mongoose.model('Department', DepartmentSchema),
@@ -236,5 +301,9 @@ module.exports = {
   ContactMessage: mongoose.models.ContactMessage || mongoose.model('ContactMessage', ContactMessageSchema),
   Notification: mongoose.models.Notification || mongoose.model('Notification', NotificationSchema),
   Message: mongoose.models.Message || mongoose.model('Message', MessageSchema),
+  Conversation: mongoose.models.Conversation || mongoose.model('Conversation', ConversationSchema),
+  ChatMessage: mongoose.models.ChatMessage || mongoose.model('ChatMessage', ChatMessageSchema),
   Verification: mongoose.models.Verification || mongoose.model('Verification', VerificationSchema),
+  Report: mongoose.models.Report || mongoose.model('Report', ReportSchema),
 };
+

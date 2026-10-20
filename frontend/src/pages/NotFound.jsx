@@ -3,23 +3,25 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
-    <div className="pt-16 min-h-screen bg-[#1A2744] flex items-center justify-center px-6">
-      <div className="text-center">
-        <div className="font-['Fraunces',serif] text-[120px] lg:text-[180px] font-light text-[#C9973C]/20 leading-none mb-4">
+    <div className="pt-16 min-h-screen bg-[#17263C] flex items-center justify-center px-6 text-center">
+      <div className="max-w-md mx-auto reveal-pop">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#C7A76C] mb-2">
+          <span className="font-bengali font-semibold">পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</span> · 404 Error
+        </p>
+        <div className="font-serif text-[100px] sm:text-[140px] font-bold text-[#C7A76C]/25 leading-none mb-2">
           404
         </div>
-        <h1 className="font-['Fraunces',serif] text-4xl font-light text-[#F7F2E9] mb-4">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white mb-3">
           Page Not Found
         </h1>
-        <p className="text-[#7A90B8] mb-10 max-w-sm mx-auto">
-          This page does not exist in the PUST alumni network. Perhaps you were
-          looking for something else?
+        <p className="text-[#CBD5E1] text-sm mb-8 leading-relaxed">
+          The requested page could not be located in the PUST alumni network registry. Perhaps the URL has moved or been updated.
         </p>
         <Link
           to="/"
-          className="bg-[#C9973C] hover:bg-[#B5842E] text-[#1A2744] font-semibold px-8 py-4 rounded-sm text-sm tracking-wide transition-colors inline-block"
+          className="bg-[#7A1737] hover:bg-[#62122B] text-white font-semibold px-8 py-3.5 rounded-lg text-sm tracking-wide transition-all shadow-sm active:scale-95 inline-block"
         >
-          Return to Home
+          Return to Institutional Home →
         </Link>
       </div>
     </div>

@@ -12,9 +12,10 @@ import {
   xa,
   Ca,
   O,
+  createInitialsAvatar,
 } from '../data/mockData';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function request(endpoint, options = {}) {
   try {
@@ -95,7 +96,17 @@ export function getCurrentUser() {
     const raw = localStorage.getItem('pust_user');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (parsed && parsed.name) return parsed;
+      if (parsed && parsed.name) {
+        let changed = false;
+        if (!parsed.avatar || parsed.avatar.includes('unsplash.com')) {
+          parsed.avatar = createInitialsAvatar(parsed.name, parsed.role || 'alumni');
+          changed = true;
+        }
+        if (changed) {
+          localStorage.setItem('pust_user', JSON.stringify(parsed));
+        }
+        return parsed;
+      }
     }
   } catch (e) {
     // ignore
@@ -110,8 +121,12 @@ export const api = {
       body: JSON.stringify(payload),
     });
     if (res && res.ok && res.token) {
+      if (res.user && (!res.user.avatar || res.user.avatar.includes('unsplash.com'))) {
+        res.user.avatar = createInitialsAvatar(res.user.name, res.user.role || 'alumni');
+      }
       localStorage.setItem('pust_token', res.token);
       localStorage.setItem('pust_user', JSON.stringify(res.user));
+      window.dispatchEvent(new CustomEvent('pust-data-synced', { detail: res.user }));
     }
     return res;
   },
@@ -121,18 +136,50 @@ export const api = {
       body: JSON.stringify(payload),
     });
     if (res && res.ok && res.token) {
+      if (res.user && (!res.user.avatar || res.user.avatar.includes('unsplash.com'))) {
+        res.user.avatar = createInitialsAvatar(res.user.name, res.user.role || 'alumni');
+      }
       localStorage.setItem('pust_token', res.token);
       localStorage.setItem('pust_user', JSON.stringify(res.user));
       await syncWithBackend();
+      window.dispatchEvent(new CustomEvent('pust-data-synced', { detail: res.user }));
     }
     return res;
+  },
+  resetPassword: async (payload) => {
+    return request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
   },
   logout: () => {
     localStorage.removeItem('pust_token');
     localStorage.removeItem('pust_user');
+    window.dispatchEvent(new CustomEvent('pust-data-synced', { detail: null }));
   },
+  getAlumniDirectory: (params = {}) => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '' && v !== 'All' && v !== 'All Industries') {
+        query.append(k, v);
+      }
+    });
+    const qs = query.toString();
+    return request(`/alumni${qs ? `?${qs}` : ''}`);
+  },
+  getAlumniById: (id) => request(`/alumni/${id}`),
   connectAlumni: (id) =>
     request(`/alumni/${id}/connect`, { method: 'POST' }),
+  saveAlumni: (id, payload = {}) =>
+    request(`/alumni/${id}/save`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  reportAlumni: (id, payload) =>
+    request(`/alumni/${id}/report`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
   submitContact: (payload) =>
     request('/contact', { method: 'POST', body: JSON.stringify(payload) }),
   submitDonation: (payload) =>
@@ -204,13 +251,43 @@ export const api = {
       body: JSON.stringify(payload),
     });
     if (res && res.ok && res.data) {
+      if (!res.data.avatar || res.data.avatar.includes('unsplash.com')) {
+        res.data.avatar = createInitialsAvatar(res.data.name, res.data.role || 'alumni');
+      }
       localStorage.setItem('pust_user', JSON.stringify(res.data));
       await syncWithBackend();
+      window.dispatchEvent(new CustomEvent('pust-data-synced', { detail: res.data }));
     }
     return res;
   },
   markNotificationsRead: () =>
     request('/notifications/read-all', { method: 'PATCH' }),
+  // Conversations & Real-Time Messaging APIs
+  getConversations: () => request('/conversations'),
+  startConversation: (recipientId) =>
+    request('/conversations', {
+      method: 'POST',
+      body: JSON.stringify({ recipientId }),
+    }),
+  getConversation: (id) => request(`/conversations/${id}`),
+  getConversationMessages: (id, params = {}) => {
+    const query = new URLSearchParams();
+    if (params.page) query.append('page', params.page);
+    if (params.limit) query.append('limit', params.limit);
+    const qs = query.toString();
+    return request(`/conversations/${id}/messages${qs ? `?${qs}` : ''}`);
+  },
+  sendChatMessage: (id, text) =>
+    request(`/conversations/${id}/messages`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    }),
+  markConversationRead: (id) =>
+    request(`/conversations/${id}/read`, {
+      method: 'PATCH',
+    }),
+  getMessageEligibleAlumni: () => request('/alumni/message-eligible'),
+  // Legacy message endpoint preserved for backward compatibility
   sendMessage: (id, text) =>
     request(`/messages/${id}/send`, {
       method: 'POST',
@@ -235,3 +312,5 @@ export const api = {
     return res;
   },
 };
+
+export const logout = () => api.logout();

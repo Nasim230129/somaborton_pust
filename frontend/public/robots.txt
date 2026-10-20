@@ -1,0 +1,22 @@
+# robots.txt for PUST Alumni Network (Pabna University of Science & Technology)
+User-agent: *
+Allow: /
+Allow: /alumni
+Allow: /events
+Allow: /jobs
+Allow: /mentorship
+Allow: /community
+Allow: /stories
+Allow: /donate
+Allow: /about
+Allow: /gallery
+Allow: /contact
+
+# Disallow private user accounts and admin portals from indexing
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+
+Sitemap: https://alumni.pust.ac.bd/sitemap.xml

@@ -42,18 +42,55 @@ export default function DashboardAchievements() {
   let [e, t] = useState(false),
     [n, r] = useState(Hs),
     [i, a] = useState({
-      title: ``,
-      category: ``,
-      desc: ``,
-      date: ``,
+      title: "",
+      category: "",
+      desc: "",
+      date: "",
     });
+
+  const [toastMsg, setToastMsg] = useState("");
+  const [isNominateModalOpen, setIsNominateModalOpen] = useState(false);
+  const [nominationForm, setNominationForm] = useState({
+    name: "",
+    dept: "CSE",
+    batch: "2015",
+    category: "Distinguished Career",
+    reason: "",
+  });
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(""), 3000);
+  };
+
+  const handleNominateSubmit = (e) => {
+    e.preventDefault();
+    setIsNominateModalOpen(false);
+    showToast(`🎉 ${nominationForm.name}-এর অ্যাওয়ার্ড নমিনেশন সফলভাবে সাবমিট হয়েছে!`);
+    setNominationForm({
+      name: "",
+      dept: "CSE",
+      batch: "2015",
+      category: "Distinguished Career",
+      reason: "",
+    });
+  };
+
   return (
     <div className="max-w-4xl space-y-5">
+      {/* Toast */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0F172A] text-white px-5 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-700 animate-fade-in">
+          <span>✓</span>
+          <span>{toastMsg}</span>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <h1 className="font-display font-bold text-2xl text-[#0F172A]">
           Achievements
         </h1>
-        <button onClick={() => t(!e)} className="btn btn-green btn-sm">
+        <button onClick={() => t(!e)} className="btn btn-green btn-sm cursor-pointer">
           + Submit Achievement
         </button>
       </div>
@@ -259,10 +296,115 @@ export default function DashboardAchievements() {
             </div>
           ))}
         </div>
-        <button className="btn btn-outline btn-sm mt-4">
+        <button
+          onClick={() => setIsNominateModalOpen(true)}
+          className="btn btn-outline btn-sm mt-4 cursor-pointer"
+        >
           Nominate an Alumni →
         </button>
       </div>
+
+      {/* Nominate Alumni Modal */}
+      {isNominateModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h2 className="text-base font-bold text-[#0F172A]">
+                Nominate a PUST Alumnus
+              </h2>
+              <button
+                onClick={() => setIsNominateModalOpen(false)}
+                className="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center text-sm cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleNominateSubmit} className="mt-4 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">
+                  Nominee Full Name *
+                </label>
+                <input
+                  required
+                  type="text"
+                  placeholder="e.g. Engr. Tanvir Ahmed"
+                  value={nominationForm.name}
+                  onChange={(e) => setNominationForm({ ...nominationForm, name: e.target.value })}
+                  className="input text-sm w-full"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#64748B] mb-1">
+                    Department
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. CSE"
+                    value={nominationForm.dept}
+                    onChange={(e) => setNominationForm({ ...nominationForm, dept: e.target.value })}
+                    className="input text-sm w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#64748B] mb-1">
+                    Batch
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 2012"
+                    value={nominationForm.batch}
+                    onChange={(e) => setNominationForm({ ...nominationForm, batch: e.target.value })}
+                    className="input text-sm w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">
+                  Award Category
+                </label>
+                <select
+                  value={nominationForm.category}
+                  onChange={(e) => setNominationForm({ ...nominationForm, category: e.target.value })}
+                  className="input text-sm w-full"
+                >
+                  <option value="Distinguished Career">Distinguished Career</option>
+                  <option value="Young Alumnus Award">Young Alumnus Award</option>
+                  <option value="Academic Excellence">Academic Excellence</option>
+                  <option value="Entrepreneur of the Year">Entrepreneur of the Year</option>
+                  <option value="Social Impact">Social Impact</option>
+                  <option value="Lifetime Achievement">Lifetime Achievement</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">
+                  Citation / Contribution Details *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  placeholder="Describe why this alumnus deserves this recognition..."
+                  value={nominationForm.reason}
+                  onChange={(e) => setNominationForm({ ...nominationForm, reason: e.target.value })}
+                  className="input text-sm w-full"
+                />
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsNominateModalOpen(false)}
+                  className="btn btn-ghost btn-sm"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-green btn-sm">
+                  Submit Nomination
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

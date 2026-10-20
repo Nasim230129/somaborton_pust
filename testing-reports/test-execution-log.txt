@@ -1,0 +1,519 @@
+
+> somaborton-pust@1.0.0 test:coverage
+> npm run test:coverage --prefix backend
+
+
+> somaborton-pust-backend@1.0.0 test:coverage
+> NODE_ENV=test node --test --experimental-test-coverage --test-coverage-exclude="node_modules/**" --test-coverage-exclude="tests/**" tests/*.test.js
+
+TAP version 13
+# MongoDB connection notice: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/. Operating in fallback JSON document store mode.
+# Subtest: Admin Functions & Security Controls Test Suite (Black Box & White Box)
+    # Subtest: TC-SEC-01 [Headers]: Verifies security HTTP headers on all API responses
+    ok 1 - TC-SEC-01 [Headers]: Verifies security HTTP headers on all API responses
+      ---
+      duration_ms: 96.657332
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-02 [404 Routing]: Returns structured 404 JSON for nonexistent API routes
+    ok 2 - TC-SEC-02 [404 Routing]: Returns structured 404 JSON for nonexistent API routes
+      ---
+      duration_ms: 14.97008
+      type: 'test'
+      ...
+# Unhandled server error: SyntaxError: Unterminated string in JSON at position 29 (line 1 column 30)
+#     at JSON.parse (<anonymous>)
+#     at parse (/run/media/nasim/New Volume/somaborton_pust/backend/node_modules/body-parser/lib/types/json.js:96:19)
+#     at /run/media/nasim/New Volume/somaborton_pust/backend/node_modules/body-parser/lib/read.js:128:18
+#     at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+#     at invokeCallback (/run/media/nasim/New Volume/somaborton_pust/backend/node_modules/raw-body/index.js:238:16)
+#     at done (/run/media/nasim/New Volume/somaborton_pust/backend/node_modules/raw-body/index.js:227:7)
+#     at IncomingMessage.onEnd (/run/media/nasim/New Volume/somaborton_pust/backend/node_modules/raw-body/index.js:287:7)
+#     at IncomingMessage.emit (node:events:519:28)
+#     at endReadableNT (node:internal/streams/readable:1698:12)
+#     at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+#   expose: true,
+#   statusCode: 400,
+#   status: 400,
+#   body: '{"email": "broken-json-string',
+#   type: 'entity.parse.failed'
+# }
+    # Subtest: TC-SEC-03 [Malformed Input]: Graceful 400 error handling on malformed JSON payload
+    ok 3 - TC-SEC-03 [Malformed Input]: Graceful 400 error handling on malformed JSON payload
+      ---
+      duration_ms: 51.2113
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-04 [Auth Guard]: Unauthenticated request to /api/admin/verifications rejected with 401
+    ok 4 - TC-SEC-04 [Auth Guard]: Unauthenticated request to /api/admin/verifications rejected with 401
+      ---
+      duration_ms: 8.128501
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-04b [Auth Guard]: Forged or malformed Bearer token rejected with 401
+    ok 5 - TC-SEC-04b [Auth Guard]: Forged or malformed Bearer token rejected with 401
+      ---
+      duration_ms: 6.947517
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-05 [Role Guard]: Non-admin user request to /api/admin/verifications rejected with 403
+    ok 6 - TC-SEC-05 [Role Guard]: Non-admin user request to /api/admin/verifications rejected with 403
+      ---
+      duration_ms: 7.339043
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-06 [Role Guard]: Unauthorized & non-admin DELETE /api/events/:id rejected
+    ok 7 - TC-SEC-06 [Role Guard]: Unauthorized & non-admin DELETE /api/events/:id rejected
+      ---
+      duration_ms: 8.950664
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-07 [Role Guard]: Unauthorized & non-admin DELETE /api/jobs/:id rejected
+    ok 8 - TC-SEC-07 [Role Guard]: Unauthorized & non-admin DELETE /api/jobs/:id rejected
+      ---
+      duration_ms: 7.76219
+      type: 'test'
+      ...
+    # Subtest: TC-SEC-08 [Data Privacy]: Unauthenticated GET /api/contact rejected with 401
+    ok 9 - TC-SEC-08 [Data Privacy]: Unauthenticated GET /api/contact rejected with 401
+      ---
+      duration_ms: 4.343127
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-01 [Positive]: GET /api/admin/verifications returns verification requests for admin
+    ok 10 - TC-ADM-01 [Positive]: GET /api/admin/verifications returns verification requests for admin
+      ---
+      duration_ms: 5.428893
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-02 [Positive]: PATCH /api/admin/verifications/:id updates verification status
+    ok 11 - TC-ADM-02 [Positive]: PATCH /api/admin/verifications/:id updates verification status
+      ---
+      duration_ms: 9.661558
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-03 [Negative]: PATCH /api/admin/verifications/999999 returns 404 for nonexistent id
+    ok 12 - TC-ADM-03 [Negative]: PATCH /api/admin/verifications/999999 returns 404 for nonexistent id
+      ---
+      duration_ms: 4.985407
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-04 [Positive]: PATCH /api/admin/users/:id updates user record
+    ok 13 - TC-ADM-04 [Positive]: PATCH /api/admin/users/:id updates user record
+      ---
+      duration_ms: 5.250723
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-05 [Negative]: PATCH /api/admin/users/999999 returns 404 for nonexistent user
+    ok 14 - TC-ADM-05 [Negative]: PATCH /api/admin/users/999999 returns 404 for nonexistent user
+      ---
+      duration_ms: 3.003106
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-06 [Positive]: DELETE /api/admin/users/:id deletes user record
+    ok 15 - TC-ADM-06 [Positive]: DELETE /api/admin/users/:id deletes user record
+      ---
+      duration_ms: 98.011364
+      type: 'test'
+      ...
+    # Subtest: TC-ADM-07 [Negative]: DELETE /api/admin/users/999999 returns 404 for nonexistent user
+    ok 16 - TC-ADM-07 [Negative]: DELETE /api/admin/users/999999 returns 404 for nonexistent user
+      ---
+      duration_ms: 2.197177
+      type: 'test'
+      ...
+    1..16
+ok 1 - Admin Functions & Security Controls Test Suite (Black Box & White Box)
+  ---
+  duration_ms: 5404.731297
+  type: 'suite'
+  ...
+# MongoDB connection notice: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/. Operating in fallback JSON document store mode.
+# Subtest: Alumni Directory & Profile Test Suite (Black Box & White Box)
+    # Subtest: TC-ALM-01 [Positive]: GET /api/alumni returns all alumni list
+    ok 1 - TC-ALM-01 [Positive]: GET /api/alumni returns all alumni list
+      ---
+      duration_ms: 52.784793
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-02 [Privacy]: Public alumni list masks email addresses
+    ok 2 - TC-ALM-02 [Privacy]: Public alumni list masks email addresses
+      ---
+      duration_ms: 5.271725
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-03 [Search]: Case-insensitive search by name
+    ok 3 - TC-ALM-03 [Search]: Case-insensitive search by name
+      ---
+      duration_ms: 10.292981
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-04 [Search/Boundary]: Search with nonexistent keyword returns empty list
+    ok 4 - TC-ALM-04 [Search/Boundary]: Search with nonexistent keyword returns empty list
+      ---
+      duration_ms: 4.312309
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-05 [Search/Boundary]: Search with special characters and long string
+    ok 5 - TC-ALM-05 [Search/Boundary]: Search with special characters and long string
+      ---
+      duration_ms: 2.760017
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-06 [Filter]: Filter by Department and Batch
+    ok 6 - TC-ALM-06 [Filter]: Filter by Department and Batch
+      ---
+      duration_ms: 2.689024
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-07 [Filter]: Filter by Mentor availability
+    ok 7 - TC-ALM-07 [Filter]: Filter by Mentor availability
+      ---
+      duration_ms: 2.859494
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-08 [Profile/Positive]: GET /api/alumni/:id returns single member details
+    ok 8 - TC-ALM-08 [Profile/Positive]: GET /api/alumni/:id returns single member details
+      ---
+      duration_ms: 3.237681
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-09 [Profile/Negative]: GET /api/alumni/:id returns 404 for nonexistent id
+    ok 9 - TC-ALM-09 [Profile/Negative]: GET /api/alumni/:id returns 404 for nonexistent id
+      ---
+      duration_ms: 3.723359
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-10 [Profile/Auth]: Authenticated request receives unmasked email
+    ok 10 - TC-ALM-10 [Profile/Auth]: Authenticated request receives unmasked email
+      ---
+      duration_ms: 8.627764
+      type: 'test'
+      ...
+    # Subtest: TC-ALM-11 [Positive]: POST /api/alumni/:id/connect increments connection count
+    ok 11 - TC-ALM-11 [Positive]: POST /api/alumni/:id/connect increments connection count
+      ---
+      duration_ms: 18.597039
+      type: 'test'
+      ...
+    1..11
+ok 2 - Alumni Directory & Profile Test Suite (Black Box & White Box)
+  ---
+  duration_ms: 5175.927666
+  type: 'suite'
+  ...
+# MongoDB connection notice: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/. Operating in fallback JSON document store mode.
+# Subtest: Authentication & Registration Test Suite (Black Box & White Box)
+    # Subtest: TC-API-01: Health check returns service status and db metadata
+    ok 1 - TC-API-01: Health check returns service status and db metadata
+      ---
+      duration_ms: 145.024832
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-01 [Positive]: Register new alumni user with valid fields
+    ok 2 - TC-AUTH-01 [Positive]: Register new alumni user with valid fields
+      ---
+      duration_ms: 153.168004
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-02 [Negative]: Registration fails with empty name or email
+    ok 3 - TC-AUTH-02 [Negative]: Registration fails with empty name or email
+      ---
+      duration_ms: 4.493699
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-03 [Negative]: Registration fails with invalid email format
+    ok 4 - TC-AUTH-03 [Negative]: Registration fails with invalid email format
+      ---
+      duration_ms: 6.749904
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-04 [Boundary]: Registration fails with password shorter than 6 characters
+    ok 5 - TC-AUTH-04 [Boundary]: Registration fails with password shorter than 6 characters
+      ---
+      duration_ms: 2.393348
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-05 [Negative]: Registration fails with duplicate email
+    ok 6 - TC-AUTH-05 [Negative]: Registration fails with duplicate email
+      ---
+      duration_ms: 81.299088
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-06 [Positive]: Login succeeds with correct registered credentials
+    ok 7 - TC-AUTH-06 [Positive]: Login succeeds with correct registered credentials
+      ---
+      duration_ms: 161.100703
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-07 [Negative]: Login fails with wrong password for registered user
+    ok 8 - TC-AUTH-07 [Negative]: Login fails with wrong password for registered user
+      ---
+      duration_ms: 154.221758
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-08 [Negative]: Login fails when email is missing or empty
+    ok 9 - TC-AUTH-08 [Negative]: Login fails when email is missing or empty
+      ---
+      duration_ms: 2.35936
+      type: 'test'
+      ...
+    # Subtest: TC-AUTH-09 [Negative/Security]: Login fails when email does not exist in database
+    ok 10 - TC-AUTH-09 [Negative/Security]: Login fails when email does not exist in database
+      ---
+      duration_ms: 2.428569
+      type: 'test'
+      ...
+    1..10
+ok 3 - Authentication & Registration Test Suite (Black Box & White Box)
+  ---
+  duration_ms: 5762.2096
+  type: 'suite'
+  ...
+# MongoDB connection notice: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/. Operating in fallback JSON document store mode.
+# Subtest: Events and Jobs Test Suite (Black Box & White Box)
+    # Subtest: TC-EVT-01 [Positive]: GET /api/events returns event list
+    ok 1 - TC-EVT-01 [Positive]: GET /api/events returns event list
+      ---
+      duration_ms: 40.64753
+      type: 'test'
+      ...
+    # Subtest: TC-EVT-02 [Positive]: POST /api/events creates a new event
+    ok 2 - TC-EVT-02 [Positive]: POST /api/events creates a new event
+      ---
+      duration_ms: 18.893423
+      type: 'test'
+      ...
+    # Subtest: TC-EVT-03 [Positive]: POST /api/events/:id/register registers user and increments counter
+    ok 3 - TC-EVT-03 [Positive]: POST /api/events/:id/register registers user and increments counter
+      ---
+      duration_ms: 6.119817
+      type: 'test'
+      ...
+    # Subtest: TC-EVT-04 [Positive]: DELETE /api/events/:id removes event when authorized
+    ok 4 - TC-EVT-04 [Positive]: DELETE /api/events/:id removes event when authorized
+      ---
+      duration_ms: 9.551612
+      type: 'test'
+      ...
+    # Subtest: TC-EVT-05 [Negative/Validation]: POST /api/events fails with 400 when required fields are missing
+    ok 5 - TC-EVT-05 [Negative/Validation]: POST /api/events fails with 400 when required fields are missing
+      ---
+      duration_ms: 2.870985
+      type: 'test'
+      ...
+    # Subtest: TC-EVT-06 [Negative]: POST /api/events/999999/register returns 404 for nonexistent event
+    ok 6 - TC-EVT-06 [Negative]: POST /api/events/999999/register returns 404 for nonexistent event
+      ---
+      duration_ms: 2.054838
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-01 [Positive]: GET /api/jobs returns jobs list
+    ok 7 - TC-JOB-01 [Positive]: GET /api/jobs returns jobs list
+      ---
+      duration_ms: 3.703333
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-02 [Positive]: POST /api/jobs creates a new job posting
+    ok 8 - TC-JOB-02 [Positive]: POST /api/jobs creates a new job posting
+      ---
+      duration_ms: 3.496851
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-03 [Positive]: POST /api/jobs/:id/apply submits application and increments applicant count
+    ok 9 - TC-JOB-03 [Positive]: POST /api/jobs/:id/apply submits application and increments applicant count
+      ---
+      duration_ms: 5.026097
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-04 [Positive]: PATCH /api/jobs/:id updates job posting
+    ok 10 - TC-JOB-04 [Positive]: PATCH /api/jobs/:id updates job posting
+      ---
+      duration_ms: 4.398024
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-05 [Positive]: DELETE /api/jobs/:id deletes job posting when authorized
+    ok 11 - TC-JOB-05 [Positive]: DELETE /api/jobs/:id deletes job posting when authorized
+      ---
+      duration_ms: 5.547932
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-06 [Negative/Validation]: POST /api/jobs fails with 400 when title or company is missing
+    ok 12 - TC-JOB-06 [Negative/Validation]: POST /api/jobs fails with 400 when title or company is missing
+      ---
+      duration_ms: 3.086077
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-07 [Negative]: POST /api/jobs/999999/apply returns 404 for nonexistent job
+    ok 13 - TC-JOB-07 [Negative]: POST /api/jobs/999999/apply returns 404 for nonexistent job
+      ---
+      duration_ms: 3.588172
+      type: 'test'
+      ...
+    # Subtest: TC-JOB-08 [Negative]: PATCH /api/jobs/999999 returns 404 for nonexistent job
+    ok 14 - TC-JOB-08 [Negative]: PATCH /api/jobs/999999 returns 404 for nonexistent job
+      ---
+      duration_ms: 6.966547
+      type: 'test'
+      ...
+    1..14
+ok 4 - Events and Jobs Test Suite (Black Box & White Box)
+  ---
+  duration_ms: 5298.877106
+  type: 'suite'
+  ...
+# MongoDB connection notice: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/. Operating in fallback JSON document store mode.
+# Subtest: Full Platform Features Test Suite (Stories, Gallery, Community, Donations, Contact, Notifications)
+    # Subtest: TC-BST-01 [Positive]: GET /api/bootstrap hydrates full frontend state
+    ok 1 - TC-BST-01 [Positive]: GET /api/bootstrap hydrates full frontend state
+      ---
+      duration_ms: 60.967799
+      type: 'test'
+      ...
+    # Subtest: TC-DEP-01 [Positive]: GET /api/departments returns academic departments list
+    ok 2 - TC-DEP-01 [Positive]: GET /api/departments returns academic departments list
+      ---
+      duration_ms: 10.427273
+      type: 'test'
+      ...
+    # Subtest: TC-STY-01 [Positive]: GET & POST /api/stories
+    ok 3 - TC-STY-01 [Positive]: GET & POST /api/stories
+      ---
+      duration_ms: 24.954639
+      type: 'test'
+      ...
+    # Subtest: TC-GAL-01 [Positive]: GET /api/gallery & POST /api/gallery/:id/like
+    ok 4 - TC-GAL-01 [Positive]: GET /api/gallery & POST /api/gallery/:id/like
+      ---
+      duration_ms: 14.783137
+      type: 'test'
+      ...
+    # Subtest: TC-GAL-02 [Negative]: POST /api/gallery/999999/like returns 404 for nonexistent photo
+    ok 5 - TC-GAL-02 [Negative]: POST /api/gallery/999999/like returns 404 for nonexistent photo
+      ---
+      duration_ms: 7.063364
+      type: 'test'
+      ...
+    # Subtest: TC-COM-01 [Positive]: GET & POST /api/community posts
+    ok 6 - TC-COM-01 [Positive]: GET & POST /api/community posts
+      ---
+      duration_ms: 16.823512
+      type: 'test'
+      ...
+    # Subtest: TC-MEN-01 [Positive]: GET /api/mentorship & POST /api/mentorship/request
+    ok 7 - TC-MEN-01 [Positive]: GET /api/mentorship & POST /api/mentorship/request
+      ---
+      duration_ms: 10.276424
+      type: 'test'
+      ...
+    # Subtest: TC-DON-01 [Positive]: GET /api/donations & POST /api/donations with valid contribution
+    ok 8 - TC-DON-01 [Positive]: GET /api/donations & POST /api/donations with valid contribution
+      ---
+      duration_ms: 10.452378
+      type: 'test'
+      ...
+    # Subtest: TC-DON-02 [Negative/Boundary]: POST /api/donations rejects non-positive or invalid amounts with 400
+    ok 9 - TC-DON-02 [Negative/Boundary]: POST /api/donations rejects non-positive or invalid amounts with 400
+      ---
+      duration_ms: 17.269443
+      type: 'test'
+      ...
+    # Subtest: TC-CNT-01 [Positive]: POST /api/contact sends inquiry message
+    ok 10 - TC-CNT-01 [Positive]: POST /api/contact sends inquiry message
+      ---
+      duration_ms: 6.647706
+      type: 'test'
+      ...
+    # Subtest: TC-CNT-02 [Negative]: POST /api/contact validates required fields and email formatting
+    ok 11 - TC-CNT-02 [Negative]: POST /api/contact validates required fields and email formatting
+      ---
+      duration_ms: 7.332278
+      type: 'test'
+      ...
+    # Subtest: TC-CNT-03 [Positive]: GET /api/contact retrieves messages when authenticated as admin
+    ok 12 - TC-CNT-03 [Positive]: GET /api/contact retrieves messages when authenticated as admin
+      ---
+      duration_ms: 5.017247
+      type: 'test'
+      ...
+    # Subtest: TC-NOT-01 [Positive]: GET /api/notifications & PATCH /api/notifications/read-all marks all read
+    ok 13 - TC-NOT-01 [Positive]: GET /api/notifications & PATCH /api/notifications/read-all marks all read
+      ---
+      duration_ms: 5.609042
+      type: 'test'
+      ...
+    # Subtest: TC-MSG-01 [Positive]: GET /api/messages & POST /api/messages/:id/send updates lastMsg
+    ok 14 - TC-MSG-01 [Positive]: GET /api/messages & POST /api/messages/:id/send updates lastMsg
+      ---
+      duration_ms: 9.397681
+      type: 'test'
+      ...
+    1..14
+ok 5 - Full Platform Features Test Suite (Stories, Gallery, Community, Donations, Contact, Notifications)
+  ---
+  duration_ms: 5269.503759
+  type: 'suite'
+  ...
+# Subtest: White Box Internal Logic & Code Coverage Suite
+    # Subtest: WB-SAN-01 [Branch]: sanitizeUser handles null, undefined, and empty objects
+    ok 1 - WB-SAN-01 [Branch]: sanitizeUser handles null, undefined, and empty objects
+      ---
+      duration_ms: 5.886686
+      type: 'test'
+      ...
+    # Subtest: WB-SAN-02 [Condition]: sanitizeUser email masking branches
+    ok 2 - WB-SAN-02 [Condition]: sanitizeUser email masking branches
+      ---
+      duration_ms: 0.589983
+      type: 'test'
+      ...
+    # Subtest: WB-JWT-01 [Branch/Condition]: JWT token generation, verification, and invalid signature rejection
+    ok 3 - WB-JWT-01 [Branch/Condition]: JWT token generation, verification, and invalid signature rejection
+      ---
+      duration_ms: 11.529349
+      type: 'test'
+      ...
+    # Subtest: WB-MEM-01 [Branch]: Database store provides seeded data collections
+    ok 4 - WB-MEM-01 [Branch]: Database store provides seeded data collections
+      ---
+      duration_ms: 1.454983
+      type: 'test'
+      ...
+    # Subtest: WB-MOD-01 [Schema Validation]: User schema validates required roles
+    ok 5 - WB-MOD-01 [Schema Validation]: User schema validates required roles
+      ---
+      duration_ms: 17.015944
+      type: 'test'
+      ...
+    1..5
+ok 6 - White Box Internal Logic & Code Coverage Suite
+  ---
+  duration_ms: 40.204496
+  type: 'suite'
+  ...
+1..6
+# tests 70
+# suites 6
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6740.635056
+# start of coverage report
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# file         | line % | branch % | funcs % | uncovered lines
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# app.js       |  83.13 |    38.46 |  100.00 | 18-19 28-33 43 45-49
+# config       |        |          |         | 
+#  db.js       |  72.40 |    45.83 |   77.78 | 21-22 82-86 89-119 132-137 140-142 152-155 161-162
+# data         |        |          |         | 
+#  seedData.js | 100.00 |   100.00 |  100.00 | 
+# models       |        |          |         | 
+#  schemas.js  | 100.00 |   100.00 |  100.00 | 
+# routes       |        |          |         | 
+#  api.js      |  82.99 |    61.31 |   95.95 | 19-33 53-54 139-140 166-167 173-174 185-186 266-267 278-279 291-293 298-299 318-319 337-338 344-345 349-364 373-374 378-379 382-383 394-395 406-407 439-440 443-444 458-459 462-463 472-473 477-478 481-482 493-494 528-529 532-533 547-548 551-552 566-567 570-571 580-581 585-586 589-590 601-602 627-628 631-632 643-644 658-659 662-663 674-675 697-698 701-702 715-716 740-741 744-745 756-757 785-786 789-790 824-825 828-829 837-838 849-850 861-862 865-866 874-875 888-892 896-897 908-909 924-925 928-929 943-944 947-948 962-963 966-967
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# all files    |  89.16 |    59.42 |   94.25 | 
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# end of coverage report

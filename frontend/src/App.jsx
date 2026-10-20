@@ -1,46 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { syncWithBackend } from "./services/api";
+import ErrorBoundary from "./components/ErrorBoundary";
+import LoadingFallback from "./components/LoadingFallback";
 
 import PublicRoot from "./layouts/PublicRoot";
 import DashRoot from "./layouts/DashRoot";
 import AdminRoot from "./layouts/AdminRoot";
 
-import Home from "./pages/public/Home";
-import Directory from "./pages/public/Directory";
-import AlumniProfile from "./pages/public/AlumniProfile";
-import Stories from "./pages/public/Stories";
-import Events from "./pages/public/Events";
-import Jobs from "./pages/public/Jobs";
-import Mentorship from "./pages/public/Mentorship";
-import Donate from "./pages/public/Donate";
-import About from "./pages/public/About";
-import Gallery from "./pages/public/Gallery";
-import Community from "./pages/public/Community";
-import Contact from "./pages/public/Contact";
+// Public Pages (Code-split for performance)
+const Home = lazy(() => import("./pages/public/Home"));
+const Directory = lazy(() => import("./pages/public/Directory"));
+const AlumniProfile = lazy(() => import("./pages/public/AlumniProfile"));
+const Stories = lazy(() => import("./pages/public/Stories"));
+const Events = lazy(() => import("./pages/public/Events"));
+const Jobs = lazy(() => import("./pages/public/Jobs"));
+const Mentorship = lazy(() => import("./pages/public/Mentorship"));
+const Donate = lazy(() => import("./pages/public/Donate"));
+const About = lazy(() => import("./pages/public/About"));
+const Gallery = lazy(() => import("./pages/public/Gallery"));
+const Community = lazy(() => import("./pages/public/Community"));
+const Contact = lazy(() => import("./pages/public/Contact"));
 
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
+// Auth Pages
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
 
-import DashboardOverview from "./pages/dashboard/Overview";
-import DashboardNetwork from "./pages/dashboard/Network";
-import DashboardMessages from "./pages/dashboard/Messages";
-import DashboardMentorship from "./pages/dashboard/Mentorship";
-import DashboardJobs from "./pages/dashboard/Jobs";
-import DashboardCommunity from "./pages/dashboard/Community";
-import DashboardAchievements from "./pages/dashboard/Achievements";
-import DashboardProfile from "./pages/dashboard/Profile";
-import DashboardSettings from "./pages/dashboard/Settings";
-import DashboardNotifications from "./pages/dashboard/Notifications";
+// Dashboard Pages
+const DashboardOverview = lazy(() => import("./pages/dashboard/Overview"));
+const DashboardNetwork = lazy(() => import("./pages/dashboard/Network"));
+const DashboardMessages = lazy(() => import("./pages/dashboard/Messages"));
+const DashboardMentorship = lazy(() => import("./pages/dashboard/Mentorship"));
+const DashboardJobs = lazy(() => import("./pages/dashboard/Jobs"));
+const DashboardCommunity = lazy(() => import("./pages/dashboard/Community"));
+const DashboardAchievements = lazy(() => import("./pages/dashboard/Achievements"));
+const DashboardProfile = lazy(() => import("./pages/dashboard/Profile"));
+const DashboardSettings = lazy(() => import("./pages/dashboard/Settings"));
+const DashboardNotifications = lazy(() => import("./pages/dashboard/Notifications"));
 
-import AdminOverview from "./pages/admin/Overview";
-import AdminUsers from "./pages/admin/Users";
-import AdminVerification from "./pages/admin/Verification";
-import AdminAnalytics from "./pages/admin/Analytics";
-import AdminJobs from "./pages/admin/AdminJobs";
-import AdminEvents from "./pages/admin/AdminEvents";
+// Admin Pages
+const AdminOverview = lazy(() => import("./pages/admin/Overview"));
+const AdminUsers = lazy(() => import("./pages/admin/Users"));
+const AdminVerification = lazy(() => import("./pages/admin/Verification"));
+const AdminAnalytics = lazy(() => import("./pages/admin/Analytics"));
+const AdminJobs = lazy(() => import("./pages/admin/AdminJobs"));
+const AdminEvents = lazy(() => import("./pages/admin/AdminEvents"));
 
-import NotFound from "./pages/NotFound";
+// 404 Fallback Page
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+function NotFoundWrapper() {
+  return (
+    <Suspense fallback={<LoadingFallback message="Loading..." />}>
+      <NotFound />
+    </Suspense>
+  );
+}
 
 const router = createBrowserRouter([
   {
@@ -50,7 +65,12 @@ const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "alumni", Component: Directory },
       { path: "alumni/:id", Component: AlumniProfile },
+      { path: "directory", Component: Directory },
+      { path: "directory/:id", Component: AlumniProfile },
       { path: "stories", Component: Stories },
+      { path: "stories/:id", Component: Stories },
+      { path: "news", Component: Stories },
+      { path: "news/:id", Component: Stories },
       { path: "events", Component: Events },
       { path: "jobs", Component: Jobs },
       { path: "mentorship", Component: Mentorship },
@@ -91,12 +111,17 @@ const router = createBrowserRouter([
       { path: "events", Component: AdminEvents },
     ],
   },
-  { path: "*", Component: NotFound },
+  { path: "*", Component: NotFoundWrapper },
 ]);
 
 export default function App() {
   useEffect(() => {
     syncWithBackend();
   }, []);
-  return <RouterProvider router={router} />;
+
+  return (
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  );
 }

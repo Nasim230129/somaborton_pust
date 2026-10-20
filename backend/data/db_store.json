@@ -1,12 +1,175 @@
 {
   "users": [
     {
+      "id": 1792524420534,
+      "name": "raja",
+      "email": "raja@pust.ac.bd",
+      "password": "$2a$10$7QSA7cqEN7NbHYL4kAd5tu0Jpigs1CjicJEH/WDEXpkK9qyCLW612",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RA_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RA_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Electrical & Electronic Engineering",
+      "batch": "",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Student, Electrical & Electronic Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": false,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Electrical & Electronic Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1792524284030,
+      "name": "Tariqul Anam",
+      "email": "verify.atlas.1792524283877@pust.ac.bd",
+      "password": "$2a$10$QJTCVPqZQSclwGqvY19e7.agtVtNUvHmrYRyO3/wexmwp/oCWGL0e",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Computer Science & Engineering",
+      "batch": "2020",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Alumni, Computer Science & Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": true,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Computer Science & Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1792516302503,
+      "name": "jaka",
+      "email": "jaka@pust.ac.bd",
+      "password": "$2a$10$i2G1k9dXQTeilLos4OUKiui1b.O4Uy6F4RIPpOL5PoreQftVqJk6m",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_JA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_JA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EJA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Computer Science & Engineering",
+      "batch": "2018",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Alumni, Computer Science & Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": true,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Computer Science & Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1792503226836,
+      "name": "jaki",
+      "email": "jaki@gmail.com",
+      "password": "$2a$10$3EAoQEx0gGWQ55QqleA4sOnVV7nxSyOiS0Z5KZyuTGgqVaY2o8QUC",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_JA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_JA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EJA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Computer Science & Engineering",
+      "batch": "",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Student, Computer Science & Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research",
+        "programming"
+      ],
+      "company": "i am jaki",
+      "mentorAvailable": false,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Computer Science & Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1792485371028,
+      "name": "Test Alumnus",
+      "email": "test_alumnus@pust.ac.bd",
+      "password": "$2a$10$LWNk7hc3NqXv1bFu2zRNdeHqTsc8sY2DXHLcYjHykZu2EnAZvnBYq",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "CSE",
+      "batch": "2022",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Alumni, CSE",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": true,
+      "industry": "Technology",
+      "connections": 2,
+      "bio": "Proud member of the PUST CSE community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1792483953653,
+      "name": "Test Alumni User",
+      "email": "testalumni@pust.ac.bd",
+      "password": "$2a$10$EHMvl7yrLRF.Kbq0UdqFce7UTHo.Q7CPPdBOcyTL3/lsydsxbZImu",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TU_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TU_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETU%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Computer Science & Engineering",
+      "batch": "2022",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Alumni, Computer Science & Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": true,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Computer Science & Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
+      "id": 1791297176452,
+      "name": "ashik",
+      "email": "nasimulislam171702@gmail.com",
+      "password": "$2a$10$9vcFe8DV6fEppJ9wXda15O6eULSF9wDaD0V5yVvAALtVXVWYxIB5.",
+      "role": "student",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_AS_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_AS_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EAS%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Civil Engineering",
+      "batch": "",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Student, Civil Engineering",
+      "verified": false,
+      "skills": [
+        "Leadership",
+        "Research"
+      ],
+      "company": "",
+      "mentorAvailable": false,
+      "industry": "Technology",
+      "connections": 1,
+      "bio": "Proud member of the PUST Civil Engineering community.",
+      "status": "unverified",
+      "joined": "2026"
+    },
+    {
       "id": 1790534515533,
       "name": "nasim",
       "email": "nasimul.230129@s.pust.ac.bd",
       "password": "$2a$10$aULTiRa5QTxiylER160pYeBSAVRHXl6D/STgoUmdB0a2T47SU8sVS",
       "role": "student",
-      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Computer Science & Engineering",
       "batch": "",
       "location": "Dhaka, Bangladesh",
@@ -28,11 +191,11 @@
       "id": 1,
       "name": "Dr. Rafiqul Islam",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Computer Science & Engineering",
       "batch": "2008",
       "location": "Dhaka, Bangladesh",
-      "headline": "Software Architect at Brain Station 23",
+      "headline": "Senior Software Architect at Brain Station 23",
       "verified": true,
       "skills": [
         "Python",
@@ -42,17 +205,48 @@
       "company": "Brain Station 23",
       "mentorAvailable": true,
       "industry": "Technology",
-      "connections": 342,
+      "connections": 344,
       "bio": "Leading tech innovation in Bangladesh's fastest-growing software company.",
       "email": "rafiq@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Software Architect",
+          "company": "Brain Station 23",
+          "period": "2020 - Present",
+          "description": "Leading architecture and cloud transformation for enterprise microservices across telecom and fintech clients."
+        },
+        {
+          "title": "Senior Software Engineer",
+          "company": "TigerIT Bangladesh",
+          "period": "2014 - 2020",
+          "description": "Engineered scalable biometric authentication engines and distributed identity infrastructure."
+        }
+      ],
+      "education": [
+        {
+          "degree": "Ph.D. in Computer Science",
+          "institution": "BUET",
+          "year": "2018"
+        },
+        {
+          "degree": "B.Sc. in Computer Science & Engineering",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2008 - 2012"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/rafiqul-islam-pust",
+        "github": "https://github.com/rafiqul-islam",
+        "website": "https://rafiqul.dev"
+      }
     },
     {
       "id": 2,
       "name": "Nusrat Jahan Akter",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Electrical & Electronic Engineering",
       "batch": "2012",
       "location": "Chittagong, Bangladesh",
@@ -66,17 +260,42 @@
       "company": "BPDB",
       "mentorAvailable": true,
       "industry": "Energy",
-      "connections": 218,
+      "connections": 219,
       "bio": "Transforming Bangladesh's power grid one project at a time.",
       "email": "nusrat@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Power Systems Engineer",
+          "company": "BPDB",
+          "period": "2018 - Present",
+          "description": "Supervising regional grid substation automation, telemetry integration, and high-voltage distribution networks."
+        },
+        {
+          "title": "Assistant Electrical Engineer",
+          "company": "Summit Power International",
+          "period": "2014 - 2018",
+          "description": "Managed plant protection relays and switchgear maintenance operations."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Sc. in Electrical & Electronic Engineering",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2012 - 2016"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/nusrat-jahan-eee",
+        "twitter": "https://twitter.com/nusrat_pust"
+      }
     },
     {
       "id": 3,
       "name": "Mahmudul Hasan",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_MH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_MH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EMH%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Mathematics",
       "batch": "2010",
       "location": "London, UK",
@@ -90,17 +309,47 @@
       "company": "HSBC Global",
       "mentorAvailable": false,
       "industry": "Finance",
-      "connections": 487,
+      "connections": 488,
       "bio": "Applying mathematical rigour to global financial models.",
       "email": "mahmudul@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Senior Data Scientist",
+          "company": "HSBC Global",
+          "period": "2019 - Present",
+          "description": "Developing algorithmic credit risk models and probabilistic forecasting systems using PySpark and statistical estimators."
+        },
+        {
+          "title": "Quantitative Risk Analyst",
+          "company": "Standard Chartered Bank",
+          "period": "2015 - 2019",
+          "description": "Built portfolio stress-testing pipelines and asset liability assessment frameworks."
+        }
+      ],
+      "education": [
+        {
+          "degree": "M.Sc. in Financial Mathematics",
+          "institution": "University of Warwick",
+          "year": "2016"
+        },
+        {
+          "degree": "B.Sc. in Mathematics",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2010 - 2014"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/mahmudul-hasan-quant",
+        "github": "https://github.com/mhasan-stats"
+      }
     },
     {
       "id": 4,
       "name": "Shahina Begum",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SB_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SB_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESB%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Chemistry",
       "batch": "2007",
       "location": "Pabna, Bangladesh",
@@ -113,16 +362,46 @@
       ],
       "mentorAvailable": true,
       "industry": "Academia",
-      "connections": 163,
+      "connections": 166,
       "email": "shahina@pust.ac.bd",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Associate Professor",
+          "company": "Pabna University of Science & Technology",
+          "period": "2021 - Present",
+          "description": "Directing departmental organic synthesis research and supervising postgraduate student theses in green chemistry."
+        },
+        {
+          "title": "Assistant Professor",
+          "company": "PUST",
+          "period": "2014 - 2021",
+          "description": "Lectured core thermodynamics and polymer chemistry courses."
+        }
+      ],
+      "education": [
+        {
+          "degree": "Ph.D. in Organic Chemistry",
+          "institution": "University of Dhaka",
+          "year": "2017"
+        },
+        {
+          "degree": "B.Sc. in Chemistry",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2007 - 2011"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/dr-shahina-begum-chem",
+        "website": "https://pust.ac.bd/faculty/shahina"
+      }
     },
     {
       "id": 5,
       "name": "Tahmid Chowdhury",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Business Administration",
       "batch": "2015",
       "location": "Toronto, Canada",
@@ -136,16 +415,46 @@
       "company": "Shopify",
       "mentorAvailable": true,
       "industry": "Technology",
-      "connections": 602,
+      "connections": 603,
       "email": "tahmid@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Product Manager",
+          "company": "Shopify",
+          "period": "2021 - Present",
+          "description": "Leading international checkout experiences and merchant onboarding workflows for multi-currency storefronts."
+        },
+        {
+          "title": "Product Operations Lead",
+          "company": "Pathao",
+          "period": "2017 - 2021",
+          "description": "Spearheaded driver partner dispatch algorithms and loyalty reward mechanics."
+        }
+      ],
+      "education": [
+        {
+          "degree": "MBA in Management Information Systems",
+          "institution": "IBA, University of Dhaka",
+          "year": "2018"
+        },
+        {
+          "degree": "BBA in Marketing & Management",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2015 - 2019"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/tahmid-chowdhury-pm",
+        "twitter": "https://twitter.com/tahmid_pm"
+      }
     },
     {
       "id": 6,
       "name": "Rumana Islam",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Physics",
       "batch": "2011",
       "location": "Rajshahi, Bangladesh",
@@ -161,13 +470,36 @@
       "connections": 89,
       "email": "rumana@example.com",
       "status": "unverified",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Research Scientist",
+          "company": "BCSIR",
+          "period": "2018 - Present",
+          "description": "Conducting materials physics research focusing on thin film semiconductors and solar cell photovoltaic efficiency."
+        }
+      ],
+      "education": [
+        {
+          "degree": "M.Sc. in Applied Physics",
+          "institution": "University of Rajshahi",
+          "year": "2016"
+        },
+        {
+          "degree": "B.Sc. in Physics",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2011 - 2015"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/rumana-islam-phys"
+      }
     },
     {
       "id": 7,
       "name": "Imran Hossain",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_IH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_IH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EIH%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Civil Engineering",
       "batch": "2013",
       "location": "Dhaka, Bangladesh",
@@ -184,13 +516,37 @@
       "connections": 271,
       "email": "imran@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Project Director",
+          "company": "LGED",
+          "period": "2019 - Present",
+          "description": "Managing rural infrastructure modernization, bridge structural integrity surveys, and environmental assessments."
+        },
+        {
+          "title": "Executive Structural Engineer",
+          "company": "Concord Group",
+          "period": "2015 - 2019",
+          "description": "Designed earthquake-resistant high-rise foundational piles and pre-stressed concrete slab assemblies."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Sc. in Civil Engineering",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2013 - 2017"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/engr-imran-hossain-ce"
+      }
     },
     {
       "id": 8,
       "name": "Fariha Sultana",
       "role": "alumni",
-      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_FS_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_FS_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EFS%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "English",
       "batch": "2016",
       "location": "Dhaka, Bangladesh",
@@ -206,13 +562,43 @@
       "connections": 144,
       "email": "fariha@example.com",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Content Strategist",
+          "company": "The Daily Star",
+          "period": "2021 - Present",
+          "description": "Curating investigative multimedia features, editorial guidelines, and audience engagement retention initiatives."
+        },
+        {
+          "title": "Senior Sub-Editor",
+          "company": "Dhaka Tribune",
+          "period": "2018 - 2021",
+          "description": "Edited op-ed columns and produced weekly culture features."
+        }
+      ],
+      "education": [
+        {
+          "degree": "M.A. in English Literature",
+          "institution": "Jahangirnagar University",
+          "year": "2019"
+        },
+        {
+          "degree": "B.A. (Hons) in English",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2016 - 2020"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/fariha-sultana-media",
+        "twitter": "https://twitter.com/fariha_writer"
+      }
     },
     {
       "id": 101,
       "name": "Ariful Islam",
       "role": "student",
-      "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_AI_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_AI_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EAI%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Computer Science & Engineering",
       "batch": "2022",
       "location": "Pabna, Bangladesh",
@@ -223,13 +609,14 @@
         "Node.js"
       ],
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "connections": 1
     },
     {
       "id": 102,
       "name": "Sumaiya Khatun",
       "role": "student",
-      "avatar": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SK_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SK_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESK%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Electrical & Electronic Engineering",
       "batch": "2023",
       "location": "Pabna, Bangladesh",
@@ -246,7 +633,7 @@
       "id": 103,
       "name": "Nahid Hasan",
       "role": "student",
-      "avatar": "https://images.unsplash.com/photo-1463453091185-61582044d556?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NH_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NH_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENH%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Mathematics",
       "batch": "2024",
       "location": "Pabna, Bangladesh",
@@ -263,7 +650,7 @@
       "id": 201,
       "name": "Prof. Dr. Abdul Karim",
       "role": "faculty",
-      "avatar": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_DK_faculty%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237c3aed%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%234c1d95%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_DK_faculty)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EDK%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Computer Science & Engineering",
       "location": "Pabna, Bangladesh",
       "headline": "Professor & Head, CSE Department | IEEE Member",
@@ -276,12 +663,12 @@
       "id": 202,
       "name": "Dr. Nasrin Akhter",
       "role": "faculty",
-      "avatar": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_faculty%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237c3aed%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%234c1d95%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_faculty)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Physics",
       "location": "Pabna, Bangladesh",
       "headline": "Associate Professor | Quantum Materials Researcher",
       "verified": true,
-      "connections": 134,
+      "connections": 135,
       "status": "active",
       "joined": "2023"
     },
@@ -289,7 +676,7 @@
       "id": 301,
       "name": "Sazzad Hossain",
       "role": "employer",
-      "avatar": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SH_employer%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23b45309%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SH_employer)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESH%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Recruiter",
       "location": "Dhaka, Bangladesh",
       "headline": "Head of Talent, Brain Station 23",
@@ -302,20 +689,21 @@
       "id": 302,
       "name": "Farjana Akter",
       "role": "employer",
-      "avatar": "https://images.unsplash.com/photo-1598550880863-4e8aa3d0edb4?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_FA_employer%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23b45309%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_FA_employer)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EFA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "HR",
       "location": "Dhaka, Bangladesh",
       "headline": "HR Manager, Dutch-Bangla Bank",
       "verified": true,
       "company": "Dutch-Bangla Bank",
       "status": "active",
-      "joined": "2024"
+      "joined": "2024",
+      "connections": 1
     },
     {
       "id": 303,
       "name": "Karim Ahmed",
       "role": "employer",
-      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_KA_employer%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23b45309%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23d97706%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_KA_employer)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EKA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "dept": "Recruitment",
       "location": "Chittagong, Bangladesh",
       "headline": "Talent Acquisition Lead, BPDB",
@@ -323,6 +711,258 @@
       "company": "BPDB",
       "status": "unverified",
       "joined": "2024"
+    },
+    {
+      "id": 9,
+      "name": "Farhan Tanvir",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_FT_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_FT_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EFT%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Architecture",
+      "batch": "2014",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Principal Architect, Studio Vitti",
+      "verified": true,
+      "skills": [
+        "BIM",
+        "Sustainable Design",
+        "AutoCAD"
+      ],
+      "company": "Studio Vitti",
+      "mentorAvailable": true,
+      "industry": "Infrastructure",
+      "connections": 185,
+      "bio": "Pioneering eco-friendly sustainable public architecture across South Asia.",
+      "email": "farhan@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Principal Architect",
+          "company": "Studio Vitti",
+          "period": "2019 - Present",
+          "description": "Leading master planning and bioclimatic campus design projects."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Arch in Architecture",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2014 - 2019"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/farhan-tanvir-arch"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Dr. Anika Rahman",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_AR_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_AR_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EAR%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Pharmacy",
+      "batch": "2013",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Senior Formulation Scientist, Beximco Pharma",
+      "verified": true,
+      "skills": [
+        "Drug Formulation",
+        "Pharmacovigilance",
+        "HPLC"
+      ],
+      "company": "Beximco Pharma",
+      "mentorAvailable": true,
+      "industry": "Healthcare",
+      "connections": 310,
+      "bio": "Advancing pharmaceutical dosage formulation and biosimilar delivery mechanisms.",
+      "email": "anika@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Senior Formulation Scientist",
+          "company": "Beximco Pharmaceuticals Ltd.",
+          "period": "2018 - Present",
+          "description": "Formulation optimization for controlled-release therapeutic formulations."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Pharm (Professional)",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2013 - 2017"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/anika-rahman-pharma"
+      }
+    },
+    {
+      "id": 11,
+      "name": "Tanvir Ahmed",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Information & Communication Engineering",
+      "batch": "2015",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Cloud & Network Engineer, Grameenphone",
+      "verified": true,
+      "skills": [
+        "5G Networks",
+        "Kubernetes",
+        "Cybersecurity"
+      ],
+      "company": "Grameenphone",
+      "mentorAvailable": true,
+      "industry": "Technology",
+      "connections": 275,
+      "bio": "Building next-generation telecommunications and telco cloud infrastructure.",
+      "email": "tanvir.ice@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Cloud & Network Engineer",
+          "company": "Grameenphone Ltd.",
+          "period": "2020 - Present",
+          "description": "Deploying carrier-grade virtualization and 5G packet core networks."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Sc. in Information & Communication Engineering",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2015 - 2019"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/tanvir-ahmed-ice"
+      }
+    },
+    {
+      "id": 12,
+      "name": "Sadia Afrin",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Economics",
+      "batch": "2017",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Assistant Director, Bangladesh Bank",
+      "verified": true,
+      "skills": [
+        "Macroeconomics",
+        "Monetary Policy",
+        "Econometrics"
+      ],
+      "company": "Bangladesh Bank",
+      "mentorAvailable": true,
+      "industry": "Finance",
+      "connections": 220,
+      "bio": "Engaged in macroprudential policy analysis and financial stability research.",
+      "email": "sadia.afrin@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Assistant Director",
+          "company": "Bangladesh Bank",
+          "period": "2021 - Present",
+          "description": "Monetary policy analysis and banking sector risk monitoring."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S.S. in Economics",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2017 - 2021"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/sadia-afrin-econ"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Mehedi Hasan",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_MH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_MH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EMH%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Urban and Regional Planning",
+      "batch": "2016",
+      "location": "Dhaka, Bangladesh",
+      "headline": "Urban Planner, RAJUK",
+      "verified": true,
+      "skills": [
+        "GIS Mapping",
+        "Urban Planning",
+        "Zoning"
+      ],
+      "company": "RAJUK",
+      "mentorAvailable": false,
+      "industry": "Infrastructure",
+      "connections": 195,
+      "bio": "Formulating master zoning plans and transit-oriented development for metropolitan Dhaka.",
+      "email": "mehedi.urp@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Urban Planner",
+          "company": "RAJUK",
+          "period": "2021 - Present",
+          "description": "Detailed area plan review and spatial GIS zoning compliance."
+        }
+      ],
+      "education": [
+        {
+          "degree": "BURP in Urban & Regional Planning",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2016 - 2020"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/mehedi-hasan-urp"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Sabrina Mostafa",
+      "role": "alumni",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SM_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SM_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESM%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "dept": "Geography and Environment",
+      "batch": "2018",
+      "location": "Pabna, Bangladesh",
+      "headline": "Environmental GIS Analyst, CEGIS",
+      "verified": true,
+      "skills": [
+        "Remote Sensing",
+        "ArcGIS",
+        "Climate Resilience"
+      ],
+      "company": "CEGIS",
+      "mentorAvailable": true,
+      "industry": "Research",
+      "connections": 160,
+      "bio": "Spatial hydrological modeling and climate disaster resilience analysis.",
+      "email": "sabrina.geo@example.com",
+      "status": "active",
+      "joined": "2024",
+      "experience": [
+        {
+          "title": "Environmental GIS Analyst",
+          "company": "CEGIS",
+          "period": "2022 - Present",
+          "description": "River morphology satellite tracking and wetland conservation mapping."
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.Sc. in Geography and Environment",
+          "institution": "Pabna University of Science & Technology",
+          "year": "2018 - 2022"
+        }
+      ],
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/sabrina-mostafa-geo"
+      }
     }
   ],
   "departments": [
@@ -568,8 +1208,8 @@
       "type": "Reunion",
       "online": false,
       "spots": 500,
-      "registered": 314,
-      "img": "https://images.unsplash.com/photo-1675716921224-e087a0cca69a?w=600&h=380&fit=crop&auto=format",
+      "registered": 313,
+      "img": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__2_-0fp2ZTdb.jpeg",
       "desc": "Annual reunion bringing together all PUST alumni across Bangladesh and globally.",
       "organizer": "PUST Alumni Association",
       "status": "upcoming",
@@ -585,7 +1225,7 @@
       "online": false,
       "spots": 800,
       "registered": 620,
-      "img": "https://images.unsplash.com/photo-1561489413-985b06da5bee?w=600&h=380&fit=crop&auto=format",
+      "img": "/assets/National_High_school_programming_contest_up-M2I5cSj0.jpg",
       "desc": "Meet 40+ top tech companies actively hiring PUST graduates and students.",
       "organizer": "CSE Department",
       "status": "upcoming",
@@ -601,7 +1241,7 @@
       "online": true,
       "spots": 2000,
       "registered": 847,
-      "img": "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&h=380&fit=crop&auto=format",
+      "img": "/assets/1779011792PUST_train_2026-D7yqNHH4.jpg",
       "desc": "Leading PUST alumni in AI and data science share insights on Bangladesh's tech future.",
       "organizer": "Alumni Tech Network",
       "status": "upcoming",
@@ -617,7 +1257,7 @@
       "online": true,
       "spots": 200,
       "registered": 156,
-      "img": "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=380&fit=crop&auto=format",
+      "img": "/assets/fresher_s_reception_2026-VNfpIasg.jpg",
       "desc": "Intensive two-day mentorship sessions connecting senior alumni with recent graduates.",
       "organizer": "PUST Mentorship Cell",
       "status": "upcoming",
@@ -641,7 +1281,7 @@
         "Django",
         "REST API"
       ],
-      "applicants": 47,
+      "applicants": 54,
       "postedBy": "Dr. Rafiqul Islam (Alumni)",
       "remote": false,
       "desc": "Join our engineering team building enterprise-grade software products for global clients.",
@@ -744,7 +1384,7 @@
         "id": 5,
         "name": "Tahmid Chowdhury",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Business Administration",
         "batch": "2015",
         "location": "Toronto, Canada",
@@ -759,14 +1399,45 @@
         "mentorAvailable": true,
         "industry": "Technology",
         "connections": 602,
+        "bio": "Building merchant-facing commerce systems. Available for product management mentorship.",
         "email": "tahmid@example.com",
         "status": "active",
-        "joined": "2024"
+        "joined": "2024",
+        "experience": [
+          {
+            "title": "Product Manager",
+            "company": "Shopify",
+            "period": "2021 - Present",
+            "description": "Leading international checkout experiences and merchant onboarding workflows for multi-currency storefronts."
+          },
+          {
+            "title": "Product Operations Lead",
+            "company": "Pathao",
+            "period": "2017 - 2021",
+            "description": "Spearheaded driver partner dispatch algorithms and loyalty reward mechanics."
+          }
+        ],
+        "education": [
+          {
+            "degree": "MBA in Management Information Systems",
+            "institution": "IBA, University of Dhaka",
+            "year": "2018"
+          },
+          {
+            "degree": "BBA in Marketing & Management",
+            "institution": "Pabna University of Science & Technology",
+            "year": "2015 - 2019"
+          }
+        ],
+        "socialLinks": {
+          "linkedin": "https://linkedin.com/in/tahmid-chowdhury-pm",
+          "twitter": "https://twitter.com/tahmid_pm"
+        }
       },
       "category": "Career Journey",
       "date": "Sept 2026",
       "readTime": "7 min",
-      "img": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop&auto=format",
+      "img": "/assets/fresher_s_reception_2026-VNfpIasg.jpg",
       "excerpt": "How five years at PUST prepared me for a career spanning three continents and one of the world's most competitive product companies.",
       "featured": true,
       "likes": 128
@@ -778,7 +1449,7 @@
         "id": 2,
         "name": "Nusrat Jahan Akter",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Electrical & Electronic Engineering",
         "batch": "2012",
         "location": "Chittagong, Bangladesh",
@@ -793,15 +1464,40 @@
         "mentorAvailable": true,
         "industry": "Energy",
         "connections": 218,
-        "bio": "Transforming Bangladesh's power grid one project at a time.",
+        "bio": "Transforming Bangladesh's power grid one project at a time. Actively mentoring young engineers in grid automation.",
         "email": "nusrat@example.com",
         "status": "active",
-        "joined": "2024"
+        "joined": "2024",
+        "experience": [
+          {
+            "title": "Power Systems Engineer",
+            "company": "BPDB",
+            "period": "2018 - Present",
+            "description": "Supervising regional grid substation automation, telemetry integration, and high-voltage distribution networks."
+          },
+          {
+            "title": "Assistant Electrical Engineer",
+            "company": "Summit Power International",
+            "period": "2014 - 2018",
+            "description": "Managed plant protection relays and switchgear maintenance operations."
+          }
+        ],
+        "education": [
+          {
+            "degree": "B.Sc. in Electrical & Electronic Engineering",
+            "institution": "Pabna University of Science & Technology",
+            "year": "2012 - 2016"
+          }
+        ],
+        "socialLinks": {
+          "linkedin": "https://linkedin.com/in/nusrat-jahan-eee",
+          "twitter": "https://twitter.com/nusrat_pust"
+        }
       },
       "category": "Social Impact",
       "date": "Aug 2026",
       "readTime": "5 min",
-      "img": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&h=380&fit=crop&auto=format",
+      "img": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__1_-Ce5e4mLS.jpeg",
       "excerpt": "How my PUST foundation powered a career bringing electricity to millions of Bangladeshis.",
       "featured": false,
       "likes": 94
@@ -813,7 +1509,7 @@
         "id": 3,
         "name": "Mahmudul Hasan",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_MH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_MH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EMH%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Mathematics",
         "batch": "2010",
         "location": "London, UK",
@@ -828,15 +1524,45 @@
         "mentorAvailable": false,
         "industry": "Finance",
         "connections": 487,
-        "bio": "Applying mathematical rigour to global financial models.",
+        "bio": "Applying mathematical rigour to global financial models and risk analytics.",
         "email": "mahmudul@example.com",
         "status": "active",
-        "joined": "2024"
+        "joined": "2024",
+        "experience": [
+          {
+            "title": "Senior Data Scientist",
+            "company": "HSBC Global",
+            "period": "2019 - Present",
+            "description": "Developing algorithmic credit risk models and probabilistic forecasting systems using PySpark and statistical estimators."
+          },
+          {
+            "title": "Quantitative Risk Analyst",
+            "company": "Standard Chartered Bank",
+            "period": "2015 - 2019",
+            "description": "Built portfolio stress-testing pipelines and asset liability assessment frameworks."
+          }
+        ],
+        "education": [
+          {
+            "degree": "M.Sc. in Financial Mathematics",
+            "institution": "University of Warwick",
+            "year": "2016"
+          },
+          {
+            "degree": "B.Sc. in Mathematics",
+            "institution": "Pabna University of Science & Technology",
+            "year": "2010 - 2014"
+          }
+        ],
+        "socialLinks": {
+          "linkedin": "https://linkedin.com/in/mahmudul-hasan-quant",
+          "github": "https://github.com/mhasan-stats"
+        }
       },
       "category": "Academia",
       "date": "Jul 2026",
       "readTime": "9 min",
-      "img": "https://images.unsplash.com/photo-1529148482759-b35b25c5f217?w=600&h=380&fit=crop&auto=format",
+      "img": "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM__1_-MyA59s-v.jpeg",
       "excerpt": "What PUST's rigorous mathematics program taught me about discipline, curiosity, and global academia.",
       "featured": false,
       "likes": 156
@@ -848,23 +1574,23 @@
       "type": "connection",
       "msg": "Dr. Rafiqul Islam accepted your connection request",
       "time": "2 min ago",
-      "read": false,
-      "avatar": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format"
+      "read": true,
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_PU_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_PU_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EPU%3C%2Ftext%3E%3C%2Fsvg%3E"
     },
     {
       "id": 2,
       "type": "mentorship",
       "msg": "Ariful Islam requested mentorship from you",
       "time": "1 hr ago",
-      "read": false,
-      "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&auto=format"
+      "read": true,
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_PU_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_PU_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EPU%3C%2Ftext%3E%3C%2Fsvg%3E"
     },
     {
       "id": 3,
       "type": "job",
       "msg": "New job recommendation: Junior Software Engineer at Brain Station 23",
       "time": "3 hrs ago",
-      "read": false,
+      "read": true,
       "avatar": ""
     },
     {
@@ -889,7 +1615,7 @@
       "msg": "Someone replied to your post in CSE Community",
       "time": "3 days ago",
       "read": true,
-      "avatar": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=120&h=120&fit=crop&auto=format"
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_PU_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_PU_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EPU%3C%2Ftext%3E%3C%2Fsvg%3E"
     }
   ],
   "messages": [
@@ -899,7 +1625,7 @@
         "id": 1,
         "name": "Dr. Rafiqul Islam",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Computer Science & Engineering",
         "batch": "2008",
         "location": "Dhaka, Bangladesh",
@@ -919,7 +1645,7 @@
         "status": "active",
         "joined": "2024"
       },
-      "lastMsg": "how are you?",
+      "lastMsg": "hi",
       "time": "Just now",
       "unread": 2,
       "online": true
@@ -930,7 +1656,7 @@
         "id": 5,
         "name": "Tahmid Chowdhury",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Business Administration",
         "batch": "2015",
         "location": "Toronto, Canada",
@@ -949,8 +1675,8 @@
         "status": "active",
         "joined": "2024"
       },
-      "lastMsg": "I shared the PM resources I mentioned. Check your email!",
-      "time": "Yesterday",
+      "lastMsg": "jdfjsdljfds",
+      "time": "Just now",
       "unread": 0,
       "online": false
     },
@@ -960,7 +1686,7 @@
         "id": 201,
         "name": "Prof. Dr. Abdul Karim",
         "role": "faculty",
-        "avatar": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_DK_faculty%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237c3aed%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%234c1d95%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_DK_faculty)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EDK%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Computer Science & Engineering",
         "location": "Pabna, Bangladesh",
         "headline": "Professor & Head, CSE Department | IEEE Member",
@@ -969,8 +1695,8 @@
         "status": "active",
         "joined": "2023"
       },
-      "lastMsg": "Please submit your internship report by Monday.",
-      "time": "Mon",
+      "lastMsg": "hi",
+      "time": "Just now",
       "unread": 1,
       "online": true
     },
@@ -980,7 +1706,7 @@
         "id": 7,
         "name": "Imran Hossain",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_IH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_IH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EIH%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Civil Engineering",
         "batch": "2013",
         "location": "Dhaka, Bangladesh",
@@ -999,8 +1725,8 @@
         "status": "active",
         "joined": "2024"
       },
-      "lastMsg": "Welcome to the PUST Network! Happy to help anytime.",
-      "time": "Sun",
+      "lastMsg": "hi",
+      "time": "Just now",
       "unread": 0,
       "online": false
     }
@@ -1008,203 +1734,173 @@
   "gallery": [
     {
       "id": 1,
-      "url": "https://images.unsplash.com/photo-1775623914545-3227d584f0d7?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1775623914545-3227d584f0d7?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/615395049_122219081894306424_5887109760029984744_n-BOeBTVce.jpg",
+      "thumb": "/assets/615395049_122219081894306424_5887109760029984744_n-BOeBTVce.jpg",
       "category": "Convocation",
-      "title": "Convocation 2024 — Hat Toss",
-      "year": 2024,
+      "title": "PUST Campus — Sunset View",
+      "year": 2026,
       "likes": 342,
       "stakeholder": "alumni"
     },
     {
       "id": 2,
-      "url": "https://images.unsplash.com/photo-1775623914519-71b3143f86a1?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1775623914519-71b3143f86a1?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/fresher_s_reception_2026-VNfpIasg.jpg",
+      "thumb": "/assets/fresher_s_reception_2026-VNfpIasg.jpg",
       "category": "Convocation",
-      "title": "Class of 2024 — Ceremony Highlights",
-      "year": 2024,
+      "title": "Freshers Reception & Orientation",
+      "year": 2026,
       "likes": 289,
-      "stakeholder": "alumni"
-    },
-    {
-      "id": 3,
-      "url": "https://images.unsplash.com/photo-1775623914576-e7f58589a00e?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1775623914576-e7f58589a00e?w=400&h=300&fit=crop&auto=format",
-      "category": "Convocation",
-      "title": "Graduation Day Joy",
-      "year": 2023,
-      "likes": 198,
       "stakeholder": "students"
     },
     {
-      "id": 4,
-      "url": "https://images.unsplash.com/photo-1722871514923-9318d7eeaf03?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1722871514923-9318d7eeaf03?w=400&h=300&fit=crop&auto=format",
+      "id": 3,
+      "url": "/assets/1778991184DSC05122-DR5DHwQE.jpeg",
+      "thumb": "/assets/1778991184DSC05122-DR5DHwQE.jpeg",
       "category": "Convocation",
-      "title": "Faculty & Students on Stage",
-      "year": 2023,
+      "title": "Academic Award Giving Ceremony",
+      "year": 2026,
+      "likes": 198,
+      "stakeholder": "alumni"
+    },
+    {
+      "id": 4,
+      "url": "/assets/National_High_school_programming_contest_up-M2I5cSj0.jpg",
+      "thumb": "/assets/National_High_school_programming_contest_up-M2I5cSj0.jpg",
+      "category": "Events",
+      "title": "National High School Programming Contest",
+      "year": 2026,
       "likes": 415,
-      "stakeholder": "faculty"
+      "stakeholder": "students"
     },
     {
       "id": 5,
-      "url": "https://images.unsplash.com/photo-1622604647545-0cada2f34470?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1622604647545-0cada2f34470?w=400&h=300&fit=crop&auto=format",
-      "category": "Alumni Reunion",
-      "title": "Homecoming 2025 — Campus Gathering",
-      "year": 2025,
+      "url": "/assets/1779011792PUST_train_2026-D7yqNHH4.jpg",
+      "thumb": "/assets/1779011792PUST_train_2026-D7yqNHH4.jpg",
+      "category": "Research",
+      "title": "PUST Faculty Training & Pedagogy Workshop",
+      "year": 2026,
       "likes": 512,
-      "stakeholder": "alumni"
+      "stakeholder": "faculty"
     },
     {
       "id": 6,
-      "url": "https://images.unsplash.com/photo-1693608231470-25e1b16a23b9?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1693608231470-25e1b16a23b9?w=400&h=300&fit=crop&auto=format",
-      "category": "Alumni Reunion",
-      "title": "Batch 2012 Reunion Photo",
-      "year": 2025,
+      "url": "/assets/1778991857DSC05306__1_-Bl7-Lfr0.jpeg",
+      "thumb": "/assets/1778991857DSC05306__1_-Bl7-Lfr0.jpeg",
+      "category": "Campus Life",
+      "title": "Vice Chancellor Office, PUST",
+      "year": 2026,
       "likes": 278,
-      "stakeholder": "alumni"
+      "stakeholder": "faculty"
     },
     {
       "id": 7,
-      "url": "https://images.unsplash.com/photo-1662148931823-b0f72b89a6fc?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1662148931823-b0f72b89a6fc?w=400&h=300&fit=crop&auto=format",
-      "category": "Alumni Reunion",
-      "title": "Annual Reunion — Open Air Gathering",
-      "year": 2024,
+      "url": "/assets/612594246_122218424870306424_3652612665065691841_n-DBl6A9z0.jpg",
+      "thumb": "/assets/612594246_122218424870306424_3652612665065691841_n-DBl6A9z0.jpg",
+      "category": "Campus Life",
+      "title": "PUST Eagle Sculpture & Plaza",
+      "year": 2026,
       "likes": 391,
       "stakeholder": "alumni"
     },
     {
       "id": 8,
-      "url": "https://images.unsplash.com/photo-1707944746058-4da338d0f827?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1707944746058-4da338d0f827?w=400&h=300&fit=crop&auto=format",
-      "category": "Research",
-      "title": "PUST Research Lab — Chemistry",
-      "year": 2025,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__1_-Ce5e4mLS.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__1_-Ce5e4mLS.jpeg",
+      "category": "Campus Life",
+      "title": "Campus Lakeside Walkway & Green Lawn",
+      "year": 2026,
       "likes": 143,
-      "stakeholder": "faculty"
-    },
-    {
-      "id": 9,
-      "url": "https://images.unsplash.com/photo-1707944745899-104a4b12d945?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1707944745899-104a4b12d945?w=400&h=300&fit=crop&auto=format",
-      "category": "Research",
-      "title": "Physics Research Group at Work",
-      "year": 2025,
-      "likes": 176,
-      "stakeholder": "faculty"
-    },
-    {
-      "id": 10,
-      "url": "https://images.unsplash.com/photo-1707944746042-e4c81c191812?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1707944746042-e4c81c191812?w=400&h=300&fit=crop&auto=format",
-      "category": "Research",
-      "title": "Interdisciplinary Lab Collaboration",
-      "year": 2024,
-      "likes": 224,
       "stakeholder": "students"
     },
     {
-      "id": 11,
-      "url": "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=400&h=300&fit=crop&auto=format",
+      "id": 9,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM__1_-MyA59s-v.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM__1_-MyA59s-v.jpeg",
+      "category": "Research",
+      "title": "Central Library & Knowledge Hub",
+      "year": 2026,
+      "likes": 176,
+      "stakeholder": "students"
+    },
+    {
+      "id": 10,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM-bVegn0pL.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM-bVegn0pL.jpeg",
       "category": "Events",
-      "title": "Tech Career Fair 2025",
-      "year": 2025,
+      "title": "PUST Main Academic Building",
+      "year": 2026,
+      "likes": 224,
+      "stakeholder": "alumni"
+    },
+    {
+      "id": 11,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__2_-0fp2ZTdb.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM__2_-0fp2ZTdb.jpeg",
+      "category": "Alumni Reunion",
+      "title": "Shaheed Minar Chattar — Alumni Gathering",
+      "year": 2026,
       "likes": 388,
-      "stakeholder": "employers"
+      "stakeholder": "alumni"
     },
     {
       "id": 12,
-      "url": "https://images.unsplash.com/photo-1561489413-985b06da5bee?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1561489413-985b06da5bee?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM-CPUs16yN.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM-CPUs16yN.jpeg",
       "category": "Events",
-      "title": "Alumni Career Networking Seminar",
-      "year": 2025,
+      "title": "Faculty of Engineering & Technology",
+      "year": 2026,
       "likes": 267,
-      "stakeholder": "alumni"
+      "stakeholder": "faculty"
     },
     {
       "id": 13,
-      "url": "https://images.unsplash.com/photo-1571645163064-77faa9676a46?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1571645163064-77faa9676a46?w=400&h=300&fit=crop&auto=format",
-      "category": "Events",
-      "title": "Leadership Summit — Panel Discussion",
-      "year": 2024,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM__1_-DcD11DjP.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.06_PM__1_-DcD11DjP.jpeg",
+      "category": "Research",
+      "title": "Dr. Wazed Miah Science Building Labs",
+      "year": 2026,
       "likes": 445,
-      "stakeholder": "alumni"
+      "stakeholder": "faculty"
     },
     {
       "id": 14,
-      "url": "https://images.unsplash.com/photo-1603478804503-dc909c7f5ce5?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1603478804503-dc909c7f5ce5?w=400&h=300&fit=crop&auto=format",
-      "category": "Events",
-      "title": "Industry Workshop — Employer Partners",
-      "year": 2024,
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM__1_-Dx0GuzIF.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.07_PM__1_-Dx0GuzIF.jpeg",
+      "category": "Convocation",
+      "title": "Central Convocation Grounds",
+      "year": 2026,
       "likes": 192,
-      "stakeholder": "employers"
+      "stakeholder": "alumni"
     },
     {
       "id": 15,
-      "url": "https://images.unsplash.com/photo-1720525200240-17cd4ffd127f?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1720525200240-17cd4ffd127f?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.08_PM-DlZuJ16J.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.08_PM-DlZuJ16J.jpeg",
       "category": "Campus Life",
-      "title": "Students on the PUST Lawn",
-      "year": 2025,
+      "title": "PUST Central Field & Green Amphitheater",
+      "year": 2026,
       "likes": 308,
       "stakeholder": "students"
     },
     {
       "id": 16,
-      "url": "https://images.unsplash.com/photo-1764254811529-e6dcaad68924?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1764254811529-e6dcaad68924?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM-G_1y-8IQ.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.04_PM-G_1y-8IQ.jpeg",
       "category": "Campus Life",
-      "title": "PUST Main Building — Heritage View",
-      "year": 2025,
+      "title": "Campus Green Boulevard & Trees",
+      "year": 2026,
       "likes": 534,
       "stakeholder": "students"
     },
     {
       "id": 17,
-      "url": "https://images.unsplash.com/photo-1775702764288-847dbb75a163?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1775702764288-847dbb75a163?w=400&h=300&fit=crop&auto=format",
-      "category": "Sports",
-      "title": "Inter-Departmental Football Tournament",
-      "year": 2025,
-      "likes": 423,
-      "stakeholder": "students"
-    },
-    {
-      "id": 18,
-      "url": "https://images.unsplash.com/photo-1782007727055-ed44ee079183?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1782007727055-ed44ee079183?w=400&h=300&fit=crop&auto=format",
-      "category": "Sports",
-      "title": "PUST Annual Athletics Meet",
-      "year": 2024,
-      "likes": 287,
-      "stakeholder": "students"
-    },
-    {
-      "id": 19,
-      "url": "https://images.unsplash.com/photo-1722932620084-8f308ab8ee9a?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1722932620084-8f308ab8ee9a?w=400&h=300&fit=crop&auto=format",
-      "category": "Convocation",
-      "title": "Women of PUST — Class of 2024",
-      "year": 2024,
-      "likes": 618,
-      "stakeholder": "alumni"
-    },
-    {
-      "id": 20,
-      "url": "https://images.unsplash.com/photo-1662148932231-f75d645631c4?w=800&h=600&fit=crop&auto=format",
-      "thumb": "https://images.unsplash.com/photo-1662148932231-f75d645631c4?w=400&h=300&fit=crop&auto=format",
+      "url": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM-CNp3I0tK.jpeg",
+      "thumb": "/assets/WhatsApp_Image_2026-09-15_at_3.15.05_PM-CNp3I0tK.jpeg",
       "category": "Campus Life",
-      "title": "Campus Walk — Early Morning",
-      "year": 2023,
-      "likes": 261,
-      "stakeholder": "students"
+      "title": "PUST Administrative Building Plaza",
+      "year": 2026,
+      "likes": 423,
+      "stakeholder": "alumni"
     }
   ],
   "awards": [
@@ -1213,37 +1909,135 @@
       "name": "Dr. Rafiqul Islam",
       "year": 2025,
       "desc": "For pioneering AI adoption in Bangladesh's software industry",
-      "img": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format"
+      "img": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E"
     },
     {
       "award": "Young Achiever",
       "name": "Tahmid Chowdhury",
       "year": 2024,
       "desc": "Youngest Bangladeshi PM at a global tech unicorn",
-      "img": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format"
+      "img": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E"
     },
     {
       "award": "Social Impact Award",
       "name": "Nusrat Jahan Akter",
       "year": 2024,
       "desc": "Expanding rural electricity access to 2M+ households",
-      "img": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&auto=format"
+      "img": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E"
     },
     {
       "award": "Research Excellence",
       "name": "Mahmudul Hasan",
       "year": 2023,
       "desc": "Groundbreaking financial risk modelling research at HSBC",
-      "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&auto=format"
+      "img": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_MH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_MH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EMH%3C%2Ftext%3E%3C%2Fsvg%3E"
     }
   ],
   "verifications": [
+    {
+      "id": 1792524420535,
+      "name": "raja",
+      "dept": "Electrical & Electronic Engineering",
+      "batch": "2024",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RA_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RA_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Student, Electrical & Electronic Engineering",
+      "status": "pending"
+    },
+    {
+      "id": 1792524284031,
+      "name": "Tariqul Anam",
+      "dept": "Computer Science & Engineering",
+      "batch": "2020",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Alumni, Computer Science & Engineering",
+      "status": "pending"
+    },
+    {
+      "id": 1792516302505,
+      "name": "jaka",
+      "dept": "Computer Science & Engineering",
+      "batch": "2018",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_JA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_JA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EJA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Alumni, Computer Science & Engineering",
+      "status": "pending"
+    },
+    {
+      "id": 1792503226837,
+      "name": "jaki",
+      "dept": "Computer Science & Engineering",
+      "batch": "2024",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_JA_student%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_JA_student)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EJA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Student, Computer Science & Engineering",
+      "status": "pending"
+    },
+    {
+      "id": 1792485371030,
+      "name": "Test Alumnus",
+      "dept": "CSE",
+      "batch": "2022",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Alumni, CSE",
+      "status": "pending"
+    },
+    {
+      "id": 1792483953656,
+      "name": "Test Alumni User",
+      "dept": "Computer Science & Engineering",
+      "batch": "2022",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TU_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TU_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETU%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Alumni, Computer Science & Engineering",
+      "status": "pending"
+    },
+    {
+      "id": 1791297176453,
+      "name": "ashik",
+      "dept": "Civil Engineering",
+      "batch": "2024",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_AS_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_AS_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EAS%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "submitted": "Just now",
+      "docs": [
+        "Student ID",
+        "Certificate"
+      ],
+      "note": "Student, Civil Engineering",
+      "status": "pending"
+    },
     {
       "id": 1790534515534,
       "name": "nasim",
       "dept": "Computer Science & Engineering",
       "batch": "2024",
-      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "submitted": "Just now",
       "docs": [
         "Student ID",
@@ -1257,7 +2051,7 @@
       "name": "Sumaiya Islam",
       "dept": "EEE",
       "batch": "2019",
-      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_SI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_SI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ESI%3C%2Ftext%3E%3C%2Fsvg%3E",
       "submitted": "2 days ago",
       "docs": [
         "Transcript",
@@ -1271,7 +2065,7 @@
       "name": "Tanvir Hossain",
       "dept": "CSE",
       "batch": "2020",
-      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TH_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TH_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETH%3C%2Ftext%3E%3C%2Fsvg%3E",
       "submitted": "3 days ago",
       "docs": [
         "Provisional Certificate",
@@ -1285,7 +2079,7 @@
       "name": "Rumana Islam",
       "dept": "Physics",
       "batch": "2011",
-      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&auto=format",
+      "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
       "submitted": "5 days ago",
       "docs": [
         "Degree Certificate"
@@ -1301,7 +2095,7 @@
         "id": 1,
         "name": "Dr. Rafiqul Islam",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Computer Science & Engineering",
         "batch": "2008",
         "location": "Dhaka, Bangladesh",
@@ -1340,7 +2134,7 @@
         "id": 5,
         "name": "Tahmid Chowdhury",
         "role": "alumni",
-        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Business Administration",
         "batch": "2015",
         "location": "Toronto, Canada",
@@ -1378,7 +2172,7 @@
         "id": 201,
         "name": "Prof. Dr. Abdul Karim",
         "role": "faculty",
-        "avatar": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=120&h=120&fit=crop&auto=format",
+        "avatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_DK_faculty%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237c3aed%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%234c1d95%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_DK_faculty)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3EDK%3C%2Ftext%3E%3C%2Fsvg%3E",
         "dept": "Computer Science & Engineering",
         "location": "Pabna, Bangladesh",
         "headline": "Professor & Head, CSE Department | IEEE Member",
@@ -1401,7 +2195,78 @@
       "pinned": false
     }
   ],
-  "mentorshipRequests": [],
+  "mentorshipRequests": [
+    {
+      "id": 1792429111445,
+      "mentorId": 11,
+      "mentorName": "Tanvir Ahmed",
+      "menteeName": "PUST Student",
+      "menteeEmail": "",
+      "dept": "CSE",
+      "batch": "2022",
+      "topic": "Career Guidance",
+      "goal": "Career & Technical Growth",
+      "message": "",
+      "status": "pending",
+      "createdAt": "2026-10-19T16:58:31.445Z"
+    },
+    {
+      "id": 1792427408731,
+      "mentorId": 2,
+      "mentorName": "Nusrat Jahan Akter",
+      "menteeName": "PUST Student",
+      "menteeEmail": "",
+      "dept": "CSE",
+      "batch": "2022",
+      "topic": "Career Guidance",
+      "goal": "Career & Technical Growth",
+      "message": "",
+      "status": "pending",
+      "createdAt": "2026-10-19T16:30:08.731Z"
+    },
+    {
+      "id": 1792427395160,
+      "mentorId": 1,
+      "mentorName": "Dr. Rafiqul Islam",
+      "menteeName": "PUST Student",
+      "menteeEmail": "",
+      "dept": "CSE",
+      "batch": "2022",
+      "topic": "Career Guidance",
+      "goal": "Career & Technical Growth",
+      "message": "",
+      "status": "pending",
+      "createdAt": "2026-10-19T16:29:55.160Z"
+    },
+    {
+      "id": 1791313951217,
+      "mentorId": 2,
+      "mentorName": "Nusrat Jahan Akter",
+      "menteeName": "PUST Student",
+      "menteeEmail": "",
+      "dept": "CSE",
+      "batch": "2022",
+      "topic": "Career Guidance",
+      "goal": "Career & Technical Growth",
+      "message": "",
+      "status": "pending",
+      "createdAt": "2026-10-06T19:12:31.217Z"
+    },
+    {
+      "id": 1791298324171,
+      "mentorId": 1,
+      "mentorName": "Dr. Rafiqul Islam",
+      "menteeName": "PUST Student",
+      "menteeEmail": "",
+      "dept": "CSE",
+      "batch": "2022",
+      "topic": "Career Guidance",
+      "goal": "Career & Technical Growth",
+      "message": "",
+      "status": "pending",
+      "createdAt": "2026-10-06T14:52:04.171Z"
+    }
+  ],
   "donations": [
     {
       "id": 1,
@@ -1432,6 +2297,19 @@
   ],
   "contactMessages": [
     {
+      "id": 1792505516759,
+      "name": "Nasimul Islam",
+      "email": "nasimulislam171702@gmail.com",
+      "phone": "",
+      "dept": "cse-15",
+      "batch": "",
+      "topic": "membership",
+      "subject": "Inquiry",
+      "message": "i have problem some profile issue",
+      "status": "unread",
+      "createdAt": "2026-10-20T14:11:56.759Z"
+    },
+    {
       "id": 1790536662890,
       "name": "Nasimul Islam",
       "email": "nasimul.230129@s.pust.ac.bd",
@@ -1443,6 +2321,142 @@
       "message": "hi,i have problem some issue",
       "status": "unread",
       "createdAt": "2026-09-27T19:17:42.890Z"
+    }
+  ],
+  "reports": [],
+  "conversations": [
+    {
+      "id": 1792513398662,
+      "participants": [
+        1,
+        101
+      ],
+      "lastMessage": "",
+      "lastMessageAt": "2026-10-20T16:23:18.662Z",
+      "lastSenderId": 1,
+      "unreadCounts": {
+        "1": 0,
+        "101": 0
+      },
+      "createdAt": "2026-10-20T16:23:18.662Z",
+      "updatedAt": "2026-10-20T16:23:18.662Z"
+    },
+    {
+      "id": 1792513393519,
+      "participants": [
+        1,
+        102
+      ],
+      "lastMessage": "",
+      "lastMessageAt": "2026-10-20T16:23:13.519Z",
+      "lastSenderId": 1,
+      "unreadCounts": {
+        "1": 0,
+        "102": 0
+      },
+      "createdAt": "2026-10-20T16:23:13.519Z",
+      "updatedAt": "2026-10-20T16:23:13.519Z"
+    },
+    {
+      "id": 1792511728335,
+      "participants": [
+        1,
+        3
+      ],
+      "lastMessage": "",
+      "lastMessageAt": "2026-10-20T15:55:28.335Z",
+      "lastSenderId": 1,
+      "unreadCounts": {
+        "1": 0,
+        "3": 0
+      },
+      "createdAt": "2026-10-20T15:55:28.335Z",
+      "updatedAt": "2026-10-20T15:55:28.335Z"
+    },
+    {
+      "id": 101,
+      "participants": [
+        1,
+        2
+      ],
+      "lastMessage": "Looking forward to seeing the PUST robotics showcase next week!",
+      "lastMessageAt": "2026-10-20T14:41:09.131Z",
+      "lastSenderId": 2,
+      "unreadCounts": {
+        "1": 0,
+        "2": 0
+      },
+      "createdAt": "2026-10-19T15:41:09.132Z",
+      "updatedAt": "2026-10-20T14:41:09.132Z"
+    },
+    {
+      "id": 102,
+      "participants": [
+        1,
+        5
+      ],
+      "lastMessage": "I shared the product roadmap guide with you. Check your inbox!",
+      "lastMessageAt": "2026-10-19T15:41:09.132Z",
+      "lastSenderId": 5,
+      "unreadCounts": {
+        "1": 0,
+        "5": 0
+      },
+      "createdAt": "2026-10-18T15:41:09.132Z",
+      "updatedAt": "2026-10-19T15:41:09.132Z"
+    }
+  ],
+  "chatMessages": [
+    {
+      "id": 1001,
+      "conversationId": 101,
+      "senderId": 1,
+      "senderName": "Dr. Rafiqul Islam",
+      "senderAvatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "text": "Hello Nusrat, congratulations on the renewable energy project in Pabna!",
+      "read": true,
+      "createdAt": "2026-10-20T13:41:09.132Z"
+    },
+    {
+      "id": 1002,
+      "conversationId": 101,
+      "senderId": 2,
+      "senderName": "Nusrat Jahan Akter",
+      "senderAvatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "text": "Thank you Dr. Rafiqul! We could not have done it without the PUST alumni engineering foundation.",
+      "read": true,
+      "createdAt": "2026-10-20T14:11:09.132Z"
+    },
+    {
+      "id": 1003,
+      "conversationId": 101,
+      "senderId": 2,
+      "senderName": "Nusrat Jahan Akter",
+      "senderAvatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_NA_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_NA_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ENA%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "text": "Looking forward to seeing the PUST robotics showcase next week!",
+      "read": true,
+      "createdAt": "2026-10-20T14:41:09.132Z",
+      "readAt": "2026-10-20T15:55:15.354Z"
+    },
+    {
+      "id": 1004,
+      "conversationId": 102,
+      "senderId": 1,
+      "senderName": "Dr. Rafiqul Islam",
+      "senderAvatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_RI_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_RI_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ERI%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "text": "Hey Tahmid, how is everything going at Shopify?",
+      "read": true,
+      "createdAt": "2026-10-19T14:41:09.132Z"
+    },
+    {
+      "id": 1005,
+      "conversationId": 102,
+      "senderId": 5,
+      "senderName": "Tahmid Chowdhury",
+      "senderAvatar": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g_TC_alumni%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230369a1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g_TC_alumni)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%2256%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.25)%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2254%25%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2244%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20letter-spacing%3D%22-1%22%3ETC%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "text": "I shared the product roadmap guide with you. Check your inbox!",
+      "read": true,
+      "createdAt": "2026-10-19T15:41:09.132Z"
     }
   ]
 }

@@ -1,22 +1,16 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 const fs = require('fs');
+const http = require('http');
+const express = require('express');
+const app = require('./app');
 const { connectDB } = require('./config/db');
-const apiRoutes = require('./routes/api');
+const { initSocket } = require('./socket');
 
-const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// Mount API routes
-app.use('/api', apiRoutes);
-
-// Serve static frontend build in production if available
+// Serve static frontend build in standalone production mode if dist exists
 const distPath = path.join(__dirname, '../frontend/dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
@@ -26,11 +20,15 @@ if (fs.existsSync(distPath)) {
   });
 }
 
+const server = http.createServer(app);
+initSocket(server);
+
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`PUST Alumni Network Server running on port ${PORT}`);
     console.log(`API Base URL: http://localhost:${PORT}/api`);
+    console.log(`Real-Time Socket.IO: Connected & Ready`);
     console.log(`====================================================`);
   });
 });

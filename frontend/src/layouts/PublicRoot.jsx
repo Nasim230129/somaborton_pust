@@ -1,567 +1,268 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { ba, wa } from "../data/mockData";
-import { useBackendSync } from "../services/api";
+import { wa } from "../data/mockData";
+import { useBackendSync, getCurrentUser } from "../services/api";
+import LoadingFallback from "../components/LoadingFallback";
+import ScrollControls from "../components/ScrollControls";
+import useScrollReveal from "../services/useScrollReveal";
+import Navbar from "../components/Navbar";
 
-var Ea = [
-    {
-      to: `/`,
-      label: `Home`,
-      exact: true,
-    },
-    {
-      to: `/alumni`,
-      label: `Alumni`,
-    },
-    {
-      to: `/events`,
-      label: `Events`,
-    },
-    {
-      to: `/jobs`,
-      label: `Jobs`,
-    },
-    {
-      to: `/mentorship`,
-      label: `Mentorship`,
-    },
-    {
-      to: `/community`,
-      label: `Community`,
-    },
-    {
-      to: `/stories`,
-      label: `Stories`,
-    },
-    {
-      to: `/donate`,
-      label: `Give Back`,
-    },
-    {
-      to: `/about`,
-      label: `About`,
-    },
-    {
-      to: `/contact`,
-      label: `Contact`,
-    },
-  ],
-  Da = `#004D2C`,
-  Oa = `#002A18`;
 export default function PublicRoot() {
   useBackendSync();
-  let [e, t] = useState(false),
-    [n, r] = useState(false),
-    { pathname: i } = useLocation(),
-    a = ba.filter((e) => !e.read).length;
+  useScrollReveal();
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      return localStorage.getItem("pust_token") ? getCurrentUser() : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const handleSync = () => {
+      try {
+        setCurrentUser(localStorage.getItem("pust_token") ? getCurrentUser() : null);
+      } catch (e) {}
+    };
+    window.addEventListener("pust-data-synced", handleSync);
+    window.addEventListener("storage", handleSync);
+    return () => {
+      window.removeEventListener("pust-data-synced", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
-    useEffect(() => {
-      (t(false), r(false), window.scrollTo(0, 0));
-    }, [i]),
-    (
-      <div
-        className="min-h-screen"
-        style={{
-          background: `#F5F7FA`,
-        }}
+    <div className="min-h-screen bg-[#F4F5F7] text-[#17263C] flex flex-col selection:bg-[#B5893C] selection:text-white">
+      {/* Skip to Main Content Link for Keyboard and Screen Reader Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-[#B5893C] focus:text-white focus:font-bold focus:rounded-md focus:shadow-xl focus:outline-none"
       >
-        <div
-          className="hidden sm:flex items-center justify-between text-white text-[10px] py-2 px-6"
-          style={{
-            background: Oa,
-          }}
-        >
-          <span
-            style={{
-              color: `rgba(255,255,255,0.45)`,
-            }}
-          >
-            📍 Rajapur, Pabna-6600, Bangladesh  |  📞 +880-731-65350  |  ✉️
-            alumni@pust.ac.bd
-          </span>
-          <span
-            style={{
-              color: `rgba(255,255,255,0.40)`,
-            }}
-          >
-            Pabna University of Science & Technology · Est. 2008
-          </span>
-        </div>
-        <header
-          className="sticky top-0 z-50"
-          style={{
-            background: Da,
-            boxShadow: `0 4px 24px rgba(0,0,0,0.28)`,
-          }}
-        >
-          <div
-            style={{
-              height: 3,
-              background: `linear-gradient(to right,#F59E0B,#D97706,#F59E0B)`,
-            }}
-          />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
-              className="flex items-center"
-              style={{
-                height: 72,
-              }}
-            >
-              <Link
-                to="/"
-                className="flex items-center gap-4 flex-shrink-0 pr-7 mr-3"
-                style={{
-                  borderRight: `1px solid rgba(255,255,255,0.14)`,
-                }}
-              >
-                <div
-                  className="bg-white flex items-center justify-center"
-                  style={{
-                    width: 52,
-                    height: 52,
-                    padding: 4,
-                    borderRadius: 3,
-                    boxShadow: `0 2px 8px rgba(0,0,0,0.22)`,
-                  }}
-                >
-                  <img
-                    src={wa}
-                    alt="PUST"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="leading-tight hidden sm:block">
-                  <p
-                    className="font-display font-bold text-white leading-none"
-                    style={{
-                      fontSize: 17,
-                      letterSpacing: `-0.01em`,
-                    }}
-                  >
-                    PUST Alumni
-                  </p>
-                  <p
-                    className="font-bold uppercase mt-0.5"
-                    style={{
-                      fontSize: 9,
-                      letterSpacing: `0.22em`,
-                      color: `#F59E0B`,
-                    }}
-                  >
-                    Network · Est. 2008
-                  </p>
-                </div>
-              </Link>
-              <nav className="hidden lg:flex items-stretch flex-1 h-full">
-                {Ea.map((e) => (
-                  <NavLink
-                    key={e.to}
-                    to={e.to}
-                    end={e.exact}
-                    className={({ isActive: e }) =>
-                      `flex items-center px-3 h-full border-b-[3px] transition-all font-bold ${e ? `text-white border-[#F59E0B]` : `text-green-100/80 border-transparent hover:text-white hover:border-white/30`}`
-                    }
-                    style={{
-                      fontSize: 13,
-                      letterSpacing: `0.01em`,
-                    }}
-                  >
-                    {e.label}
-                  </NavLink>
-                ))}
-              </nav>
-              <div className="flex items-center gap-3 ml-auto">
-                <div className="relative">
-                  <button
-                    onClick={() => r(!n)}
-                    className="relative w-10 h-10 flex items-center justify-center text-green-100 hover:text-white hover:bg-white/10 transition-colors"
-                    style={{
-                      fontSize: 18,
-                      borderRadius: 4,
-                    }}
-                  >
-                    🔔
-                    {a > 0 && (
-                      <span className="absolute top-1 right-1 w-4 h-4 bg-[#F59E0B] rounded-full text-[9px] text-black flex items-center justify-center font-bold">
-                        {a}
-                      </span>
-                    )}
-                  </button>
-                  {n && (
-                    <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 shadow-xl z-50 rounded-sm overflow-hidden">
-                      <div
-                        className="px-4 py-2.5 border-b border-gray-200 flex justify-between items-center"
-                        style={{
-                          background: Da,
-                        }}
-                      >
-                        <span className="font-semibold text-sm text-white">
-                          Notifications
-                        </span>
-                        <span className="text-[10px] font-bold bg-[#F59E0B] text-black px-2 py-0.5 rounded-full">
-                          {a}
-                          {" new"}
-                        </span>
-                      </div>
-                      <div className="max-h-72 overflow-y-auto">
-                        {ba.map((e) => (
-                          <div
-                            key={e.id}
-                            className={`px-4 py-3 hover:bg-gray-50 flex gap-3 ${e.read ? `` : `bg-green-50/60`}`}
-                          >
-                            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 text-sm overflow-hidden">
-                              {e.avatar ? (
-                                <img
-                                  src={e.avatar}
-                                  className="w-full h-full object-cover"
-                                  alt=""
-                                />
-                              ) : (
-                                `🔔`
-                              )}
-                            </div>
-                            <div>
-                              <p className="text-xs text-gray-800 leading-snug">
-                                {e.msg}
-                              </p>
-                              <p className="text-[10px] text-gray-400 mt-1">
-                                {e.time}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="px-4 py-2.5 border-t border-gray-200">
-                        <Link
-                          to="/dashboard/notifications"
-                          className="text-xs font-medium hover:underline"
-                          style={{
-                            color: Da,
-                          }}
-                        >
-                          View all notifications
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <Link
-                  to="/login"
-                  className="hidden sm:block font-bold text-green-100 hover:text-white transition-colors px-3 py-2"
-                  style={{
-                    fontSize: 13,
-                    letterSpacing: `0.01em`,
-                  }}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="font-bold text-black px-5 py-2.5 transition-all hover:opacity-90"
-                  style={{
-                    background: `#F59E0B`,
-                    fontSize: 13,
-                    letterSpacing: `0.02em`,
-                  }}
-                >
-                  Join Free →
-                </Link>
-                <button
-                  className="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 text-white ml-1"
-                  onClick={() => t(!e)}
-                >
-                  <span
-                    className={`w-6 h-0.5 bg-current transition-all ${e ? `rotate-45 translate-y-2` : ``}`}
-                  />
-                  <span
-                    className={`w-6 h-0.5 bg-current transition-all ${e ? `opacity-0` : ``}`}
-                  />
-                  <span
-                    className={`w-6 h-0.5 bg-current transition-all ${e ? `-rotate-45 -translate-y-2` : ``}`}
-                  />
-                </button>
-              </div>
-            </div>
+        Skip to main content
+      </a>
+
+      {/* World-Class Modern University Navbar */}
+      <Navbar currentUser={currentUser} onUserChange={setCurrentUser} />
+
+      {/* Main Outlet for Pages */}
+      <main id="main-content" tabIndex="-1" className="flex-1 pb-20 lg:pb-0">
+        <Suspense fallback={<LoadingFallback message="Loading content..." />}>
+          <div key={pathname} className="animate-page-enter">
+            <Outlet />
           </div>
-          {e && (
-            <div
-              className="lg:hidden border-t"
-              style={{
-                background: Oa,
-                borderColor: `rgba(255,255,255,0.10)`,
-              }}
-            >
-              {Ea.map((e) => (
-                <NavLink
-                  key={e.to}
-                  to={e.to}
-                  end={e.exact}
-                  className={({ isActive: e }) =>
-                    `block px-6 py-3 font-bold border-l-4 transition-colors ${e ? `text-white border-[#F59E0B] bg-white/8` : `text-green-200/80 border-transparent hover:text-white hover:bg-white/5`}`
-                  }
-                  style={{
-                    fontSize: 14,
-                    letterSpacing: `0.01em`,
-                  }}
-                >
-                  {e.label}
-                </NavLink>
-              ))}
-              <div
-                className="px-5 pt-4 pb-5 border-t mt-1 flex gap-3"
-                style={{
-                  borderColor: `rgba(255,255,255,0.1)`,
-                }}
-              >
-                <Link
-                  to="/login"
-                  className="flex-1 text-center font-bold text-green-200 py-2.5 border hover:text-white transition-colors"
-                  style={{
-                    borderColor: `rgba(255,255,255,0.3)`,
-                    fontSize: 13,
-                  }}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="flex-1 text-center font-bold text-black py-2.5 hover:opacity-90 transition-opacity"
-                  style={{
-                    background: `#F59E0B`,
-                    fontSize: 13,
-                  }}
-                >
-                  Join Free →
-                </Link>
-              </div>
-            </div>
-          )}
-        </header>
-        <main>
-          <Outlet />
-        </main>
-        <footer
-          style={{
-            background: `#0D1F0A`,
-            color: `#94A3B8`,
-          }}
-          className="pt-14 pb-8"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
-              className="h-1 w-24 mb-10"
-              style={{
-                background: `#006B3F`,
-              }}
-            />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-10">
-              <div className="lg:col-span-2">
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="bg-white rounded-sm flex items-center justify-center flex-shrink-0"
-                    style={{
-                      width: 40,
-                      height: 40,
-                      padding: 4,
-                    }}
-                  >
-                    <img
-                      src={wa}
-                      alt="PUST"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold text-sm">
-                      PUST Alumni Network
-                    </p>
-                    <p
-                      className="text-[10px] uppercase tracking-widest mt-0.5"
-                      style={{
-                        color: `#4ADE80`,
-                      }}
-                    >
-                      Pabna, Bangladesh · Est. 2008
-                    </p>
-                  </div>
+        </Suspense>
+      </main>
+
+      {/* Authentic Institutional Deep Navy Footer */}
+      <footer className="pt-16 pb-12 border-t border-[#1E324F] bg-[#17263C] text-slate-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+            {/* Branding Column */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-white p-1.5 flex items-center justify-center flex-shrink-0 shadow-md border border-white/20 ring-2 ring-blue-500/30">
+                  <img src={wa} alt="PUST Emblem" className="w-full h-full object-contain" />
                 </div>
-                <p
-                  className="text-sm leading-relaxed max-w-xs mb-5"
-                  style={{
-                    color: `#64748B`,
-                  }}
-                >
-                  Connecting 22,400+ alumni of Pabna University of Science &
-                  Technology across 45 countries.
-                </p>
-                <div className="flex gap-2">
-                  {[`in`, `𝕏`, `fb`, `yt`].map((e, t) => (
-                    <a
-                      key={t}
-                      href="#"
-                      className="w-8 h-8 flex items-center justify-center text-[10px] font-bold transition-colors"
-                      style={{
-                        background: `rgba(255,255,255,0.06)`,
-                        color: `#94A3B8`,
-                      }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.background = `#006B3F`)
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.background = `rgba(255,255,255,0.06)`)
-                      }
-                    >
-                      {e}
-                    </a>
-                  ))}
+                <div>
+                  <p className="text-white font-bold text-base sm:text-lg tracking-tight font-display">
+                    PUST Alumni Network
+                  </p>
+                  <p className="text-[10px] sm:text-[10.5px] uppercase tracking-widest text-blue-300 font-semibold mt-0.5">
+                    Pabna University of Science & Technology · Est. 2008
+                  </p>
                 </div>
               </div>
-              {[
-                {
-                  title: `Network`,
-                  links: [
-                    {
-                      l: `Alumni Directory`,
-                      to: `/alumni`,
-                    },
-                    {
-                      l: `Find Mentors`,
-                      to: `/mentorship`,
-                    },
-                    {
-                      l: `Career & Jobs`,
-                      to: `/jobs`,
-                    },
-                    {
-                      l: `Events`,
-                      to: `/events`,
-                    },
-                  ],
-                },
-                {
-                  title: `Explore`,
-                  links: [
-                    {
-                      l: `Community`,
-                      to: `/community`,
-                    },
-                    {
-                      l: `Alumni Stories`,
-                      to: `/stories`,
-                    },
-                    {
-                      l: `Photo Gallery`,
-                      to: `/gallery`,
-                    },
-                    {
-                      l: `Give Back`,
-                      to: `/donate`,
-                    },
-                    {
-                      l: `About PUST`,
-                      to: `/about`,
-                    },
-                    {
-                      l: `Contact Us`,
-                      to: `/contact`,
-                    },
-                  ],
-                },
-                {
-                  title: `Account`,
-                  links: [
-                    {
-                      l: `Sign In`,
-                      to: `/login`,
-                    },
-                    {
-                      l: `Join Network`,
-                      to: `/register`,
-                    },
-                    {
-                      l: `Dashboard`,
-                      to: `/dashboard`,
-                    },
-                    {
-                      l: `Admin Panel`,
-                      to: `/admin`,
-                    },
-                  ],
-                },
-              ].map((e) => (
-                <div key={e.title}>
-                  <h4
-                    className="text-white font-semibold text-xs uppercase tracking-wider mb-4"
-                    style={{
-                      borderBottom: `1px solid rgba(255,255,255,0.08)`,
-                      paddingBottom: 10,
-                    }}
-                  >
-                    {e.title}
-                  </h4>
-                  <ul className="space-y-2.5">
-                    {e.links.map((e) => (
-                      <li key={e.l}>
-                        <Link
-                          to={e.to}
-                          className="text-sm transition-colors hover:text-white"
-                          style={{
-                            color: `#64748B`,
-                          }}
-                        >
-                          {e.l}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div
-              className="border-t pt-7 flex flex-col sm:flex-row justify-between items-center gap-4"
-              style={{
-                borderColor: `rgba(255,255,255,0.07)`,
-              }}
-            >
-              <p
-                className="text-xs"
-                style={{
-                  color: `#475569`,
-                }}
-              >
-                © 2026 PUST Alumni Network. All rights reserved.
+              <p className="text-xs sm:text-sm leading-relaxed max-w-sm mb-5 text-slate-300">
+                Official alumni platform connecting 22,400+ graduates of Pabna University of Science and Technology across 45 countries for lifelong professional collaboration, research excellence, and community mentorship.
               </p>
-              <div className="flex gap-5 text-xs">
+              <div className="flex gap-2">
                 {[
-                  {
-                    l: `Privacy Policy`,
-                    to: `#`,
-                  },
-                  {
-                    l: `Terms of Use`,
-                    to: `#`,
-                  },
-                  {
-                    l: `Contact Us`,
-                    to: `/contact`,
-                  },
-                ].map((e) => (
-                  <Link
-                    key={e.l}
-                    to={e.to}
-                    className="transition-colors hover:text-white"
-                    style={{
-                      color: `#475569`,
-                    }}
+                  { name: "LinkedIn", href: "https://www.linkedin.com/school/pabna-university-of-science-and-technology" },
+                  { name: "Facebook", href: "https://www.facebook.com/pust.ac.bd" },
+                  { name: "YouTube", href: "https://www.youtube.com/results?search_query=PUST+alumni" },
+                  { name: "X", href: "https://twitter.com/search?q=PUST" },
+                ].map((social, idx) => (
+                  <a
+                    key={idx}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 border border-white/15 text-slate-200 hover:text-white hover:bg-[#1D4ED8] hover:border-[#1D4ED8] transition-all"
                   >
-                    {e.l}
-                  </Link>
+                    {social.name}
+                  </a>
                 ))}
               </div>
             </div>
+
+            {/* Link Columns */}
+            {[
+              {
+                title: "Alumni Network",
+                links: [
+                  { l: "Alumni Directory", to: "/alumni" },
+                  { l: "Find Mentors", to: "/mentorship" },
+                  { l: "Career Opportunities", to: "/jobs" },
+                  { l: "Alumni Events", to: "/events" },
+                ],
+              },
+              {
+                title: "University & Community",
+                links: [
+                  { l: "News & Stories", to: "/news" },
+                  { l: "Community Forum", to: "/community" },
+                  { l: "Photo Gallery", to: "/gallery" },
+                  { l: "Giving & Endowment", to: "/donate" },
+                  { l: "About PUST", to: "/about" },
+                  { l: "Contact & Campus Map", to: "/contact" },
+                ],
+              },
+              {
+                title: "Member Portal",
+                links: [
+                  { l: "Alumni Login", to: "/login" },
+                  { l: "Join Network (Registration)", to: "/register" },
+                  { l: "Member Dashboard", to: "/dashboard" },
+                  { l: "Admin Console", to: "/admin" },
+                ],
+              },
+            ].map((col) => (
+              <div key={col.title}>
+                <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4 pb-2 border-b border-[#1E324F]">
+                  {col.title}
+                </h4>
+                <ul className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.l}>
+                      <Link
+                        to={link.to}
+                        className="text-xs sm:text-sm text-slate-300 hover:text-white hover:underline transition-colors"
+                      >
+                        {link.l}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-        </footer>
-      </div>
-    )
+
+          {/* Bottom Bar */}
+          <div className="border-t border-[#1E324F] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+            <p>© 2026 Pabna University of Science & Technology Alumni Network. All rights reserved.</p>
+            <div className="flex gap-5">
+              {[
+                { l: "Privacy Policy", to: "#" },
+                { l: "Terms of Service", to: "#" },
+                { l: "Institutional Contact", to: "/contact" },
+              ].map((item) => (
+                <Link key={item.l} to={item.to} className="hover:text-white transition-colors">
+                  {item.l}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* Mobile Floating University Quick Dock */}
+      <aside
+        aria-label="Quick mobile navigation dock"
+        className="lg:hidden fixed bottom-3 left-3 right-3 z-40 pointer-events-none"
+      >
+        <div className="pointer-events-auto bg-[#0F172A]/95 border border-white/10 backdrop-blur-2xl rounded-2xl px-2 py-1.5 flex items-center justify-around text-slate-300 max-w-md mx-auto shadow-[0_15px_35px_rgba(0,0,0,0.5)] ring-1 ring-blue-500/20">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">🏠</span>
+            <span className="text-[10px] mt-0.5">Home</span>
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">ℹ️</span>
+            <span className="text-[10px] mt-0.5">About</span>
+          </NavLink>
+          <NavLink
+            to="/alumni"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">🎓</span>
+            <span className="text-[10px] mt-0.5">Alumni</span>
+          </NavLink>
+          <NavLink
+            to="/events"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">📅</span>
+            <span className="text-[10px] mt-0.5">Events</span>
+          </NavLink>
+          <NavLink
+            to="/news"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">📰</span>
+            <span className="text-[10px] mt-0.5">News</span>
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+                isActive
+                  ? "text-white bg-gradient-to-r from-[#1D4ED8] to-[#2563EB] font-bold shadow-xs ring-1 ring-white/20"
+                  : "text-slate-300 hover:text-white"
+              }`
+            }
+          >
+            <span className="text-base leading-none">✉️</span>
+            <span className="text-[10px] mt-0.5">Contact</span>
+          </NavLink>
+        </div>
+      </aside>
+
+      {/* Floating Scroll Controls: Progress Bar & Scroll To Top */}
+      <ScrollControls />
+    </div>
   );
 }

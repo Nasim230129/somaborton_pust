@@ -62,57 +62,108 @@ var bc = [
 export default function AdminEvents() {
   let [e, t] = useState(bc),
     [n, r] = useState(false),
+    [editingId, setEditingId] = useState(null),
+    [toastMsg, setToastMsg] = useState(""),
     [i, a] = useState({
-      title: ``,
-      date: ``,
-      location: ``,
-      type: `Reunion`,
-    }),
-    o = (n) => {
-      n.preventDefault();
+      title: "",
+      date: "",
+      location: "",
+      type: "Reunion",
+    });
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(""), 3000);
+  };
+
+  const o = (eventObj) => {
+    eventObj.preventDefault();
+    if (editingId) {
+      t(
+        e.map((item) =>
+          item.id === editingId ? { ...item, ...i } : item
+        )
+      );
+      showToast("ইভেন্ট সফলভাবে আপডেট করা হয়েছে!");
+      setEditingId(null);
+    } else {
       api.createEvent(i);
       t([
         {
           id: Date.now(),
           ...i,
           attendees: 0,
-          status: `upcoming`,
+          status: "upcoming",
           featured: false,
         },
         ...e,
       ]);
-      a({
-        title: ``,
-        date: ``,
-        location: ``,
-        type: `Reunion`,
-      });
-      r(false);
-    },
-    s = e.filter((e) => e.status === `upcoming`),
-    c = e.filter((e) => e.status === `completed`);
+      showToast("নতুন ইভেন্ট সফলভাবে তৈরি করা হয়েছে!");
+    }
+    a({
+      title: "",
+      date: "",
+      location: "",
+      type: "Reunion",
+    });
+    r(false);
+  };
+
+  const handleEditClick = (eventItem) => {
+    setEditingId(eventItem.id);
+    a({
+      title: eventItem.title,
+      date: eventItem.date,
+      location: eventItem.location,
+      type: eventItem.type,
+    });
+    r(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDeleteClick = (eventId, eventTitle) => {
+    t(e.filter((item) => item.id !== eventId));
+    api.deleteEvent?.(eventId);
+    showToast(`"${eventTitle}" ইভেন্টটি বাতিল করা হয়েছে`);
+  };
+
+  let s = e.filter((e) => e.status === "upcoming"),
+    c = e.filter((e) => e.status === "completed");
+
   return (
     <div className="space-y-5 max-w-5xl">
+      {/* Toast */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0F172A] text-white px-5 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-700 animate-fade-in">
+          <span>✓</span>
+          <span>{toastMsg}</span>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-2xl text-[#0F172A]">
             Event Management
           </h1>
           <p className="text-[#64748B] text-sm">
-            {s.length}
-            {" upcoming \xB7 "}
-            {c.length}
-            {" past"}
+            {s.length} upcoming · {c.length} past
           </p>
         </div>
-        <button onClick={() => r(!n)} className="btn btn-green btn-sm">
+        <button
+          onClick={() => {
+            setEditingId(null);
+            a({ title: "", date: "", location: "", type: "Reunion" });
+            r(!n);
+          }}
+          className="btn btn-green btn-sm cursor-pointer"
+        >
           + Create Event
         </button>
       </div>
       {n && (
         <div className="card rounded-xl p-6">
           <h2 className="font-semibold text-[#0F172A] mb-4">
-            Create New Event
+            {editingId ? "Edit Event" : "Create New Event"}
           </h2>
           <form onSubmit={o} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
@@ -252,8 +303,16 @@ export default function AdminEvents() {
                   </div>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <button className="btn btn-ghost btn-sm text-xs">Edit</button>
-                  <button className="btn btn-outline btn-sm text-xs text-red-500 border-red-200 hover:bg-red-50">
+                  <button
+                    onClick={() => handleEditClick(e)}
+                    className="btn btn-ghost btn-sm text-xs cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(e.id, e.title)}
+                    className="btn btn-outline btn-sm text-xs text-red-500 border-red-200 hover:bg-red-50 cursor-pointer"
+                  >
                     Cancel
                   </button>
                 </div>

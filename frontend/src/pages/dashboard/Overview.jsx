@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { pa, _a, va, ba } from "../../data/mockData";
-import { getCurrentUser, useBackendSync } from "../../services/api";
+import { api, getCurrentUser, useBackendSync } from "../../services/api";
 
 var Es = [
     {
@@ -36,45 +36,89 @@ var Es = [
 export default function DashboardOverview() {
   useBackendSync();
   const Ts = getCurrentUser() || pa[0];
+
+  const [connectedIds, setConnectedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem("pust_connected_alumni");
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [registeredEvents, setRegisteredEvents] = useState(() => {
+    try {
+      const stored = localStorage.getItem("pust_registered_events");
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const handleToggleConnect = async (alumnusId) => {
+    const isConn = connectedIds.includes(alumnusId);
+    let nextList;
+    if (isConn) {
+      nextList = connectedIds.filter((id) => id !== alumnusId);
+    } else {
+      nextList = [...connectedIds, alumnusId];
+      await api.connectAlumni(alumnusId);
+    }
+    setConnectedIds(nextList);
+    localStorage.setItem("pust_connected_alumni", JSON.stringify(nextList));
+  };
+
+  const handleToggleEventRegister = async (eventId) => {
+    const isReg = registeredEvents.includes(eventId);
+    let nextList;
+    if (isReg) {
+      nextList = registeredEvents.filter((id) => id !== eventId);
+    } else {
+      nextList = [...registeredEvents, eventId];
+      await api.registerEvent(eventId);
+    }
+    setRegisteredEvents(nextList);
+    localStorage.setItem("pust_registered_events", JSON.stringify(nextList));
+  };
   return (
     <div className="space-y-6 max-w-6xl">
-      <div className="bg-gradient-to-r from-[#006B3F] to-[#1B4F8A] rounded-2xl p-6 lg:p-8 text-white">
+      <div className="bg-gradient-to-r from-[#17263C] to-[#7A1737] rounded-2xl p-6 lg:p-8 text-white shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <img
             src={Ts.avatar}
             alt={Ts.name}
-            className="w-16 h-16 rounded-full object-cover ring-4 ring-white/30"
+            className="w-16 h-16 rounded-full object-cover ring-4 ring-white/20"
           />
           <div className="flex-1">
-            <p className="text-green-200 text-sm">Good morning,</p>
-            <h1 className="font-display font-bold text-2xl lg:text-3xl">
+            <p className="text-[#C7A76C] text-xs font-bold uppercase tracking-wider">Good morning,</p>
+            <h1 className="font-serif font-bold text-2xl lg:text-3xl">
               {"Welcome back, "}
               {Ts.name.split(` `)[0]}!
             </h1>
-            <p className="text-green-100 text-sm mt-1">{Ts.headline}</p>
+            <p className="text-[#CBD5E1] text-sm mt-1">{Ts.headline}</p>
           </div>
           <Link
             to="/dashboard/profile"
-            className="btn bg-white text-[#006B3F] hover:bg-green-50 btn-sm font-bold flex-shrink-0"
+            className="btn bg-white text-[#7A1737] hover:bg-slate-50 btn-sm font-bold flex-shrink-0 shadow-xs"
           >
             Edit Profile
           </Link>
         </div>
-        <div className="mt-6 bg-white/10 rounded-xl p-4">
+        <div className="mt-6 bg-white/10 rounded-xl p-4 border border-white/10">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-green-100">Profile Completion</span>
-            <span className="font-bold text-[#F59E0B]">84%</span>
+            <span className="text-[#CBD5E1]">Profile Completion</span>
+            <span className="font-bold text-[#C7A76C]">84%</span>
           </div>
           <div className="progress-bar h-2 bg-white/20">
             <div
-              className="progress-fill bg-[#F59E0B]"
+              className="progress-fill bg-[#C7A76C]"
               style={{
                 width: `84%`,
               }}
             />
           </div>
-          <p className="text-xs text-green-200 mt-2">
-            Add your publications and LinkedIn URL to complete your profile
+          <p className="text-xs text-[#CBD5E1] mt-2">
+            Add your publications, current employer, and LinkedIn URL to reach 100%
           </p>
         </div>
       </div>
@@ -105,7 +149,7 @@ export default function DashboardOverview() {
               </h2>
               <Link
                 to="/dashboard/network"
-                className="text-xs text-[#1B4F8A] hover:underline"
+                className="text-xs text-[#7A1737] hover:underline"
               >
                 View all
               </Link>
@@ -140,8 +184,16 @@ export default function DashboardOverview() {
                       {e.dept.split(` `)[0]}
                     </p>
                   </div>
-                  <button className="btn btn-sm btn-outline flex-shrink-0">
-                    Connect
+                  <button
+                    type="button"
+                    onClick={() => handleToggleConnect(e.id)}
+                    className={`btn btn-sm flex-shrink-0 cursor-pointer transition-colors ${
+                      connectedIds.includes(e.id)
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-300"
+                        : "btn-outline"
+                    }`}
+                  >
+                    {connectedIds.includes(e.id) ? "Connected ✓" : "Connect"}
                   </button>
                 </div>
               ))}
@@ -154,7 +206,7 @@ export default function DashboardOverview() {
               <h2 className="font-semibold text-[#0F172A]">Notifications</h2>
               <Link
                 to="/dashboard/notifications"
-                className="text-xs text-[#1B4F8A] hover:underline"
+                className="text-xs text-[#7A1737] hover:underline"
               >
                 All
               </Link>
@@ -192,8 +244,8 @@ export default function DashboardOverview() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-[#0F172A]">Next Event</h2>
               <Link
-                to="/dashboard/events"
-                className="text-xs text-[#1B4F8A] hover:underline"
+                to="/events"
+                className="text-xs text-[#7A1737] hover:underline"
               >
                 Calendar
               </Link>
@@ -213,8 +265,16 @@ export default function DashboardOverview() {
               {"\uD83D\uDCC5 "}
               {_a[0].date}
             </p>
-            <button className="btn btn-primary btn-sm w-full mt-3">
-              Register Now
+            <button
+              type="button"
+              onClick={() => handleToggleEventRegister(_a[0].id)}
+              className={`btn btn-sm w-full mt-3 cursor-pointer transition-colors ${
+                registeredEvents.includes(_a[0].id)
+                  ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                  : "btn-primary"
+              }`}
+            >
+              {registeredEvents.includes(_a[0].id) ? "✓ Registered" : "Register Now"}
             </button>
           </div>
         </div>
@@ -223,7 +283,7 @@ export default function DashboardOverview() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-[#0F172A]">Recommended Jobs</h2>
           <Link
-            to="/dashboard/jobs"
+            to="/jobs"
             className="text-xs text-[#1B4F8A] hover:underline"
           >
             View all
@@ -231,19 +291,20 @@ export default function DashboardOverview() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {va.slice(0, 3).map((e) => (
-            <div
+            <Link
               key={e.id}
-              className="p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] hover:border-[#1B4F8A]/30 transition-colors"
+              to={`/jobs?search=${encodeURIComponent(e.title)}`}
+              className="block p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] hover:border-[#1B4F8A]/40 hover:bg-white transition-all shadow-2xs"
             >
               <div className="flex gap-3 mb-3">
-                <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+                <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center text-xl flex-shrink-0 shadow-sm border border-slate-100">
                   {e.logo}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-semibold text-[#0F172A] text-xs leading-snug">
+                  <p className="font-semibold text-[#0F172A] text-xs leading-snug truncate">
                     {e.title}
                   </p>
-                  <p className="text-[#94A3B8] text-[10px]">{e.company}</p>
+                  <p className="text-[#94A3B8] text-[10px] truncate">{e.company}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -260,7 +321,7 @@ export default function DashboardOverview() {
               <p className="text-[10px] text-[#006B3F] font-medium mt-2">
                 {e.salary}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
