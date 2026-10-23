@@ -56,12 +56,16 @@ const DepartmentSchema = new mongoose.Schema(
     id: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     code: { type: String, required: true },
+    slug: { type: String, default: '' },
+    facultyId: { type: Number, default: 1 },
     alumni: { type: Number, default: 0 },
     students: { type: Number, default: 0 },
     hod: { type: String, default: '' },
     established: { type: Number, default: 2008 },
     icon: { type: String, default: '🎓' },
+    coverImage: { type: String, default: '' },
     faculty: { type: String, default: '' },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -125,49 +129,246 @@ const StorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const FacultySchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    slug: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    shortName: { type: String, default: '' },
+    bengali: { type: String, default: '' },
+    description: { type: String, default: '' },
+    icon: { type: String, default: '🏛️' },
+    coverImage: { type: String, default: '' },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+const BatchSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    batchNumber: { type: Number, required: true },
+    label: { type: String, required: true }, // e.g. "Batch 1", "Batch 18"
+    session: { type: String, default: '' }, // e.g. "2008-2009", "2025-2026"
+    admissionYear: { type: Number },
+    graduationYear: { type: Number },
+    departmentId: { type: Number, required: true },
+    deptCode: { type: String, default: '' },
+    status: { type: String, enum: ['active', 'graduated', 'archived'], default: 'graduated' },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+BatchSchema.index({ departmentId: 1, batchNumber: 1 });
+
+const GalleryAccessRequestSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    userId: { type: Number, required: true },
+    userName: { type: String, default: '' },
+    userEmail: { type: String, default: '' },
+    departmentId: { type: Number, required: true },
+    deptCode: { type: String, default: '' },
+    batchId: { type: Number },
+    batchLabel: { type: String, default: '' },
+    requestedRole: { type: String, enum: ['member', 'moderator'], default: 'member' },
+    reason: { type: String, default: '' },
+    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+    reviewedBy: { type: Number },
+    reviewedAt: { type: Date },
+  },
+  { timestamps: true }
+);
+
 const GalleryItemSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true, unique: true },
     url: { type: String, required: true },
     thumb: { type: String, required: true },
-    category: { type: String, default: 'Campus Life' },
+    mediaType: { type: String, enum: ['photo', 'video', 'IMAGE', 'VIDEO'], default: 'photo' },
+    category: {
+      type: String,
+      enum: ['Reunion', 'Campus Life', 'Cultural Program', 'Sports', 'Convocation', 'Department Event', 'Research', 'Department Lab', 'Batch Day', 'Other'],
+      default: 'Campus Life',
+    },
     title: { type: String, required: true },
+    caption: { type: String, default: '' },
+    description: { type: String, default: '' },
+    facultyId: { type: Number, default: 1 },
+    faculty: { type: String, default: 'Engineering & Technology' },
+    departmentId: { type: Number, default: 1 },
+    dept: { type: String, default: 'Computer Science & Engineering' },
+    deptCode: { type: String, default: 'CSE' },
+    batchId: { type: Number },
+    batch: { type: String, default: 'Batch 1' },
+    batchLabel: { type: String, default: 'Batch 1' },
     year: { type: mongoose.Schema.Types.Mixed, default: 2026 },
     likes: { type: Number, default: 0 },
+    likedBy: [{ type: String }],
     stakeholder: { type: String, default: 'alumni' },
+    moderationStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected', 'archived'],
+      default: 'approved',
+    },
+    rejectionReason: { type: String, default: '' },
+    approvedBy: { type: Number },
+    approvedAt: { type: Date },
+    ownerId: { type: Number },
+    uploader: {
+      id: { type: Number },
+      name: { type: String, default: 'PUSTian' },
+      role: { type: String, default: 'alumni' },
+      dept: { type: String, default: 'CSE' },
+      avatar: { type: String, default: '' },
+    },
+    comments: [
+      {
+        id: { type: Number, default: () => Date.now() },
+        userName: { type: String, default: 'PUSTian' },
+        userRole: { type: String, default: 'alumni' },
+        dept: { type: String, default: '' },
+        avatar: { type: String, default: '' },
+        text: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
+GalleryItemSchema.index({ departmentId: 1, batchId: 1, moderationStatus: 1 });
 
 const CommunityPostSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true, unique: true },
     author: { type: mongoose.Schema.Types.Mixed },
     channel: { type: String, default: 'General' },
+    communityId: { type: Number, default: 1 },
     title: { type: String, required: true },
     body: { type: String, default: '' },
     tags: [{ type: String }],
+    type: { type: String, default: 'post' }, // post, announcement, question, poll
+    poll: { type: mongoose.Schema.Types.Mixed, default: null },
     likes: { type: Number, default: 0 },
+    likedBy: [{ type: String }],
     replies: { type: Number, default: 0 },
+    comments: { type: Number, default: 0 },
+    commentList: [{ type: mongoose.Schema.Types.Mixed }],
     time: { type: String, default: 'Just now' },
     pinned: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
+const CommunityGroupSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    name: { type: String, required: true },
+    slug: { type: String },
+    desc: { type: String, required: true },
+    icon: { type: String, default: '🌐' },
+    category: { type: String, default: 'Technology' },
+    dept: { type: String, default: 'All' },
+    tags: [{ type: String }],
+    membersCount: { type: Number, default: 1 },
+    postsCount: { type: Number, default: 0 },
+    onlineCount: { type: Number, default: 1 },
+    creator: { type: mongoose.Schema.Types.Mixed },
+    privacy: { type: String, default: 'Public' },
+    memberIds: [{ type: Number }],
+    img: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+const CommunityChatSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    communityId: { type: Number, required: true, index: true },
+    sender: { type: mongoose.Schema.Types.Mixed, required: true },
+    text: { type: String, required: true },
+    time: { type: String, default: 'Just now' },
+  },
+  { timestamps: true }
+);
+CommunityChatSchema.index({ communityId: 1, createdAt: 1 });
+
+const CommunityResourceSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    communityId: { type: Number, required: true, index: true },
+    title: { type: String, required: true },
+    url: { type: String, required: true },
+    category: { type: String, default: 'General' },
+    description: { type: String, default: '' },
+    uploader: { type: mongoose.Schema.Types.Mixed },
+  },
+  { timestamps: true }
+);
+CommunityResourceSchema.index({ communityId: 1 });
+
 const MentorshipRequestSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true, unique: true },
     mentorId: { type: Number },
     mentorName: { type: String },
+    mentorAvatar: { type: String, default: '' },
+    menteeId: { type: Number, default: 0 },
     menteeName: { type: String, required: true },
     menteeEmail: { type: String },
+    menteeAvatar: { type: String, default: '' },
     dept: { type: String },
     batch: { type: String },
     topic: { type: String },
     goal: { type: String },
     message: { type: String },
+    preferredDate: { type: String, default: '' },
+    preferredTime: { type: String, default: '' },
+    preferredPlatform: { type: String, default: 'Google Meet' },
+    scheduleDate: { type: String, default: '' },
+    scheduleTime: { type: String, default: '' },
+    platform: { type: String, default: 'Google Meet' },
+    meetLink: { type: String, default: '' },
+    notes: { type: String, default: '' },
     status: { type: String, default: 'pending' },
+  },
+  { timestamps: true }
+);
+
+const MentorshipSessionSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    requestId: { type: Number, default: 0 },
+    mentorId: { type: Number, required: true },
+    mentorName: { type: String, required: true },
+    mentorAvatar: { type: String, default: '' },
+    menteeId: { type: Number, default: 0 },
+    menteeName: { type: String, required: true },
+    menteeEmail: { type: String, default: '' },
+    menteeAvatar: { type: String, default: '' },
+    dept: { type: String, default: 'CSE' },
+    topic: { type: String, default: 'Career Guidance' },
+    date: { type: String, required: true },
+    time: { type: String, required: true },
+    platform: { type: String, default: 'Google Meet' },
+    meetLink: { type: String, default: '' },
+    status: { type: String, default: 'scheduled' }, // scheduled, in-progress, completed, cancelled
+    notes: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+const MentorshipReviewSchema = new mongoose.Schema(
+  {
+    id: { type: Number, required: true, unique: true },
+    mentorId: { type: Number, required: true },
+    mentorName: { type: String, default: '' },
+    menteeName: { type: String, required: true },
+    menteeAvatar: { type: String, default: '' },
+    dept: { type: String, default: 'CSE' },
+    batch: { type: String, default: '2023' },
+    rating: { type: Number, default: 5 },
+    review: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -199,6 +400,9 @@ const ContactMessageSchema = new mongoose.Schema(
     batch: { type: String, default: '' },
     topic: { type: String, default: 'general' },
     subject: { type: String, default: '' },
+    trackingCode: { type: String, default: '' },
+    stage: { type: String, default: 'Logged & Received' },
+    priority: { type: String, default: 'Normal' },
     message: { type: String, required: true },
     status: { type: String, default: 'unread' },
   },
@@ -290,13 +494,21 @@ ChatMessageSchema.index({ conversationId: 1, createdAt: 1 });
 
 module.exports = {
   User: mongoose.models.User || mongoose.model('User', UserSchema),
+  Faculty: mongoose.models.Faculty || mongoose.model('Faculty', FacultySchema),
   Department: mongoose.models.Department || mongoose.model('Department', DepartmentSchema),
+  Batch: mongoose.models.Batch || mongoose.model('Batch', BatchSchema),
+  GalleryAccessRequest: mongoose.models.GalleryAccessRequest || mongoose.model('GalleryAccessRequest', GalleryAccessRequestSchema),
   Event: mongoose.models.Event || mongoose.model('Event', EventSchema),
   Job: mongoose.models.Job || mongoose.model('Job', JobSchema),
   Story: mongoose.models.Story || mongoose.model('Story', StorySchema),
   GalleryItem: mongoose.models.GalleryItem || mongoose.model('GalleryItem', GalleryItemSchema),
   CommunityPost: mongoose.models.CommunityPost || mongoose.model('CommunityPost', CommunityPostSchema),
+  CommunityGroup: mongoose.models.CommunityGroup || mongoose.model('CommunityGroup', CommunityGroupSchema),
+  CommunityChat: mongoose.models.CommunityChat || mongoose.model('CommunityChat', CommunityChatSchema),
+  CommunityResource: mongoose.models.CommunityResource || mongoose.model('CommunityResource', CommunityResourceSchema),
   MentorshipRequest: mongoose.models.MentorshipRequest || mongoose.model('MentorshipRequest', MentorshipRequestSchema),
+  MentorshipSession: mongoose.models.MentorshipSession || mongoose.model('MentorshipSession', MentorshipSessionSchema),
+  MentorshipReview: mongoose.models.MentorshipReview || mongoose.model('MentorshipReview', MentorshipReviewSchema),
   Donation: mongoose.models.Donation || mongoose.model('Donation', DonationSchema),
   ContactMessage: mongoose.models.ContactMessage || mongoose.model('ContactMessage', ContactMessageSchema),
   Notification: mongoose.models.Notification || mongoose.model('Notification', NotificationSchema),

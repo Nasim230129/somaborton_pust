@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   pa,
   ma,
@@ -20,10 +20,10 @@ import {
   Za,
   Qa,
 } from "../../data/mockData";
-import { api, useBackendSync } from "../../services/api";
+import { api, useBackendSync, getCurrentUser } from "../../services/api";
 import usePageMeta from "../../services/usePageMeta";
 
-// Department acronyms and search aliases mapping
+// Department acronyms and search aliases mapping for all 21 PUST academic departments
 const DEPARTMENT_ALIASES = {
   cse: "Computer Science & Engineering",
   "comp sci": "Computer Science & Engineering",
@@ -114,6 +114,7 @@ const roleTabs = [
   { key: "Alumni", label: "Alumni" },
   { key: "Students", label: "Students" },
   { key: "Faculty", label: "Faculty" },
+  { key: "Saved", label: "Bookmarked Profiles" },
 ];
 
 const roleLabels = {
@@ -130,32 +131,15 @@ const roleColors = {
   employer: "bg-amber-50 text-amber-800 border-amber-200",
 };
 
-const batchOptions = [
-  "All Batches",
-  "2024",
-  "2023",
-  "2022",
-  "2021",
-  "2020",
-  "2018",
-  "2016",
-  "2015",
-  "2013",
-  "2012",
-  "2011",
-  "2010",
-  "2008",
-  "2007",
-];
-
-const locationOptions = [
-  "All Locations",
-  "Dhaka",
-  "Pabna",
-  "Chittagong",
-  "Rajshahi",
-  "Toronto",
-  "London",
+const industryOptions = [
+  "All Industries",
+  "Technology",
+  "Engineering",
+  "Education",
+  "Finance",
+  "Healthcare",
+  "Architecture",
+  "Government",
 ];
 
 const sortOptions = ["Relevance", "Name A–Z", "Batch (Newest)", "Connections"];
@@ -181,15 +165,31 @@ function getMemberRoleDisplay(member) {
 
 // Offline high-contrast university initials avatar
 function getInitialsAvatar(name) {
-  const initials = (name || "PUST")
-    .split(" ")
-    .map((n) => n[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase() || "P";
+  const initials =
+    (name || "PUST")
+      .split(" ")
+      .map((n) => n[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join("")
+      .toUpperCase() || "P";
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" fill="#7A1737"/><text x="50%" y="54%" font-family="Inter, system-ui, sans-serif" font-size="44" font-weight="bold" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">${initials}</text></svg>`;
   return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+
+// Safe institutional email masking for privacy
+function maskEmail(email) {
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    return "Protected for member privacy";
+  }
+  const [username, domain] = email.split("@");
+  if (!username) return `***@${domain || "pust.ac.bd"}`;
+  if (username.length <= 2) {
+    return `${username[0]}***@${domain}`;
+  }
+  const visible = username.slice(0, 2);
+  const asterisks = "*".repeat(Math.max(username.length - 2, 3));
+  return `${visible}${asterisks}@${domain}`;
 }
 
 // Match department with acronyms and names
@@ -215,7 +215,7 @@ function matchesDepartment(memberDept, targetDept) {
   return false;
 }
 
-// Search matching
+// Search matching logic across multiple fields
 function matchesSearch(m, q) {
   if (!q) return true;
   const query = q.toLowerCase().trim();
@@ -241,13 +241,16 @@ function matchesSearch(m, q) {
   if (m.company && m.company.toLowerCase().includes(query)) return true;
   if (m.bio && m.bio.toLowerCase().includes(query)) return true;
 
+  // Industry
+  if (m.industry && m.industry.toLowerCase().includes(query)) return true;
+
   // Role
-  const mRole = (m.role || "").toLowerCase();
+  const mRole = (m.role || "alumni").toLowerCase();
   if (mRole === query) return true;
   if (query === "student" && mRole === "student") return true;
   if (query === "students" && mRole === "student") return true;
-  if (query === "alumni" && mRole === "alumni") return true;
-  if (query === "alumnus" && mRole === "alumni") return true;
+  if (query === "alumni" && mRole.startsWith("alumn")) return true;
+  if (query === "alumnus" && mRole.startsWith("alumn")) return true;
   if ((query === "faculty" || query === "teacher" || query === "prof" || query === "professor") && mRole === "faculty") return true;
 
   // Mentor search keywords
@@ -289,6 +292,7 @@ export default function Directory() {
   );
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSearchParam = () => {
     if (typeof window === "undefined") return { q: "", role: "All", dept: "All" };
@@ -339,18 +343,74 @@ export default function Directory() {
   const [selectedDept, setSelectedDept] = useState(initialParams.dept);
   const [selectedBatch, setSelectedBatch] = useState("All Batches");
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
+  const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [mentorOnly, setMentorOnly] = useState(false);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [sortBy, setSortBy] = useState("Relevance");
   const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const pageSize = 12;
+
+  // Interactivity States: Connected and Saved
+  const [connectedIds, setConnectedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem("pust_connected_alumni");
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [savedIds, setSavedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem("pust_saved_alumni");
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // Defensive membership helpers
+  const isMemberConnected = (memberId) => {
+    if (!memberId || !Array.isArray(connectedIds)) return false;
+    return connectedIds.some((id) => String(id) === String(memberId));
+  };
+
+  const isMemberSaved = (memberId) => {
+    if (!memberId || !Array.isArray(savedIds)) return false;
+    return savedIds.some((id) => String(id) === String(memberId));
+  };
+
+  // Quick View Modal State
+  const [quickViewMember, setQuickViewMember] = useState(null);
+  const [revealEmailMap, setRevealEmailMap] = useState({});
+
+  // Guest Direct Message Modal State
+  const [guestMsgMember, setGuestMsgMember] = useState(null);
+  const [guestMsgForm, setGuestMsgForm] = useState({ name: "", email: "", message: "" });
+  const [guestMsgSending, setGuestMsgSending] = useState(false);
+  const [guestMsgSuccess, setGuestMsgSuccess] = useState(false);
+
+  // Floating Toast Notification
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
+  const toastTimeoutRef = useRef(null);
+
+  const showToast = (message, type = "info") => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ show: true, message, type });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ show: false, message: "", type: "info" });
+    }, 3200);
+  };
 
   // Dynamically compute available batches and locations from all members in store
   const availableBatches = useMemo(() => {
     const set = new Set();
     allMembers.forEach((m) => {
-      if (m.batch) set.add(String(m.batch));
+      if (m.batch && String(m.batch).trim()) set.add(String(m.batch).trim());
     });
     const sorted = Array.from(set).sort((a, b) => Number(b) - Number(a));
     return ["All Batches", ...sorted];
@@ -384,29 +444,12 @@ export default function Directory() {
     }
   };
 
-  // Interactivity States
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [connectedIds, setConnectedIds] = useState(() => {
-    try {
-      const stored = localStorage.getItem("pust_connected_alumni");
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      return [];
-    }
-  });
-  const [savedIds, setSavedIds] = useState(() => {
-    try {
-      const stored = localStorage.getItem("pust_saved_alumni");
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      return [];
-    }
-  });
-
   // Clickable skill handler
   const handleSkillClick = (skill, ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
     setSearchQuery(skill);
     setDebouncedSearch(skill);
     setSelectedRole("All");
@@ -480,13 +523,18 @@ export default function Directory() {
         return false;
       }
       // Batch filter
-      if (selectedBatch !== "All Batches" && String(m.batch) !== String(selectedBatch)) {
+      if (selectedBatch !== "All Batches" && String(m.batch || "").trim() !== String(selectedBatch).trim()) {
         return false;
       }
       // Location filter
       if (selectedLocation !== "All Locations") {
         const locLower = selectedLocation.toLowerCase();
         if (!m.location || !m.location.toLowerCase().includes(locLower)) return false;
+      }
+      // Industry filter
+      if (selectedIndustry !== "All Industries") {
+        const indLower = selectedIndustry.toLowerCase();
+        if (!m.industry || !m.industry.toLowerCase().includes(indLower)) return false;
       }
       // Mentor filter
       if (mentorOnly && !m.mentorAvailable) return false;
@@ -503,6 +551,7 @@ export default function Directory() {
     selectedDept,
     selectedBatch,
     selectedLocation,
+    selectedIndustry,
     mentorOnly,
     verifiedOnly,
     debouncedSearch,
@@ -512,34 +561,37 @@ export default function Directory() {
   const roleCounts = useMemo(() => {
     return {
       All: baseFilteredMembers.length,
-      Alumni: baseFilteredMembers.filter((m) => m.role === "alumni").length,
-      Students: baseFilteredMembers.filter((m) => m.role === "student").length,
-      Faculty: baseFilteredMembers.filter((m) => m.role === "faculty").length,
+      Alumni: baseFilteredMembers.filter((m) => m && (m.role || "alumni").toLowerCase().startsWith("alumn")).length,
+      Students: baseFilteredMembers.filter((m) => m && (m.role || "").toLowerCase() === "student").length,
+      Faculty: baseFilteredMembers.filter((m) => m && (m.role || "").toLowerCase() === "faculty").length,
+      Saved: baseFilteredMembers.filter((m) => m && isMemberSaved(m.id)).length,
     };
-  }, [baseFilteredMembers]);
+  }, [baseFilteredMembers, savedIds]);
 
   // Final filtered list after applying selectedRole
   const filteredMembers = useMemo(() => {
     let list = baseFilteredMembers;
     if (selectedRole === "Alumni") {
-      list = list.filter((m) => m.role === "alumni");
+      list = list.filter((m) => m && (m.role || "alumni").toLowerCase().startsWith("alumn"));
     } else if (selectedRole === "Students") {
-      list = list.filter((m) => m.role === "student");
+      list = list.filter((m) => m && (m.role || "").toLowerCase() === "student");
     } else if (selectedRole === "Faculty") {
-      list = list.filter((m) => m.role === "faculty");
+      list = list.filter((m) => m && (m.role || "").toLowerCase() === "faculty");
+    } else if (selectedRole === "Saved") {
+      list = list.filter((m) => m && isMemberSaved(m.id));
     }
 
     // Sorting
     if (sortBy === "Name A–Z") {
-      list = [...list].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      list = [...list].sort((a, b) => ((a && a.name) || "").localeCompare((b && b.name) || ""));
     } else if (sortBy === "Batch (Newest)") {
-      list = [...list].sort((a, b) => Number(b.batch || 0) - Number(a.batch || 0));
+      list = [...list].sort((a, b) => Number((b && b.batch) || 0) - Number((a && a.batch) || 0));
     } else if (sortBy === "Connections") {
-      list = [...list].sort((a, b) => Number(b.connections || 0) - Number(a.connections || 0));
+      list = [...list].sort((a, b) => Number((b && b.connections) || 0) - Number((a && a.connections) || 0));
     }
 
     return list;
-  }, [baseFilteredMembers, selectedRole, sortBy]);
+  }, [baseFilteredMembers, selectedRole, sortBy, savedIds]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredMembers.length / pageSize) || 1;
@@ -549,32 +601,117 @@ export default function Directory() {
   }, [filteredMembers, currentPage, pageSize]);
 
   // Actions
-  const handleConnect = async (id, ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (!connectedIds.includes(id)) {
-      const next = [...connectedIds, id];
-      setConnectedIds(next);
-      try {
-        localStorage.setItem("pust_connected_alumni", JSON.stringify(next));
-        await api.connectAlumni(id);
-      } catch (err) {
-        console.debug("Connect failed:", err);
-      }
+  const handleConnect = async (member, ev) => {
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    const memId = member?.id;
+    if (!memId) return;
+    const isConn = isMemberConnected(memId);
+    const currList = Array.isArray(connectedIds) ? connectedIds : [];
+    let next;
+    if (isConn) {
+      next = currList.filter((id) => String(id) !== String(memId));
+      showToast(`Removed connection with ${member.name}`);
+    } else {
+      next = [...currList, memId];
+      showToast(`✓ Connected with ${member.name}! Added to your professional network.`, "success");
+    }
+    setConnectedIds(next);
+    try {
+      localStorage.setItem("pust_connected_alumni", JSON.stringify(next));
+      await api.connectAlumni(memId);
+    } catch (err) {
+      console.debug("Connect failed:", err);
     }
   };
 
-  const handleToggleSave = async (id, ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    const isSaved = savedIds.includes(id);
-    const nextSaved = isSaved ? savedIds.filter((item) => item !== id) : [...savedIds, id];
+  const handleToggleSave = async (member, ev) => {
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    const memId = member?.id;
+    if (!memId) return;
+    const isSaved = isMemberSaved(memId);
+    const currSaved = Array.isArray(savedIds) ? savedIds : [];
+    const nextSaved = isSaved
+      ? currSaved.filter((item) => String(item) !== String(memId))
+      : [...currSaved, memId];
     setSavedIds(nextSaved);
+    showToast(
+      isSaved
+        ? `Removed ${member.name} from bookmarks`
+        : `★ Saved ${member.name} to bookmarked profiles!`,
+      "info"
+    );
     try {
       localStorage.setItem("pust_saved_alumni", JSON.stringify(nextSaved));
-      await api.saveAlumni(id, { saved: !isSaved });
+      await api.saveAlumni(memId, { saved: !isSaved });
     } catch (err) {
       console.debug("Save failed:", err);
+    }
+  };
+
+  const handleMessageClick = (member, ev) => {
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    const currentUser = getCurrentUser();
+    if (currentUser && currentUser.email) {
+      navigate(`/dashboard/messages?startWith=${member.id}`);
+    } else {
+      setGuestMsgMember(member);
+      setGuestMsgForm({
+        name: "",
+        email: "",
+        message: `Hello ${member.name}, I found your profile in the PUST Alumni Directory and would love to connect with you.`,
+      });
+      setGuestMsgSuccess(false);
+    }
+  };
+
+  const handleShareProfile = (member, ev) => {
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    const profileUrl = `${window.location.origin}/alumni/${member.id}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(profileUrl);
+      showToast(`📋 Link for ${member.name} copied to clipboard!`, "success");
+    } else {
+      showToast(`Profile: ${profileUrl}`, "info");
+    }
+  };
+
+  const handleGuestMsgSubmit = async (e) => {
+    e.preventDefault();
+    if (!guestMsgForm.name.trim() || !guestMsgForm.email.trim() || !guestMsgForm.message.trim()) {
+      showToast("Please provide your name, email, and message.", "warning");
+      return;
+    }
+    setGuestMsgSending(true);
+    try {
+      await api.submitContact({
+        name: guestMsgForm.name.trim(),
+        email: guestMsgForm.email.trim(),
+        topic: "alumni-inquiry",
+        subject: `Direct message for ${guestMsgMember.name} (via Directory)`,
+        message: `[Message for: ${guestMsgMember.name} (${guestMsgMember.dept || "PUST"})]\n\n${guestMsgForm.message.trim()}`,
+      });
+      setGuestMsgSuccess(true);
+      showToast(`✓ Your message has been sent to ${guestMsgMember.name}!`, "success");
+      setTimeout(() => {
+        setGuestMsgMember(null);
+        setGuestMsgSuccess(false);
+      }, 2200);
+    } catch (err) {
+      showToast("Could not send message. Please try signing in.", "warning");
+    } finally {
+      setGuestMsgSending(false);
     }
   };
 
@@ -585,6 +722,7 @@ export default function Directory() {
     setSelectedDept("All");
     setSelectedBatch("All Batches");
     setSelectedLocation("All Locations");
+    setSelectedIndustry("All Industries");
     setMentorOnly(false);
     setVerifiedOnly(false);
     setSortBy("Relevance");
@@ -597,19 +735,20 @@ export default function Directory() {
     (selectedDept !== "All" && selectedDept !== "All Departments") ||
     selectedBatch !== "All Batches" ||
     selectedLocation !== "All Locations" ||
+    selectedIndustry !== "All Industries" ||
     mentorOnly ||
     verifiedOnly;
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       {/* =========================================
-          HERO BANNER (FULL LENGTH / FULL VIEWPORT VIDEO HERO)
+          HERO BANNER (FULL VIEWPORT CAMPUS VIDEO HERO)
       ========================================= */}
       <section
         className="relative overflow-hidden bg-[#0D1522] text-white flex flex-col justify-between pt-6 sm:pt-10 pb-6 sm:pb-8 border-b border-[#0F1A2A]"
         style={{ minHeight: "calc(100vh - 84px)" }}
       >
-        {/* Live Campus Video Background spanning the full length of the hero */}
+        {/* Live Campus Video Background spanning full hero */}
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
           <video
             ref={videoRef}
@@ -627,12 +766,12 @@ export default function Directory() {
             <source src="/assets/videos/pust_campus_tour_experience.mp4" type="video/mp4" />
           </video>
 
-          {/* Deep Navy Gradient Overlay for high-contrast, effortless text readability */}
+          {/* Deep Navy Gradient Overlay for high-contrast readability */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(13, 21, 34, 0.82) 0%, rgba(13, 21, 34, 0.45) 45%, rgba(13, 21, 34, 0.92) 100%)",
+                "linear-gradient(180deg, rgba(13, 21, 34, 0.85) 0%, rgba(13, 21, 34, 0.50) 45%, rgba(13, 21, 34, 0.94) 100%)",
             }}
           />
         </div>
@@ -644,7 +783,7 @@ export default function Directory() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
             </span>
-            <span className="font-bengali">🏛️ PUST ক্যাম্পাস লাইভ ব্যাকগ্রাউন্ড</span>
+            <span className="font-bengali">🏛️ PUST ক্যাম্পাস লাইভ ব্যাকগ্রাউন্ড · {allMembers.length}+ সদস্য</span>
           </div>
 
           <button
@@ -659,9 +798,9 @@ export default function Directory() {
         </div>
 
         {/* Center Main Content */}
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center my-auto py-8 sm:py-12 reveal-up">
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center my-auto py-6 sm:py-10 reveal-up">
           <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-2 text-[#C7A76C]">
-            <span className="font-bengali font-semibold">পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</span> · Alumni Directory
+            <span className="font-bengali font-semibold">পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</span> · Official Alumni Network
           </p>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold !text-white text-white mb-3 tracking-tight font-display">
@@ -669,7 +808,7 @@ export default function Directory() {
           </h1>
 
           <p className="mb-6 max-w-xl mx-auto text-sm sm:text-base text-[#E2E8F0] leading-relaxed">
-            Search and connect with graduates, current students, and faculty members across all 21 departments.
+            Search, connect, and collaborate with graduates, students, and faculty across all 21 academic departments worldwide.
           </p>
 
           {/* Primary & Secondary Hero CTAs */}
@@ -682,7 +821,7 @@ export default function Directory() {
               }}
               className="px-6 py-3 rounded-full bg-[#7A1737] hover:bg-[#60122B] text-white font-bold text-xs sm:text-sm transition-all shadow-xl active:scale-95 cursor-pointer flex items-center gap-1.5"
             >
-              <span>Explore Alumni</span>
+              <span>Explore Community ({allMembers.length})</span>
               <span>↓</span>
             </a>
             <Link
@@ -704,7 +843,7 @@ export default function Directory() {
             <input
               id="alumni-hero-search-input"
               type="text"
-              placeholder="Search by name, department (CSE, EEE, CE), company, batch, skills... (Press /)"
+              placeholder="Search by name, dept (CSE, EEE, CE), company, batch, skills... (Press /)"
               aria-label="Search alumni community"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -734,7 +873,7 @@ export default function Directory() {
 
           {/* Popular Search Suggestions */}
           <div className="mt-4 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap text-xs text-[#E2E8F0] reveal-up delay-200">
-            <span className="text-[#C7A76C] font-semibold text-[11px]">Quick Filters:</span>
+            <span className="text-[#C7A76C] font-semibold text-[11px]">Popular Tags:</span>
             {[
               { label: "💻 CSE", term: "CSE" },
               { label: "⚡ EEE", term: "EEE" },
@@ -753,13 +892,37 @@ export default function Directory() {
               </button>
             ))}
           </div>
+
+          {/* University Live Community Metrics Ribbon */}
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-w-2xl mx-auto pt-6 border-t border-white/10">
+            <div className="bg-[#17263C]/60 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+              <span className="block text-xl sm:text-2xl font-black text-white">{allMembers.length}+</span>
+              <span className="text-[10px] sm:text-xs text-[#CBD5E1]">Community Members</span>
+            </div>
+            <div className="bg-[#17263C]/60 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+              <span className="block text-xl sm:text-2xl font-black text-white">21</span>
+              <span className="text-[10px] sm:text-xs text-[#CBD5E1]">Departments</span>
+            </div>
+            <div className="bg-[#17263C]/60 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+              <span className="block text-xl sm:text-2xl font-black text-[#C7A76C]">
+                {allMembers.filter((m) => m.verified).length}
+              </span>
+              <span className="text-[10px] sm:text-xs text-[#CBD5E1]">Verified Graduates</span>
+            </div>
+            <div className="bg-[#17263C]/60 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
+              <span className="block text-xl sm:text-2xl font-black text-emerald-400">
+                {allMembers.filter((m) => m.mentorAvailable).length}
+              </span>
+              <span className="text-[10px] sm:text-xs text-[#CBD5E1]">Available Mentors</span>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Ambient Bar & Scroll Down Prompt */}
         <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 w-full flex items-center justify-between text-xs text-[#E2E8F0] font-bengali">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="hidden sm:inline">লাইভ ক্যাম্পাস ভিডিও ব্যাকগ্রাউন্ড</span>
+            <span className="hidden sm:inline">পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় অ্যালামনাই ডিরেক্টরি</span>
           </div>
 
           <a
@@ -770,14 +933,14 @@ export default function Directory() {
             }}
             className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white font-semibold transition-all shadow-md active:scale-95 cursor-pointer"
           >
-            <span>নিচে স্ক্রোল করে অ্যালামনাই তালিকা দেখুন</span>
+            <span>নিচে স্ক্রোল করে সদস্যদের তালিকা দেখুন</span>
             <span className="animate-bounce font-mono">↓</span>
           </a>
         </div>
       </section>
 
       {/* =========================================
-          ROLE TABS (STICKY WITH LIVE COUNTS)
+          ROLE TABS (STICKY WITH LIVE COUNTS & BOOKMARKS)
       ========================================= */}
       <div className="bg-white border-b border-[#E2E8F0] shadow-xs sticky top-16 z-20 reveal-up">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -804,7 +967,10 @@ export default function Directory() {
                       active ? "bg-[#7A1737]" : "bg-[#CBD5E1]"
                     }`}
                   />
-                  <span>{tab.label}</span>
+                  <span>
+                    {tab.key === "Saved" ? "★ " : ""}
+                    {tab.label}
+                  </span>
                   <span
                     className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
                       active ? "bg-[#7A1737]/10 text-[#7A1737]" : "bg-[#F1F5F9] text-[#64748B]"
@@ -847,7 +1013,7 @@ export default function Directory() {
 
         {/* Structured Layout: Left Filter Panel (1 col) + Right Content (3 cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          {/* Left: Unified Cohesive Filter Panel */}
+          {/* Left: Unified Filter Panel */}
           <aside className={`w-full lg:col-span-1 ${mobileFiltersOpen ? "block" : "hidden lg:block"} sticky top-28 reveal-left`}>
             <div className="rounded-xl bg-white border border-[#E2E8F0] shadow-xs overflow-hidden">
               {/* Filter Panel Header */}
@@ -883,7 +1049,7 @@ export default function Directory() {
                     }}
                     className="w-full text-xs py-2 px-2.5 rounded-lg outline-none focus:ring-2 focus:ring-[#7A1737]/20 focus:border-[#7A1737] bg-[#F8FAFC] border border-[#E2E8F0] text-[#17263C] cursor-pointer"
                   >
-                    <option value="All">All Departments</option>
+                    <option value="All">All Departments (21)</option>
                     {ga.map((d) => (
                       <option key={d.code} value={d.code}>
                         {d.code} — {d.name}
@@ -938,7 +1104,30 @@ export default function Directory() {
                   </select>
                 </div>
 
-                {/* Status Checkboxes */}
+                {/* Industry / Field Dropdown */}
+                <div>
+                  <label htmlFor="filter-industry-select" className="block text-[11px] font-bold uppercase tracking-wider text-[#475569] mb-1.5">
+                    Industry / Sector
+                  </label>
+                  <select
+                    id="filter-industry-select"
+                    aria-label="Filter members by industry"
+                    value={selectedIndustry}
+                    onChange={(e) => {
+                      setSelectedIndustry(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="w-full text-xs py-2 px-2.5 rounded-lg outline-none focus:ring-2 focus:ring-[#7A1737]/20 focus:border-[#7A1737] bg-[#F8FAFC] border border-[#E2E8F0] text-[#17263C] cursor-pointer"
+                  >
+                    {industryOptions.map((ind) => (
+                      <option key={ind} value={ind}>
+                        {ind}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Special Status Toggles */}
                 <div className="pt-2 border-t border-[#E2E8F0] space-y-2.5">
                   <span className="block text-[11px] font-bold uppercase tracking-wider text-[#475569] mb-1">
                     Special Status
@@ -1093,6 +1282,20 @@ export default function Directory() {
                   </span>
                 )}
 
+                {selectedIndustry !== "All Industries" && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">
+                    <span>Industry: {selectedIndustry}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedIndustry("All Industries")}
+                      className="hover:text-[#7A1737] cursor-pointer"
+                      aria-label="Remove industry filter"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+
                 {mentorOnly && (
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#B45309] border border-[#FCD34D]">
                     <span>🎯 Mentors</span>
@@ -1223,11 +1426,11 @@ export default function Directory() {
                 </button>
               </div>
             ) : viewMode === "grid" ? (
-              /* GRID VIEW - BEAUTIFULLY ORGANIZED */
+              /* GRID VIEW */
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {paginatedMembers.map((member, index) => {
-                  const isConnected = connectedIds.includes(member.id);
-                  const isSaved = savedIds.includes(member.id);
+                {paginatedMembers.filter(Boolean).map((member, index) => {
+                  const isConnected = isMemberConnected(member.id);
+                  const isSaved = isMemberSaved(member.id);
                   const coverImage = campusImages[index % campusImages.length];
 
                   return (
@@ -1245,15 +1448,29 @@ export default function Directory() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#17263C]/80 via-transparent to-transparent" />
 
+                          {/* Quick View Pill */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setQuickViewMember(member);
+                            }}
+                            className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-black/40 hover:bg-black/70 text-white backdrop-blur-xs transition-colors cursor-pointer"
+                            title="Quick View Profile"
+                          >
+                            👁️ Quick View
+                          </button>
+
                           {/* Bookmark Save Button */}
                           <button
                             type="button"
-                            onClick={(e) => handleToggleSave(member.id, e)}
+                            onClick={(e) => handleToggleSave(member, e)}
                             aria-label={isSaved ? "Remove from saved profiles" : "Save alumni profile"}
-                            title={isSaved ? "Saved" : "Save Profile"}
+                            title={isSaved ? "Bookmarked (Click to remove)" : "Bookmark Profile"}
                             className={`absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center text-xs transition-colors cursor-pointer shadow-sm ${
                               isSaved
-                                ? "bg-[#C7A76C] text-[#17263C]"
+                                ? "bg-[#C7A76C] text-[#17263C] font-bold"
                                 : "bg-black/40 hover:bg-black/60 text-white"
                             }`}
                           >
@@ -1263,14 +1480,19 @@ export default function Directory() {
 
                         {/* Avatar & Badges */}
                         <div className="flex justify-center -mt-9 relative px-4">
-                          <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setQuickViewMember(member)}
+                            className="relative cursor-pointer focus:outline-hidden"
+                            title={`Click to preview ${member.name}`}
+                          >
                             <img
                               src={member.avatar || getInitialsAvatar(member.name)}
                               alt={member.name}
                               onError={(e) => {
                                 e.currentTarget.src = getInitialsAvatar(member.name);
                               }}
-                              className="w-16 h-16 rounded-full object-cover ring-2 ring-white bg-[#F8FAFC] shadow-sm"
+                              className="w-16 h-16 rounded-full object-cover ring-2 ring-white bg-[#F8FAFC] shadow-sm hover:scale-105 transition-transform"
                             />
                             {member.verified && (
                               <span
@@ -1288,7 +1510,7 @@ export default function Directory() {
                                 🎯
                               </span>
                             )}
-                          </div>
+                          </button>
                         </div>
 
                         {/* Name & Hierarchy */}
@@ -1300,7 +1522,7 @@ export default function Directory() {
                                 roleColors[member.role] || "bg-[#F8FAFC] text-[#17263C] border-[#E2E8F0]"
                               }`}
                             >
-                              {roleLabels[member.role] || member.role}
+                              {roleLabels[member.role] || member.role || "Alumni"}
                             </span>
                           </div>
 
@@ -1313,7 +1535,10 @@ export default function Directory() {
                           </Link>
 
                           {/* Current Role / Organization */}
-                          <p className="text-xs text-[#17263C] font-semibold mt-1 leading-snug line-clamp-1 min-h-[18px]" title={getMemberRoleDisplay(member)}>
+                          <p
+                            className="text-xs text-[#17263C] font-semibold mt-1 leading-snug line-clamp-1 min-h-[18px]"
+                            title={getMemberRoleDisplay(member)}
+                          >
                             {getMemberRoleDisplay(member)}
                           </p>
 
@@ -1331,7 +1556,7 @@ export default function Directory() {
                           <div className="flex items-center justify-center gap-2 mt-1 text-[11px] text-[#64748B]">
                             <span>📍 {member.location || "Bangladesh"}</span>
                             {member.connections !== undefined && (
-                              <span>· 🔗 {member.connections + (isConnected ? 1 : 0)} connections</span>
+                              <span>· 🔗 {Number(member.connections || 0) + (isConnected ? 1 : 0)} connections</span>
                             )}
                           </div>
 
@@ -1367,8 +1592,8 @@ export default function Directory() {
                       <div className="flex items-center gap-2 px-3 py-2.5 border-t border-[#E2E8F0] bg-[#F8FAFC]/60">
                         <button
                           type="button"
-                          onClick={(e) => handleConnect(member.id, e)}
-                          aria-label={isConnected ? `Connected with ${member.name}` : `Connect with ${member.name}`}
+                          onClick={(e) => handleConnect(member, e)}
+                          aria-label={isConnected ? `Disconnect with ${member.name}` : `Connect with ${member.name}`}
                           className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-xs ${
                             isConnected
                               ? "bg-[#F1F5F9] text-[#17263C] border border-[#CBD5E1]"
@@ -1377,31 +1602,33 @@ export default function Directory() {
                         >
                           {isConnected ? "✓ Connected" : "Connect"}
                         </button>
-                        <Link
-                          to={`/alumni/${member.id}`}
-                          className="flex-1 py-1.5 text-xs font-semibold text-center rounded-lg transition-colors bg-white hover:bg-[#F1F5F9] text-[#17263C] border border-[#E2E8F0]"
+                        <button
+                          type="button"
+                          onClick={() => setQuickViewMember(member)}
+                          className="flex-1 py-1.5 text-xs font-semibold text-center rounded-lg transition-colors bg-white hover:bg-[#F1F5F9] text-[#17263C] border border-[#E2E8F0] cursor-pointer"
                         >
-                          View Profile
-                        </Link>
-                        <Link
-                          to={`/dashboard/messages?startWith=${member.id}`}
+                          Quick View
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => handleMessageClick(member, e)}
                           title={`Send message to ${member.name}`}
                           aria-label={`Message ${member.name}`}
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-colors bg-white hover:bg-[#F1F5F9] text-[#17263C] border border-[#E2E8F0] flex-shrink-0"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-colors bg-white hover:bg-[#F1F5F9] text-[#17263C] border border-[#E2E8F0] flex-shrink-0 cursor-pointer"
                         >
                           💬
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              /* LIST VIEW - STRUCTURED HORIZONTAL ROWS */
+              /* LIST VIEW */
               <div className="space-y-3">
-                {paginatedMembers.map((member) => {
-                  const isConnected = connectedIds.includes(member.id);
-                  const isSaved = savedIds.includes(member.id);
+                {paginatedMembers.filter(Boolean).map((member) => {
+                  const isConnected = isMemberConnected(member.id);
+                  const isSaved = isMemberSaved(member.id);
 
                   return (
                     <div
@@ -1409,14 +1636,19 @@ export default function Directory() {
                       className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#7A1737]/40 hover:shadow-xs transition-all"
                     >
                       <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-                        <div className="relative flex-shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setQuickViewMember(member)}
+                          className="relative flex-shrink-0 cursor-pointer focus:outline-hidden"
+                          title={`Click to preview ${member.name}`}
+                        >
                           <img
                             src={member.avatar || getInitialsAvatar(member.name)}
                             alt={member.name}
                             onError={(e) => {
                               e.currentTarget.src = getInitialsAvatar(member.name);
                             }}
-                            className="w-13 h-13 rounded-full object-cover border border-[#E2E8F0] bg-[#F8FAFC]"
+                            className="w-13 h-13 rounded-full object-cover border border-[#E2E8F0] bg-[#F8FAFC] hover:scale-105 transition-transform"
                           />
                           {member.verified && (
                             <span
@@ -1426,7 +1658,7 @@ export default function Directory() {
                               ✓
                             </span>
                           )}
-                        </div>
+                        </button>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -1441,7 +1673,7 @@ export default function Directory() {
                                 roleColors[member.role] || "bg-[#F8FAFC] border-[#E2E8F0] text-[#17263C]"
                               }`}
                             >
-                              {roleLabels[member.role] || member.role}
+                              {roleLabels[member.role] || member.role || "Alumni"}
                             </span>
                             {member.mentorAvailable && (
                               <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-[#C7A76C]/15 text-[#7A1737] border border-[#C7A76C]/30">
@@ -1450,7 +1682,10 @@ export default function Directory() {
                             )}
                           </div>
 
-                          <p className="text-xs text-[#17263C] font-semibold mt-0.5 truncate" title={getMemberRoleDisplay(member)}>
+                          <p
+                            className="text-xs text-[#17263C] font-semibold mt-0.5 truncate"
+                            title={getMemberRoleDisplay(member)}
+                          >
                             {getMemberRoleDisplay(member)}
                           </p>
 
@@ -1463,7 +1698,7 @@ export default function Directory() {
                             )}
                             <span>· 📍 {member.location || "Bangladesh"}</span>
                             {member.connections !== undefined && (
-                              <span>· 🔗 {member.connections + (isConnected ? 1 : 0)} connections</span>
+                              <span>· 🔗 {Number(member.connections || 0) + (isConnected ? 1 : 0)} connections</span>
                             )}
                           </div>
 
@@ -1490,7 +1725,7 @@ export default function Directory() {
                       <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-center">
                         <button
                           type="button"
-                          onClick={(e) => handleToggleSave(member.id, e)}
+                          onClick={(e) => handleToggleSave(member, e)}
                           title={isSaved ? "Saved" : "Save Profile"}
                           className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors border cursor-pointer ${
                             isSaved
@@ -1502,7 +1737,7 @@ export default function Directory() {
                         </button>
                         <button
                           type="button"
-                          onClick={(e) => handleConnect(member.id, e)}
+                          onClick={(e) => handleConnect(member, e)}
                           className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                             isConnected
                               ? "bg-[#F1F5F9] text-[#17263C] border border-[#CBD5E1]"
@@ -1511,20 +1746,22 @@ export default function Directory() {
                         >
                           {isConnected ? "✓ Connected" : "Connect"}
                         </button>
-                        <Link
-                          to={`/alumni/${member.id}`}
-                          className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white hover:bg-[#F8FAFC] text-[#17263C] border border-[#E2E8F0] transition-colors"
+                        <button
+                          type="button"
+                          onClick={() => setQuickViewMember(member)}
+                          className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white hover:bg-[#F8FAFC] text-[#17263C] border border-[#E2E8F0] transition-colors cursor-pointer"
                         >
-                          Profile
-                        </Link>
-                        <Link
-                          to={`/dashboard/messages?startWith=${member.id}`}
+                          Preview
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => handleMessageClick(member, e)}
                           title={`Send message to ${member.name}`}
                           aria-label={`Message ${member.name}`}
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-colors bg-white hover:bg-[#F8FAFC] text-[#17263C] border border-[#E2E8F0]"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-colors bg-white hover:bg-[#F8FAFC] text-[#17263C] border border-[#E2E8F0] cursor-pointer"
                         >
                           💬
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   );
@@ -1588,6 +1825,423 @@ export default function Directory() {
           </div>
         </div>
       </div>
+
+      {/* =========================================
+          INTERACTIVE QUICK VIEW PROFILE MODAL
+      ========================================= */}
+      {quickViewMember && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-[#17263C]/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+          onClick={() => setQuickViewMember(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-[#E2E8F0] overflow-hidden relative my-auto animate-fadeIn max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Cover */}
+            <div className="relative h-28 sm:h-36 bg-[#17263C] flex-shrink-0">
+              <img
+                src={Ka}
+                alt="PUST Campus"
+                className="w-full h-full object-cover opacity-35"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17263C] via-transparent to-transparent" />
+
+              <button
+                type="button"
+                onClick={() => setQuickViewMember(null)}
+                aria-label="Close modal"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center text-sm transition-colors cursor-pointer z-10"
+              >
+                ✕
+              </button>
+
+              <div className="absolute bottom-3 left-4 text-[11px] text-[#C7A76C] font-semibold flex items-center gap-2">
+                <span>🏛️ PUST Community Profile</span>
+                <span>·</span>
+                <span className="text-white">{quickViewMember.dept || "Pabna University of Science & Technology"}</span>
+              </div>
+            </div>
+
+            {/* Modal Content Scrollable Area */}
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 -mt-12 sm:-mt-14 relative z-10">
+                <div className="flex items-end gap-3.5">
+                  <div className="relative">
+                    <img
+                      src={quickViewMember.avatar || getInitialsAvatar(quickViewMember.name)}
+                      alt={quickViewMember.name}
+                      onError={(e) => {
+                        e.currentTarget.src = getInitialsAvatar(quickViewMember.name);
+                      }}
+                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white bg-[#F8FAFC] shadow-md"
+                    />
+                    {quickViewMember.verified && (
+                      <span
+                        className="absolute bottom-0 right-0 w-5 h-5 bg-[#7A1737] text-white font-bold rounded-full flex items-center justify-center text-[10px] ring-2 ring-white shadow-xs"
+                        title="Verified PUST Alumnus"
+                      >
+                        ✓
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="font-display font-bold text-lg sm:text-xl text-[#17263C]">
+                        {quickViewMember.name}
+                      </h2>
+                      <span
+                        className={`text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                          roleColors[quickViewMember.role] || "bg-[#F8FAFC] text-[#17263C] border-[#E2E8F0]"
+                        }`}
+                      >
+                        {roleLabels[quickViewMember.role] || quickViewMember.role || "Alumni"}
+                      </span>
+                      {quickViewMember.mentorAvailable && (
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#C7A76C]/15 text-[#7A1737] border border-[#C7A76C]/30">
+                          🎯 Available Mentor
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#475569] font-medium mt-0.5">
+                      {getMemberRoleDisplay(quickViewMember)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Header Action Buttons */}
+                <div className="flex items-center gap-2 flex-shrink-0 self-start sm:self-auto pt-2 sm:pt-6">
+                  <button
+                    type="button"
+                    onClick={(e) => handleToggleSave(quickViewMember, e)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer flex items-center gap-1 ${
+                      isMemberSaved(quickViewMember.id)
+                        ? "bg-[#C7A76C]/15 border-[#C7A76C] text-[#17263C]"
+                        : "bg-white border-[#E2E8F0] text-[#64748B] hover:text-[#17263C]"
+                    }`}
+                  >
+                    <span>{isMemberSaved(quickViewMember.id) ? "★ Saved" : "☆ Bookmark"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => handleShareProfile(quickViewMember, e)}
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#64748B] transition-colors cursor-pointer"
+                    title="Copy profile link"
+                  >
+                    📋 Share
+                  </button>
+                </div>
+              </div>
+
+              {/* Key Attributes Bar */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#F8FAFC] p-3 rounded-xl border border-[#E2E8F0] text-xs text-[#475569]">
+                <div>
+                  <span className="block text-[10px] uppercase font-bold text-[#94A3B8]">Department</span>
+                  <span className="font-semibold text-[#17263C] truncate block" title={quickViewMember.dept}>
+                    {quickViewMember.dept || "PUST"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase font-bold text-[#94A3B8]">Graduation Batch</span>
+                  <span className="font-semibold text-[#17263C]">
+                    {quickViewMember.batch ? `Batch ${quickViewMember.batch}` : "PUST Member"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase font-bold text-[#94A3B8]">Location</span>
+                  <span className="font-semibold text-[#17263C] truncate block">
+                    {quickViewMember.location || "Bangladesh"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase font-bold text-[#94A3B8]">Connections</span>
+                  <span className="font-semibold text-[#17263C]">
+                    {Number(quickViewMember.connections || 0) + (isMemberConnected(quickViewMember.id) ? 1 : 0)} members
+                  </span>
+                </div>
+              </div>
+
+              {/* About / Bio */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] mb-1.5">
+                  About & Background
+                </h3>
+                <p className="text-xs sm:text-sm text-[#334155] leading-relaxed bg-white p-3 rounded-xl border border-[#E2E8F0]">
+                  {quickViewMember.bio || `Active member of the Pabna University of Science & Technology ${quickViewMember.dept || ""} network.`}
+                </p>
+              </div>
+
+              {/* Work Experience */}
+              {Array.isArray(quickViewMember.experience) && quickViewMember.experience.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] mb-1.5">
+                    Experience
+                  </h3>
+                  <div className="space-y-2">
+                    {quickViewMember.experience.map((exp, i) => (
+                      <div key={i} className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] text-xs">
+                        <div className="flex items-center justify-between gap-2">
+                          <strong className="text-[#17263C] text-xs sm:text-sm">{exp.title}</strong>
+                          <span className="text-[10px] text-[#64748B] font-mono">{exp.period || "Present"}</span>
+                        </div>
+                        <p className="text-xs font-medium text-[#7A1737]">{exp.company}</p>
+                        {exp.description && (
+                          <p className="text-xs text-[#64748B] mt-1 leading-relaxed">{exp.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education Credentials */}
+              {Array.isArray(quickViewMember.education) && quickViewMember.education.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] mb-1.5">
+                    Education
+                  </h3>
+                  <div className="space-y-2">
+                    {quickViewMember.education.map((edu, i) => (
+                      <div key={i} className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] text-xs">
+                        <strong className="text-[#17263C] text-xs">{edu.degree}</strong>
+                        <p className="text-[11px] text-[#64748B]">{edu.institution} · {edu.year}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Skills Tags */}
+              {Array.isArray(quickViewMember.skills) && quickViewMember.skills.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#475569] mb-1.5">
+                    Skills & Areas of Expertise
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {quickViewMember.skills.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={(e) => {
+                          setQuickViewMember(null);
+                          handleSkillClick(s, e);
+                        }}
+                        className="text-xs font-medium px-2.5 py-1 rounded-lg bg-[#F8FAFC] hover:bg-[#7A1737] hover:text-white border border-[#E2E8F0] text-[#475569] transition-colors cursor-pointer"
+                        title={`Filter directory by ${s}`}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Institutional Email Privacy Row */}
+              <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span>✉️</span>
+                  <div>
+                    <span className="font-semibold text-[#17263C]">Institutional Contact:</span>{" "}
+                    <span className="font-mono text-[#475569]">
+                      {revealEmailMap[quickViewMember.id]
+                        ? quickViewMember.email
+                        : maskEmail(quickViewMember.email)}
+                    </span>
+                  </div>
+                </div>
+                {!revealEmailMap[quickViewMember.id] && (
+                  <button
+                    type="button"
+                    onClick={() => setRevealEmailMap((prev) => ({ ...prev, [quickViewMember.id]: true }))}
+                    className="text-xs text-[#7A1737] font-semibold hover:underline cursor-pointer"
+                  >
+                    Reveal Email
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Sticky Footer Actions */}
+            <div className="p-3 sm:p-4 bg-white border-t border-[#E2E8F0] flex items-center justify-between gap-3 flex-wrap flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => handleConnect(quickViewMember, e)}
+                  className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-xs ${
+                    isMemberConnected(quickViewMember.id)
+                      ? "bg-[#F1F5F9] text-[#17263C] border border-[#CBD5E1]"
+                      : "btn-maroon"
+                  }`}
+                >
+                  {isMemberConnected(quickViewMember.id)
+                    ? "✓ Connected"
+                    : "Connect with Member"}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const m = quickViewMember;
+                    setQuickViewMember(null);
+                    handleMessageClick(m, e);
+                  }}
+                  className="px-4 py-2 text-xs font-semibold rounded-lg bg-white hover:bg-[#F8FAFC] text-[#17263C] border border-[#E2E8F0] transition-colors cursor-pointer"
+                >
+                  💬 Send Message
+                </button>
+              </div>
+
+              <Link
+                to={`/alumni/${quickViewMember.id}`}
+                className="text-xs font-bold text-[#7A1737] hover:underline flex items-center gap-1"
+              >
+                <span>View Full Profile Page</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================
+          GUEST DIRECT MESSAGE / INQUIRY MODAL
+      ========================================= */}
+      {guestMsgMember && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-[#17263C]/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setGuestMsgMember(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#E2E8F0] relative my-auto animate-fadeIn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setGuestMsgMember(null)}
+              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#64748B] flex items-center justify-center text-xs transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <img
+                src={guestMsgMember.avatar || getInitialsAvatar(guestMsgMember.name)}
+                alt={guestMsgMember.name}
+                className="w-12 h-12 rounded-full object-cover border border-[#E2E8F0]"
+              />
+              <div>
+                <h3 className="font-display font-bold text-base text-[#17263C]">
+                  Contact {guestMsgMember.name}
+                </h3>
+                <p className="text-xs text-[#64748B] truncate">
+                  {guestMsgMember.headline || `${guestMsgMember.role || "Alumni"}, ${guestMsgMember.dept || "PUST"}`}
+                </p>
+              </div>
+            </div>
+
+            {guestMsgSuccess ? (
+              <div className="py-6 text-center space-y-2">
+                <span className="text-4xl block">🎉</span>
+                <h4 className="font-bold text-[#17263C] text-base">Message Sent!</h4>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Your communication has been forwarded to {guestMsgMember.name}. They will be notified via their institutional account.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleGuestMsgSubmit} className="space-y-3.5">
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Send a professional connection note or inquiry directly to this member's inbox.
+                </p>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#475569] mb-1">
+                    Your Full Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Md. Tanvir Rahman"
+                    value={guestMsgForm.name}
+                    onChange={(e) => setGuestMsgForm((prev) => ({ ...prev, name: e.target.value }))}
+                    className="w-full text-xs p-2.5 rounded-lg border border-[#E2E8F0] outline-none focus:ring-2 focus:ring-[#7A1737]/20 focus:border-[#7A1737] bg-[#F8FAFC]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#475569] mb-1">
+                    Your Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="e.g. yourname@example.com"
+                    value={guestMsgForm.email}
+                    onChange={(e) => setGuestMsgForm((prev) => ({ ...prev, email: e.target.value }))}
+                    className="w-full text-xs p-2.5 rounded-lg border border-[#E2E8F0] outline-none focus:ring-2 focus:ring-[#7A1737]/20 focus:border-[#7A1737] bg-[#F8FAFC]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#475569] mb-1">
+                    Message
+                  </label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={guestMsgForm.message}
+                    onChange={(e) => setGuestMsgForm((prev) => ({ ...prev, message: e.target.value }))}
+                    className="w-full text-xs p-2.5 rounded-lg border border-[#E2E8F0] outline-none focus:ring-2 focus:ring-[#7A1737]/20 focus:border-[#7A1737] bg-[#F8FAFC] resize-none"
+                  />
+                </div>
+
+                <div className="pt-2 flex items-center justify-between gap-2">
+                  <Link
+                    to={`/login?redirect=/dashboard/messages?startWith=${guestMsgMember.id}`}
+                    className="text-xs text-[#7A1737] font-semibold hover:underline"
+                  >
+                    Or Sign In to Chat Live →
+                  </Link>
+                  <button
+                    type="submit"
+                    disabled={guestMsgSending}
+                    className="px-5 py-2 text-xs font-bold rounded-lg btn-maroon text-white disabled:opacity-50 cursor-pointer shadow-sm"
+                  >
+                    {guestMsgSending ? "Sending..." : "Send Note"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* =========================================
+          FLOATING TOAST NOTIFICATION
+      ========================================= */}
+      {toast.show && (
+        <aside
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-5 right-5 z-50 bg-[#17263C] text-white px-4 py-3 rounded-xl shadow-2xl border border-white/15 flex items-center gap-3 animate-slideUp text-xs font-medium max-w-sm"
+        >
+          <span className="text-base flex-shrink-0">
+            {toast.type === "success" ? "✓" : toast.type === "warning" ? "⚠️" : "ℹ️"}
+          </span>
+          <span className="leading-snug">{toast.message}</span>
+          <button
+            type="button"
+            onClick={() => setToast({ show: false, message: "", type: "info" })}
+            className="ml-auto text-white/60 hover:text-white text-xs cursor-pointer"
+            aria-label="Dismiss notification"
+          >
+            ✕
+          </button>
+        </aside>
+      )}
     </div>
   );
 }

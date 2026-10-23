@@ -40,7 +40,8 @@ export default function DashboardOverview() {
   const [connectedIds, setConnectedIds] = useState(() => {
     try {
       const stored = localStorage.getItem("pust_connected_alumni");
-      return stored ? JSON.parse(stored) : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       return [];
     }
@@ -49,19 +50,21 @@ export default function DashboardOverview() {
   const [registeredEvents, setRegisteredEvents] = useState(() => {
     try {
       const stored = localStorage.getItem("pust_registered_events");
-      return stored ? JSON.parse(stored) : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       return [];
     }
   });
 
   const handleToggleConnect = async (alumnusId) => {
-    const isConn = connectedIds.includes(alumnusId);
+    const list = Array.isArray(connectedIds) ? connectedIds : [];
+    const isConn = list.some((id) => String(id) === String(alumnusId));
     let nextList;
     if (isConn) {
-      nextList = connectedIds.filter((id) => id !== alumnusId);
+      nextList = list.filter((id) => String(id) !== String(alumnusId));
     } else {
-      nextList = [...connectedIds, alumnusId];
+      nextList = [...list, alumnusId];
       await api.connectAlumni(alumnusId);
     }
     setConnectedIds(nextList);
@@ -69,12 +72,13 @@ export default function DashboardOverview() {
   };
 
   const handleToggleEventRegister = async (eventId) => {
-    const isReg = registeredEvents.includes(eventId);
+    const list = Array.isArray(registeredEvents) ? registeredEvents : [];
+    const isReg = list.some((id) => String(id) === String(eventId));
     let nextList;
     if (isReg) {
-      nextList = registeredEvents.filter((id) => id !== eventId);
+      nextList = list.filter((id) => String(id) !== String(eventId));
     } else {
-      nextList = [...registeredEvents, eventId];
+      nextList = [...list, eventId];
       await api.registerEvent(eventId);
     }
     setRegisteredEvents(nextList);

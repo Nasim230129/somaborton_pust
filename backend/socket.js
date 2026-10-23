@@ -128,6 +128,49 @@ function initSocket(httpServer) {
       }
     });
 
+    // ==========================================
+    // Real-Time Live Community Room Sockets
+    // ==========================================
+    socket.on('join_community', ({ communityId }) => {
+      const cId = Number(communityId);
+      if (cId) {
+        socket.join(`community_${cId}`);
+        io.to(`community_${cId}`).emit('community_presence', {
+          communityId: cId,
+          userId,
+          name: socket.user.name,
+          online: true,
+        });
+      }
+    });
+
+    socket.on('leave_community', ({ communityId }) => {
+      const cId = Number(communityId);
+      if (cId) {
+        socket.leave(`community_${cId}`);
+      }
+    });
+
+    socket.on('community_typing', ({ communityId, isTyping }) => {
+      const cId = Number(communityId);
+      if (cId) {
+        socket.to(`community_${cId}`).emit('community_typing', {
+          communityId: cId,
+          userId,
+          name: socket.user.name,
+          isTyping: Boolean(isTyping),
+        });
+      }
+    });
+
+    socket.on('community_chat_send', (chatPayload) => {
+      const cId = Number(chatPayload?.communityId);
+      if (cId) {
+        io.to(`community_${cId}`).emit('community_chat_message', chatPayload);
+        io.emit('community_chat_message', chatPayload);
+      }
+    });
+
     // Disconnect handling
     socket.on('disconnect', () => {
       const userSet = userSockets.get(userId);

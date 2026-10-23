@@ -17,12 +17,27 @@ function getInitialsAvatar(name) {
   return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 }
 
+// Safe institutional email masking for privacy
+function maskEmail(email) {
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    return "Not publicly available";
+  }
+  const [username, domain] = email.split("@");
+  if (!username) return `***@${domain || "pust.ac.bd"}`;
+  if (username.length <= 2) {
+    return `${username[0]}***@${domain}`;
+  }
+  const visible = username.slice(0, 2);
+  const asterisks = "*".repeat(Math.max(username.length - 2, 3));
+  return `${visible}${asterisks}@${domain}`;
+}
+
 export default function AlumniProfile() {
   useBackendSync();
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const allMembers = useMemo(() => [...pa, ...ma, ...ha, ...Sa], []);
+  const [allMembers, setAllMembers] = useState(() => [...pa, ...ma, ...ha, ...Sa]);
   const initialMember = allMembers.find(
     (m) => String(m.id) === String(id) || m.id === Number(id)
   );
@@ -33,7 +48,7 @@ export default function AlumniProfile() {
     try {
       const stored = localStorage.getItem("pust_connected_alumni");
       const list = stored ? JSON.parse(stored) : [];
-      return list.some((item) => String(item) === String(id));
+      return Array.isArray(list) && list.some((item) => String(item) === String(id));
     } catch (e) {
       return false;
     }
@@ -42,7 +57,7 @@ export default function AlumniProfile() {
     try {
       const stored = localStorage.getItem("pust_saved_alumni");
       const savedList = stored ? JSON.parse(stored) : [];
-      return savedList.some((item) => String(item) === String(id));
+      return Array.isArray(savedList) && savedList.some((item) => String(item) === String(id));
     } catch (e) {
       return false;
     }
@@ -68,6 +83,19 @@ export default function AlumniProfile() {
   });
   const [reportError, setReportError] = useState("");
   const [loading, setLoading] = useState(!initialMember);
+
+  // Load live directory to populate peer recommendations
+  useEffect(() => {
+    let isMounted = true;
+    api.getAlumniDirectory().then((res) => {
+      if (isMounted && res && res.ok && Array.isArray(res.data) && res.data.length > 0) {
+        setAllMembers(res.data);
+      }
+    }).catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Sync member details from API if available
   useEffect(() => {
@@ -104,6 +132,13 @@ export default function AlumniProfile() {
     window.addEventListener("pust-data-synced", handleSync);
     return () => window.removeEventListener("pust-data-synced", handleSync);
   }, [id]);
+
+  // Department peers for recommendations (computed unconditionally before early returns)
+  const departmentPeers = useMemo(() => {
+    return allMembers
+      .filter((m) => m && String(m.id) !== String(id) && m.dept === member?.dept)
+      .slice(0, 3);
+  }, [allMembers, id, member?.dept]);
 
   usePageMeta(
     member ? `${member.name} — PUST Alumni Profile` : "Alumni Profile",
@@ -173,19 +208,18 @@ export default function AlumniProfile() {
         ];
 
   // Masked email calculation
-  const maskedEmail = member.email
-    ? member.email.replace(/(.{2})(.*)(?=@)/, (_, a, b) => a + "*".repeat(Math.max(b.length, 3)))
-    : "Not publicly available";
+  const maskedEmail = maskEmail(member.email);
 
   // Connect action
   const handleConnect = async () => {
-    if (!connected) {
+    if (!connected && member?.id) {
       setConnected(true);
       setConnectionCount((prev) => prev + 1);
       try {
         const stored = localStorage.getItem("pust_connected_alumni");
-        const list = stored ? JSON.parse(stored) : [];
-        if (!list.includes(member.id)) {
+        const parsed = stored ? JSON.parse(stored) : [];
+        const list = Array.isArray(parsed) ? parsed : [];
+        if (!list.some((item) => String(item) === String(member.id))) {
           list.push(member.id);
           localStorage.setItem("pust_connected_alumni", JSON.stringify(list));
         }
@@ -198,15 +232,17 @@ export default function AlumniProfile() {
 
   // Toggle Save / Bookmark
   const handleToggleSave = async () => {
+    if (!member?.id) return;
     const nextSaved = !isSaved;
     setIsSaved(nextSaved);
     try {
       const stored = localStorage.getItem("pust_saved_alumni");
-      let list = stored ? JSON.parse(stored) : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      let list = Array.isArray(parsed) ? parsed : [];
       if (nextSaved) {
-        if (!list.includes(member.id)) list.push(member.id);
+        if (!list.some((item) => String(item) === String(member.id))) list.push(member.id);
       } else {
-        list = list.filter((item) => item !== member.id);
+        list = list.filter((item) => String(item) !== String(member.id));
       }
       localStorage.setItem("pust_saved_alumni", JSON.stringify(list));
       await api.saveAlumni(member.id, { saved: nextSaved });
@@ -214,13 +250,6 @@ export default function AlumniProfile() {
       console.debug("Save alumni failed:", err);
     }
   };
-
-  // Department peers for recommendations
-  const departmentPeers = useMemo(() => {
-    return allMembers
-      .filter((m) => m.id !== Number(id) && m.dept === member?.dept)
-      .slice(0, 3);
-  }, [allMembers, id, member?.dept]);
 
   // Share profile
   const handleShare = () => {

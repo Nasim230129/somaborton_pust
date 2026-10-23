@@ -79,6 +79,54 @@ describe('Full Platform Features Test Suite (Stories, Gallery, Community, Donati
     assert.match(res.data.message, /not found/i);
   });
 
+  test('TC-GAL-03 [Positive]: POST /api/gallery adds department photo/video & comment', async () => {
+    const newItem = {
+      title: 'CSE AI & Robotics Lab Session 2026',
+      url: '/assets/1778991184DSC05122-DR5DHwQE.jpeg',
+      mediaType: 'photo',
+      category: 'Research',
+      dept: 'Computer Science & Engineering',
+      deptCode: 'CSE',
+      faculty: 'Engineering & Technology',
+      description: 'Hands-on training session on embedded neural networks.',
+      uploader: {
+        id: 1,
+        name: 'Dr. Rafiqul Islam',
+        role: 'alumni',
+        dept: 'CSE',
+      },
+    };
+
+    const createRes = await apiRequest('/api/gallery', {
+      method: 'POST',
+      token: adminToken,
+      body: newItem,
+    });
+    assert.strictEqual(createRes.status, 201);
+    assert.strictEqual(createRes.data.ok, true);
+    assert.strictEqual(createRes.data.data.title, newItem.title);
+    assert.strictEqual(createRes.data.data.deptCode, 'CSE');
+
+    const createdId = createRes.data.data.id;
+
+    // Filter query test
+    const filterRes = await apiRequest('/api/gallery?dept=CSE');
+    assert.strictEqual(filterRes.status, 200);
+    assert.ok(filterRes.data.data.some((item) => item.id === createdId));
+
+    // Comment test
+    const commentRes = await apiRequest(`/api/gallery/${createdId}/comment`, {
+      method: 'POST',
+      body: {
+        text: 'Proud to see our robotics lab advancing so much!',
+        user: { name: 'Ariful Islam', role: 'student', dept: 'CSE' },
+      },
+    });
+    assert.strictEqual(commentRes.status, 200);
+    assert.strictEqual(commentRes.data.ok, true);
+    assert.ok(commentRes.data.data.comments.length > 0);
+  });
+
   test('TC-COM-01 [Positive]: GET & POST /api/community posts', async () => {
     const listRes = await apiRequest('/api/community');
     assert.strictEqual(listRes.status, 200);

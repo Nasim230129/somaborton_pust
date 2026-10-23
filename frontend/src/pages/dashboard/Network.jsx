@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { pa, ma } from "../../data/mockData";
+import { pa, ma, ha, Sa } from "../../data/mockData";
 import { api, useBackendSync } from "../../services/api";
 
 var ks = [`Connections`, `Pending`, `Suggestions`, `Students to Help`];
 export default function DashboardNetwork() {
   useBackendSync();
-  let [e, t] = useState(`Connections`),
-    [n, r] = useState([1, 5]),
-    [i, a] = useState([3, 7]),
-    o =
-      {
-        Connections: pa.filter((e) => n.includes(e.id)),
-        Pending: pa.filter((e) => i.includes(e.id)),
-        Suggestions: pa.filter((e) => !n.includes(e.id) && !i.includes(e.id)),
-        "Students to Help": ma,
-      }[e] || [];
+  const [activeTab, setActiveTab] = useState(`Connections`);
+  const [allMembers, setAllMembers] = useState(() => [...pa, ...ma, ...ha, ...Sa]);
+  const [connectedIds, setConnectedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem("pust_connected_alumni");
+      const parsed = stored ? JSON.parse(stored) : [1, 5];
+      return Array.isArray(parsed) ? parsed : [1, 5];
+    } catch (e) {
+      return [1, 5];
+    }
+  });
+  const [pendingIds, setPendingIds] = useState([3, 7]);
+
+  useEffect(() => {
+    let isMounted = true;
+    api.getAlumniDirectory().then((res) => {
+      if (isMounted && res && res.ok && Array.isArray(res.data) && res.data.length > 0) {
+        setAllMembers(res.data);
+      }
+    }).catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const safeConnIds = Array.isArray(connectedIds) ? connectedIds : [];
+  const safePendingIds = Array.isArray(pendingIds) ? pendingIds : [];
+
+  const tabList = {
+    Connections: allMembers.filter((m) => m && safeConnIds.some((id) => String(id) === String(m.id))),
+    Pending: allMembers.filter((m) => m && safePendingIds.some((id) => String(id) === String(m.id))),
+    Suggestions: allMembers.filter(
+      (m) =>
+        m &&
+        !safeConnIds.some((id) => String(id) === String(m.id)) &&
+        !safePendingIds.some((id) => String(id) === String(m.id)) &&
+        (m.role || "alumni") !== "student"
+    ),
+    "Students to Help": allMembers.filter((m) => m && (m.role || "").toLowerCase() === "student"),
+  }[activeTab] || [];
   return (
     <div className="max-w-4xl space-y-5">
       <div className="flex items-center justify-between">
@@ -23,114 +53,129 @@ export default function DashboardNetwork() {
           My Network
         </h1>
         <div className="flex items-center gap-2 text-sm text-[#64748B]">
-          <span className="font-semibold text-[#0F172A]">{n.length}</span>
+          <span className="font-semibold text-[#0F172A]">{connectedIds.length}</span>
           {" connections"}
         </div>
       </div>
       <div className="card rounded-xl overflow-hidden">
         <div className="flex border-b border-[#E2E8F0] overflow-x-auto">
-          {ks.map((n) => (
+          {ks.map((tab) => (
             <button
-              key={n}
-              onClick={() => t(n)}
-              className={`tab-underline ${e === n ? `active` : ``}`}
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`tab-underline ${activeTab === tab ? `active` : ``}`}
             >
-              {n}
-              {n === `Pending` && i.length > 0 && (
+              {tab}
+              {tab === `Pending` && pendingIds.length > 0 && (
                 <span className="ml-1.5 badge badge-red text-[9px]">
-                  {i.length}
+                  {pendingIds.length}
+                </span>
+              )}
+              {tab === `Connections` && (
+                <span className="ml-1.5 badge badge-green text-[9px]">
+                  {connectedIds.length}
                 </span>
               )}
             </button>
           ))}
         </div>
         <div className="p-4 space-y-3">
-          {o.length === 0 ? (
+          {tabList.length === 0 ? (
             <div className="py-16 text-center">
               <div className="text-5xl mb-4">🔗</div>
               <h3 className="font-semibold text-[#0F172A]">
                 {"No "}
-                {e}
+                {activeTab}
                 {" Yet"}
               </h3>
               <p className="text-[#64748B] text-sm mt-1">
-                Start exploring the alumni directory to connect.
+                Start exploring the alumni directory to connect with graduates and faculty.
               </p>
               <Link to="/alumni" className="btn btn-primary btn-sm mt-4">
-                Browse Alumni
+                Browse Alumni Directory
               </Link>
             </div>
           ) : (
-            o.map((t) => (
+            tabList.map((member) => (
               <div
-                key={t.id}
+                key={member.id}
                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-[#F8FAFC] transition-colors"
               >
                 <img
-                  src={t.avatar}
-                  alt={t.name}
+                  src={member.avatar}
+                  alt={member.name}
                   className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <p className="font-semibold text-[#0F172A] text-sm">
-                      {t.name}
+                      {member.name}
                     </p>
-                    {t.verified && (
+                    {member.verified && (
                       <span className="text-[#006B3F] text-[10px]">✓</span>
                     )}
                   </div>
                   <p className="text-[#64748B] text-xs mt-0.5 truncate">
-                    {t.headline}
+                    {member.headline}
                   </p>
                   <p className="text-[10px] text-[#94A3B8]">
-                    {t.dept} {t.batch ? `· Batch ${t.batch}` : ``}
+                    {member.dept} {member.batch ? `· Batch ${member.batch}` : ``}
                   </p>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  {e === `Connections` && (
+                  {activeTab === `Connections` && (
                     <>
-                      <Link to={`/dashboard/messages?startWith=${t.id}`} className="btn btn-sm btn-ghost">Message</Link>
+                      <Link to={`/dashboard/messages?startWith=${member.id}`} className="btn btn-sm btn-ghost">Message</Link>
                       <button
-                        onClick={() => r(n.filter((e) => e !== t.id))}
+                        onClick={() => {
+                          const next = connectedIds.filter((id) => String(id) !== String(member.id));
+                          setConnectedIds(next);
+                          try {
+                            localStorage.setItem("pust_connected_alumni", JSON.stringify(next));
+                          } catch (e) {}
+                        }}
                         className="btn btn-sm btn-ghost text-red-500 hover:bg-red-50"
                       >
                         Remove
                       </button>
                     </>
                   )}
-                  {e === `Pending` && (
+                  {activeTab === `Pending` && (
                     <>
                       <button
                         onClick={() => {
-                          api.connectAlumni(t.id);
-                          r([...n, t.id]);
-                          a(i.filter((e) => e !== t.id));
+                          api.connectAlumni(member.id);
+                          const nextConn = [...connectedIds, member.id];
+                          setConnectedIds(nextConn);
+                          setPendingIds(pendingIds.filter((id) => String(id) !== String(member.id)));
+                          try {
+                            localStorage.setItem("pust_connected_alumni", JSON.stringify(nextConn));
+                          } catch (e) {}
                         }}
                         className="btn btn-sm btn-green"
                       >
                         Accept
                       </button>
                       <button
-                        onClick={() => a(i.filter((e) => e !== t.id))}
+                        onClick={() => setPendingIds(pendingIds.filter((id) => String(id) !== String(member.id)))}
                         className="btn btn-sm btn-ghost text-red-500"
                       >
                         Decline
                       </button>
                     </>
                   )}
-                  {e === `Suggestions` && (
+                  {activeTab === `Suggestions` && (
                     <button
                       onClick={() => {
-                        api.connectAlumni(t.id);
-                        a([...i, t.id]);
+                        api.connectAlumni(member.id);
+                        setPendingIds([...pendingIds, member.id]);
                       }}
                       className="btn btn-sm btn-primary"
                     >
                       Connect
                     </button>
                   )}
-                  {e === `Students to Help` && (
+                  {activeTab === `Students to Help` && (
                     <Link to="/dashboard/mentorship" className="btn btn-sm btn-outline">Mentor</Link>
                   )}
                 </div>

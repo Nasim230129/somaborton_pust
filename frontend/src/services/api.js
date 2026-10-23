@@ -182,8 +182,11 @@ export const api = {
     }),
   submitContact: (payload) =>
     request('/contact', { method: 'POST', body: JSON.stringify(payload) }),
+  getContactTracking: (code) =>
+    request(`/contact/track/${encodeURIComponent(code)}`),
   submitDonation: (payload) =>
     request('/donations', { method: 'POST', body: JSON.stringify(payload) }),
+  getEvents: () => request('/events'),
   registerEvent: (id, payload = {}) =>
     request(`/events/${id}/register`, {
       method: 'POST',
@@ -202,11 +205,15 @@ export const api = {
     await syncWithBackend();
     return res;
   },
+  getJobs: (params = '') => request(`/jobs${params ? '?' + params : ''}`),
+  getLiveJobs: () => request('/jobs/live'),
   applyJob: (id, payload = {}) =>
     request(`/jobs/${id}/apply`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
+  trackJobApplication: (code) =>
+    request(`/jobs/applications/${encodeURIComponent(code)}`),
   createJob: async (payload) => {
     const res = await request('/jobs', {
       method: 'POST',
@@ -228,6 +235,7 @@ export const api = {
     await syncWithBackend();
     return res;
   },
+  getStories: () => request('/stories'),
   createStory: async (payload) => {
     const res = await request('/stories', {
       method: 'POST',
@@ -236,15 +244,100 @@ export const api = {
     await syncWithBackend();
     return res;
   },
-  likeGallery: (id) =>
-    request(`/gallery/${id}/like`, { method: 'POST' }),
+  likeStory: (id) =>
+    request(`/stories/${id}/like`, { method: 'POST' }),
+  getFaculties: () => request('/faculties'),
+  getDepartments: (params = {}) => {
+    const q = new URLSearchParams();
+    if (params.facultyId) q.append('facultyId', params.facultyId);
+    if (params.faculty) q.append('faculty', params.faculty);
+    const qs = q.toString();
+    return request(`/departments${qs ? `?${qs}` : ''}`);
+  },
+  getDepartmentBatches: (deptId) => request(`/departments/${deptId}/batches`),
+  getGalleryPermissions: () => request('/gallery/permissions'),
+  requestGalleryAccess: (payload) =>
+    request('/gallery/request-access', { method: 'POST', body: JSON.stringify(payload) }),
+  moderateGalleryItem: (id, payload) =>
+    request(`/gallery/${id}/moderate`, { method: 'PATCH', body: JSON.stringify(payload) }),
+  getGallery: (params = {}) => {
+    const q = new URLSearchParams();
+    if (params.facultyId) q.append('facultyId', params.facultyId);
+    if (params.faculty) q.append('faculty', params.faculty);
+    if (params.departmentId) q.append('departmentId', params.departmentId);
+    if (params.dept) q.append('dept', params.dept);
+    if (params.batchId) q.append('batchId', params.batchId);
+    if (params.batch) q.append('batch', params.batch);
+    if (params.mediaType) q.append('mediaType', params.mediaType);
+    if (params.category) q.append('category', params.category);
+    if (params.stakeholder) q.append('stakeholder', params.stakeholder);
+    if (params.moderationStatus) q.append('moderationStatus', params.moderationStatus);
+    if (params.search) q.append('search', params.search);
+    if (params.page) q.append('page', params.page);
+    if (params.limit) q.append('limit', params.limit);
+    const qs = q.toString();
+    return request(`/gallery${qs ? `?${qs}` : ''}`);
+  },
+  uploadGalleryItem: (payload) =>
+    request('/gallery', { method: 'POST', body: JSON.stringify(payload) }),
+  likeGallery: (id, userId) =>
+    request(`/gallery/${id}/like`, { method: 'POST', body: JSON.stringify({ userId }) }),
+  commentGallery: (id, payload) =>
+    request(`/gallery/${id}/comment`, { method: 'POST', body: JSON.stringify(payload) }),
+  deleteGalleryItem: (id) =>
+    request(`/gallery/${id}`, { method: 'DELETE' }),
+  getCommunity: () => request('/community'),
   createCommunityPost: (payload) =>
     request('/community', { method: 'POST', body: JSON.stringify(payload) }),
+  createCommunityGroup: (payload) =>
+    request('/community/groups', { method: 'POST', body: JSON.stringify(payload) }),
+  joinCommunityGroup: (id, userId) =>
+    request(`/community/groups/${id}/join`, { method: 'POST', body: JSON.stringify({ userId }) }),
+  likeCommunityPost: (id, userId) =>
+    request(`/community/${id}/like`, { method: 'POST', body: JSON.stringify({ userId }) }),
+  commentCommunityPost: (id, payload) =>
+    request(`/community/${id}/comment`, { method: 'POST', body: JSON.stringify(payload) }),
+  voteCommunityPoll: (id, optionId) =>
+    request(`/community/${id}/vote`, { method: 'POST', body: JSON.stringify({ optionId }) }),
+  rsvpCommunityGathering: (id, userId) =>
+    request(`/community/gatherings/${id}/rsvp`, { method: 'POST', body: JSON.stringify({ userId }) }),
+  getMentorship: () => request('/mentorship'),
   requestMentorship: (payload) =>
     request('/mentorship/request', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
+  updateMentorshipRequest: (id, payload) =>
+    request(`/mentorship/request/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  scheduleMentorshipSession: (payload) =>
+    request('/mentorship/session', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  updateMentorshipSession: (id, payload) =>
+    request(`/mentorship/session/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  submitMentorshipReview: (payload) =>
+    request('/mentorship/review', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  becomeMentor: async (payload) => {
+    const res = await request('/mentorship/become-mentor', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    if (res && res.ok && res.data) {
+      localStorage.setItem('pust_user', JSON.stringify(res.data));
+      window.dispatchEvent(new CustomEvent('pust-data-synced', { detail: res.data }));
+    }
+    return res;
+  },
   updateProfile: async (id, payload) => {
     const res = await request(`/alumni/${id}`, {
       method: 'PUT',

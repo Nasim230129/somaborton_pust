@@ -63,6 +63,7 @@ async function apiRequest(endpoint, options = {}) {
   const url = `${baseUrl}${endpoint}`;
   const headers = {
     'Content-Type': 'application/json',
+    ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
     ...(options.headers || {}),
   };
 

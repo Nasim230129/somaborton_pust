@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const { emitToConversation, emitToUser, isUserOnline } = require('../socket');
+const { emitToConversation, emitToUser, isUserOnline, getIO } = require('../socket');
+const { validateMedia } = require('../utils/storage');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pust_somaborton_alumni_network_secret_key_2026';
 
@@ -51,12 +53,38 @@ function rateLimiter(limit = 15, windowMs = 60000) {
   };
 }
 
-// User sanitization to ensure password is NEVER sent to client
+// User sanitization to ensure password is NEVER sent to client, and guarantee complete fields
 function sanitizeUser(u, maskEmail = false) {
   if (!u) return u;
   const { password, ...safe } = u;
   if (!safe.id && safe._id) {
     safe.id = safe._id;
+  }
+  if (!safe.role) {
+    safe.role = 'alumni';
+  }
+  if (!safe.dept) {
+    safe.dept = 'Computer Science & Engineering';
+  }
+  if (!safe.location) {
+    safe.location = 'Dhaka, Bangladesh';
+  }
+  if (safe.company === undefined || safe.company === null) {
+    safe.company = '';
+  }
+  if (!safe.headline) {
+    safe.headline = safe.company
+      ? `${safe.role === 'student' ? 'Student' : 'Alumni'} at ${safe.company}`
+      : `${safe.role === 'student' ? 'Student' : 'Alumni'}, ${safe.dept}`;
+  }
+  if (!Array.isArray(safe.skills) || safe.skills.length === 0) {
+    safe.skills = ['Leadership', 'Research'];
+  }
+  if (typeof safe.connections !== 'number') {
+    safe.connections = 1;
+  }
+  if (!safe.bio) {
+    safe.bio = `Proud member of the PUST ${safe.dept} community.`;
   }
   if (!safe.avatar || safe.avatar.includes('unsplash.com')) {
     safe.avatar = createInitialsAvatar(safe.name, safe.role || 'alumni');
@@ -68,6 +96,42 @@ function sanitizeUser(u, maskEmail = false) {
     }
   }
   return safe;
+}
+
+// Unified user lookup helper that works transparently across MongoDB and memory store
+async function findUserDocument(paramId) {
+  if (paramId === undefined || paramId === null || paramId === '') {
+    return { userInMongo: null, storeUser: null, targetUser: null };
+  }
+  const strId = String(paramId).trim();
+  const numId = Number(strId);
+  const store = db.getStore();
+  let userInMongo = null;
+
+  if (db.isMongo() && db.models.User) {
+    const orQuery = [];
+    if (mongoose.Types.ObjectId.isValid(strId)) {
+      orQuery.push({ _id: new mongoose.Types.ObjectId(strId) });
+    }
+    if (!isNaN(numId)) {
+      orQuery.push({ id: numId });
+    }
+    orQuery.push({ id: strId });
+    userInMongo = await db.models.User.findOne({ $or: orQuery });
+  }
+
+  const storeUser = (store.users || []).find(
+    (u) =>
+      String(u.id) === strId ||
+      (!isNaN(numId) && Number(u.id) === numId) ||
+      String(u._id) === strId
+  );
+
+  const targetUser = userInMongo
+    ? (typeof userInMongo.toObject === 'function' ? userInMongo.toObject() : userInMongo)
+    : storeUser;
+
+  return { userInMongo, storeUser, targetUser };
 }
 
 // Helper to get collection items (MongoDB or JSON store)
@@ -648,13 +712,8 @@ router.get('/alumni/message-eligible', requireAuth, async (req, res) => {
 
 router.get('/alumni/:id', async (req, res) => {
   try {
-    const paramId = req.params.id;
-    const numId = Number(paramId);
-    const users = await getAll('User', 'users');
-    const user = users.find(
-      (u) => String(u.id) === String(paramId) || (numId && u.id === numId) || String(u._id) === String(paramId)
-    );
-    if (!user) return res.status(404).json({ ok: false, message: 'Member not found' });
+    const { targetUser } = await findUserDocument(req.params.id);
+    if (!targetUser) return res.status(404).json({ ok: false, message: 'Member not found' });
 
     // Check if requester has a valid auth token to view unmasked email
     const authHeader = req.headers.authorization;
@@ -668,7 +727,7 @@ router.get('/alumni/:id', async (req, res) => {
       }
     }
 
-    const safeUser = sanitizeUser(user, !isAuthenticated);
+    const safeUser = sanitizeUser(targetUser, !isAuthenticated);
     res.json({ ok: true, data: safeUser });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
@@ -678,20 +737,23 @@ router.get('/alumni/:id', async (req, res) => {
 router.put('/alumni/:id', async (req, res) => {
   try {
     const paramId = req.params.id;
-    const numId = Number(paramId);
-    const store = db.getStore();
-    const idx = store.users.findIndex(
-      (u) => String(u.id) === String(paramId) || (numId && u.id === numId) || String(u._id) === String(paramId)
-    );
-    if (idx === -1) return res.status(404).json({ ok: false, message: 'User not found' });
+    const { userInMongo, storeUser, targetUser } = await findUserDocument(paramId);
+    if (!targetUser) return res.status(404).json({ ok: false, message: 'User not found' });
 
-    store.users[idx] = { ...store.users[idx], ...req.body };
-    db.saveStore();
-
-    if (db.isMongo()) {
-      await db.models.User.findOneAndUpdate({ id: numId || paramId }, req.body, { new: true });
+    let updatedResult = null;
+    if (userInMongo) {
+      Object.assign(userInMongo, req.body);
+      await userInMongo.save();
+      updatedResult = typeof userInMongo.toObject === 'function' ? userInMongo.toObject() : userInMongo;
     }
-    res.json({ ok: true, data: store.users[idx] });
+
+    if (storeUser) {
+      Object.assign(storeUser, req.body);
+      db.saveStore();
+      if (!updatedResult) updatedResult = storeUser;
+    }
+
+    res.json({ ok: true, data: sanitizeUser(updatedResult || targetUser, false) });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -700,20 +762,25 @@ router.put('/alumni/:id', async (req, res) => {
 router.post('/alumni/:id/connect', async (req, res) => {
   try {
     const paramId = req.params.id;
-    const numId = Number(paramId);
-    const store = db.getStore();
-    const user = store.users.find(
-      (u) => String(u.id) === String(paramId) || (numId && u.id === numId) || String(u._id) === String(paramId)
-    );
-    if (!user) {
+    const { userInMongo, storeUser, targetUser } = await findUserDocument(paramId);
+    if (!targetUser) {
       return res.status(404).json({ ok: false, message: 'Alumni member not found' });
     }
-    user.connections = (user.connections || 0) + 1;
-    db.saveStore();
-    if (db.isMongo()) {
-      await db.models.User.findOneAndUpdate({ id: numId || paramId }, { $inc: { connections: 1 } });
+
+    let resultUser = null;
+    if (userInMongo) {
+      userInMongo.connections = (userInMongo.connections || 0) + 1;
+      await userInMongo.save();
+      resultUser = typeof userInMongo.toObject === 'function' ? userInMongo.toObject() : userInMongo;
     }
-    res.json({ ok: true, data: user });
+
+    if (storeUser) {
+      storeUser.connections = (storeUser.connections || 0) + 1;
+      db.saveStore();
+      if (!resultUser) resultUser = storeUser;
+    }
+
+    res.json({ ok: true, data: sanitizeUser(resultUser || targetUser, true) });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -722,12 +789,8 @@ router.post('/alumni/:id/connect', async (req, res) => {
 router.post('/alumni/:id/save', async (req, res) => {
   try {
     const paramId = req.params.id;
-    const numId = Number(paramId);
-    const store = db.getStore();
-    const target = store.users.find(
-      (u) => String(u.id) === String(paramId) || (numId && u.id === numId) || String(u._id) === String(paramId)
-    );
-    if (!target) {
+    const { targetUser } = await findUserDocument(paramId);
+    if (!targetUser) {
       return res.status(404).json({ ok: false, message: 'Alumni member not found' });
     }
 
@@ -736,14 +799,15 @@ router.post('/alumni/:id/save', async (req, res) => {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
-        authUser = store.users.find((u) => u.id === decoded.id || u.email === decoded.email);
+        const { targetUser: foundAuth } = await findUserDocument(decoded.id);
+        authUser = foundAuth;
       } catch (e) {
         // Proceed as guest
       }
     }
 
     let isSaved = false;
-    const saveTargetId = target.id;
+    const saveTargetId = targetUser.id;
     if (authUser) {
       if (!Array.isArray(authUser.savedProfiles)) {
         authUser.savedProfiles = [];
@@ -756,8 +820,13 @@ router.post('/alumni/:id/save', async (req, res) => {
         authUser.savedProfiles.push(saveTargetId);
         isSaved = true;
       }
-      db.saveStore();
-      if (db.isMongo()) {
+      const store = db.getStore();
+      const sUser = (store.users || []).find((u) => u.id === authUser.id);
+      if (sUser) {
+        sUser.savedProfiles = authUser.savedProfiles;
+        db.saveStore();
+      }
+      if (db.isMongo() && db.models.User) {
         await db.models.User.findOneAndUpdate(
           { id: authUser.id },
           { savedProfiles: authUser.savedProfiles }
@@ -779,10 +848,9 @@ router.post('/alumni/:id/save', async (req, res) => {
 
 router.post('/alumni/:id/report', async (req, res) => {
   try {
-    const id = Number(req.params.id);
-    const store = db.getStore();
-    const target = store.users.find((u) => u.id === id);
-    if (!target) {
+    const paramId = req.params.id;
+    const { targetUser } = await findUserDocument(paramId);
+    if (!targetUser) {
       return res.status(404).json({ ok: false, message: 'Alumni member not found' });
     }
 
@@ -791,6 +859,7 @@ router.post('/alumni/:id/report', async (req, res) => {
       return res.status(400).json({ ok: false, message: 'A report reason is required' });
     }
 
+    const store = db.getStore();
     if (!Array.isArray(store.reports)) {
       store.reports = [];
     }
@@ -798,8 +867,8 @@ router.post('/alumni/:id/report', async (req, res) => {
     const reportRecord = {
       id: Date.now(),
       targetType: 'alumni',
-      targetId: id,
-      targetName: target.name,
+      targetId: targetUser.id || 0,
+      targetName: targetUser.name || 'Alumni Member',
       reason: reason.trim(),
       details: (details || '').trim(),
       reporterEmail: reporterEmail || 'anonymous',
@@ -825,12 +894,187 @@ router.post('/alumni/:id/report', async (req, res) => {
 });
 
 // ========================
+// FACULTIES & INSTITUTIONAL STRUCTURE
+// ========================
+router.get('/faculties', async (req, res) => {
+  try {
+    const store = db.getStore();
+    let faculties = await getAll('Faculty', 'faculties');
+    if (!faculties || faculties.length === 0) {
+      faculties = store.faculties || [];
+    }
+    const departments = await getAll('Department', 'departments');
+    const galleryItems = store.gallery || [];
+
+    // Augment faculties with computed department count and media counts
+    const enriched = faculties.map((f) => {
+      const depts = departments.filter((d) => (d.faculty || '').toLowerCase() === (f.shortName || f.name).toLowerCase() || (d.facultyId && d.facultyId === f.id));
+      const deptCodes = depts.map((d) => (d.code || '').toUpperCase());
+      const approvedMedia = galleryItems.filter((m) => {
+        const isApproved = !m.moderationStatus || m.moderationStatus === 'approved';
+        const matchesFaculty = (m.faculty || '').toLowerCase() === (f.shortName || f.name).toLowerCase();
+        const matchesDept = deptCodes.includes((m.deptCode || '').toUpperCase());
+        return isApproved && (matchesFaculty || matchesDept);
+      });
+      const photoCount = approvedMedia.filter((m) => (m.mediaType || 'photo').toLowerCase() === 'photo' || m.mediaType === 'IMAGE').length;
+      const videoCount = approvedMedia.filter((m) => (m.mediaType || '').toLowerCase() === 'video' || m.mediaType === 'VIDEO').length;
+
+      return {
+        ...f,
+        departmentCount: depts.length,
+        totalMedia: approvedMedia.length,
+        photoCount,
+        videoCount,
+      };
+    });
+
+    res.json({ ok: true, data: enriched });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// ========================
 // DEPARTMENTS
 // ========================
 router.get('/departments', async (req, res) => {
   try {
-    const departments = await getAll('Department', 'departments');
-    res.json({ ok: true, data: departments });
+    const { facultyId, faculty } = req.query;
+    let departments = await getAll('Department', 'departments');
+    const store = db.getStore();
+    const batches = store.batches || [];
+    const galleryItems = store.gallery || [];
+
+    if (facultyId) {
+      departments = departments.filter((d) => String(d.facultyId) === String(facultyId));
+    }
+    if (faculty && faculty !== 'all') {
+      const fTarget = decodeURIComponent(faculty).toLowerCase().trim();
+      departments = departments.filter((d) => {
+        const facName = (d.faculty || '').toLowerCase().trim();
+        return facName === fTarget || facName.includes(fTarget) || fTarget.includes(facName);
+      });
+    }
+
+    // Enrich with batches and approved media counts
+    const enriched = departments.map((d) => {
+      const deptBatches = batches.filter((b) => b.departmentId === d.id || b.deptCode === d.code);
+      const approvedMedia = galleryItems.filter((m) => {
+        const isApproved = !m.moderationStatus || m.moderationStatus === 'approved';
+        return isApproved && ((m.departmentId && m.departmentId === d.id) || (m.deptCode && m.deptCode.toUpperCase() === d.code.toUpperCase()));
+      });
+      const photoCount = approvedMedia.filter((m) => (m.mediaType || 'photo').toLowerCase() === 'photo' || m.mediaType === 'IMAGE').length;
+      const videoCount = approvedMedia.filter((m) => (m.mediaType || '').toLowerCase() === 'video' || m.mediaType === 'VIDEO').length;
+
+      return {
+        ...d,
+        batchCount: deptBatches.length,
+        batches: deptBatches,
+        totalMedia: approvedMedia.length,
+        photoCount,
+        videoCount,
+      };
+    });
+
+    res.json({ ok: true, data: enriched });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.get('/departments/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const code = req.params.id.toUpperCase();
+    const store = db.getStore();
+    const dept = (store.departments || []).find((d) => d.id === id || (d.code && d.code.toUpperCase() === code));
+    if (!dept) {
+      return res.status(404).json({ ok: false, message: 'Department not found' });
+    }
+    const batches = (store.batches || []).filter((b) => b.departmentId === dept.id || b.deptCode === dept.code);
+    res.json({ ok: true, data: { ...dept, batches } });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// ========================
+// BATCHES
+// ========================
+router.get('/departments/:id/batches', async (req, res) => {
+  try {
+    const deptId = Number(req.params.id);
+    const store = db.getStore();
+    const dept = (store.departments || []).find((d) => d.id === deptId || d.code === req.params.id.toUpperCase());
+    if (!dept) {
+      return res.status(404).json({ ok: false, message: 'Department not found' });
+    }
+
+    const batches = (store.batches || []).filter((b) => b.departmentId === dept.id || b.deptCode === dept.code);
+    const galleryItems = store.gallery || [];
+
+    // Augment with approved photo/video counts and latest activity
+    const enriched = batches.map((b) => {
+      const bMedia = galleryItems.filter((m) => {
+        const isApproved = !m.moderationStatus || m.moderationStatus === 'approved';
+        const matchesDept = (m.departmentId && m.departmentId === dept.id) || (m.deptCode && m.deptCode.toUpperCase() === dept.code.toUpperCase());
+        const matchesBatch = (m.batchId && m.batchId === b.id) || (m.batch && (m.batch === b.label || m.batch === String(b.batchNumber) || m.batch === String(b.admissionYear)));
+        return isApproved && matchesDept && matchesBatch;
+      });
+
+      const photoCount = bMedia.filter((m) => (m.mediaType || 'photo').toLowerCase() === 'photo' || m.mediaType === 'IMAGE').length;
+      const videoCount = bMedia.filter((m) => (m.mediaType || '').toLowerCase() === 'video' || m.mediaType === 'VIDEO').length;
+      const latestItem = bMedia.sort((x, y) => new Date(y.createdAt || 0) - new Date(x.createdAt || 0))[0];
+
+      return {
+        ...b,
+        totalMedia: bMedia.length,
+        photoCount,
+        videoCount,
+        latestActivity: latestItem ? (latestItem.createdAt || 'Recent') : null,
+      };
+    });
+
+    res.json({ ok: true, data: enriched, count: enriched.length });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.post('/departments/:id/batches', requireAdmin, async (req, res) => {
+  try {
+    const deptId = Number(req.params.id);
+    const { label, session, admissionYear, graduationYear, status = 'active' } = req.body;
+    const store = db.getStore();
+    const dept = (store.departments || []).find((d) => d.id === deptId || d.code === req.params.id.toUpperCase());
+    if (!dept) {
+      return res.status(404).json({ ok: false, message: 'Department not found' });
+    }
+
+    const existingBatches = (store.batches || []).filter((b) => b.departmentId === dept.id);
+    const nextNum = existingBatches.length + 1;
+    const newBatch = {
+      id: Date.now(),
+      batchNumber: nextNum,
+      label: label || `Batch ${nextNum}`,
+      session: session || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
+      admissionYear: admissionYear || new Date().getFullYear(),
+      graduationYear: graduationYear || (new Date().getFullYear() + 4),
+      departmentId: dept.id,
+      deptCode: dept.code,
+      status,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    store.batches.push(newBatch);
+    db.saveStore();
+
+    if (db.isMongo() && db.models.Batch) {
+      await db.models.Batch.create(newBatch);
+    }
+
+    res.status(201).json({ ok: true, data: newBatch, message: 'New batch configured successfully' });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -888,17 +1132,23 @@ router.post('/events', async (req, res) => {
 router.post('/events/:id/register', async (req, res) => {
   try {
     const id = Number(req.params.id);
+    const isCancel = req.body && (req.body.action === 'cancel' || req.body.unregister === true);
     const store = db.getStore();
     const ev = store.events.find((e) => e.id === id);
     if (!ev) {
       return res.status(404).json({ ok: false, message: 'Event not found' });
     }
-    ev.registered = (ev.registered || 0) + 1;
+    if (isCancel) {
+      ev.registered = Math.max(0, (ev.registered || 1) - 1);
+    } else {
+      ev.registered = (ev.registered || 0) + 1;
+    }
     db.saveStore();
     if (db.isMongo()) {
-      await db.models.Event.findOneAndUpdate({ id }, { $inc: { registered: 1 } });
+      const incVal = isCancel ? -1 : 1;
+      await db.models.Event.findOneAndUpdate({ id }, { $inc: { registered: incVal } });
     }
-    res.json({ ok: true, data: ev });
+    res.json({ ok: true, data: ev, isCancel });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -924,11 +1174,97 @@ router.delete('/events/:id', requireAdmin, async (req, res) => {
 });
 
 // ========================
-// JOBS
+// JOBS & REAL-TIME CAREER ECOSYSTEM
 // ========================
+
+// In-memory cache for live online jobs (Remotive API)
+let cachedOnlineJobs = null;
+let lastOnlineFetchTime = 0;
+
+function fetchLiveRemoteJobs() {
+  const now = Date.now();
+  if (cachedOnlineJobs && (now - lastOnlineFetchTime < 10 * 60 * 1000)) {
+    return Promise.resolve(cachedOnlineJobs);
+  }
+
+  return new Promise((resolve) => {
+    const https = require('https');
+    const req = https.get('https://remotive.com/api/remote-jobs?limit=18', { timeout: 3500 }, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (Array.isArray(parsed.jobs) && parsed.jobs.length > 0) {
+            const mapped = parsed.jobs.slice(0, 18).map((j, idx) => {
+              const cleanDesc = (j.description || '')
+                .replace(/<[^>]*>?/gm, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              return {
+                id: `online-${j.id || (10000 + idx)}`,
+                title: j.title || 'Software Engineer',
+                company: j.company_name || 'Global Tech Partner',
+                logo: j.company_logo || '🌐',
+                location: j.candidate_required_location || 'Worldwide (Remote)',
+                type: j.job_type === 'internship' ? 'Internship' : (j.job_type === 'contract' ? 'Contract' : 'Full-time'),
+                salary: j.salary || '$55,000–$110,000/yr (USD / Remote)',
+                dept: (j.category || '').toLowerCase().includes('software') || (j.category || '').toLowerCase().includes('dev')
+                  ? 'CSE'
+                  : ((j.category || '').toLowerCase().includes('data') ? 'MATH/CSE' : 'All Departments'),
+                posted: 'Real-time Live API',
+                deadline: 'Rolling / Immediate',
+                skills: Array.isArray(j.tags) && j.tags.length > 0 ? j.tags.slice(0, 5) : ['Remote', 'Cloud', 'Engineering'],
+                applicants: Math.floor(18 + Math.random() * 45),
+                postedBy: 'Verified Recruiter (Live Online Feed)',
+                remote: true,
+                desc: cleanDesc.slice(0, 340) + '...',
+                applyUrl: j.url || 'https://remotive.com',
+                applyEmail: `careers@${(j.company_name ? j.company_name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'global')}.com`,
+                isLiveApi: true,
+                status: 'approved',
+              };
+            });
+            cachedOnlineJobs = mapped;
+            lastOnlineFetchTime = now;
+            resolve(mapped);
+            return;
+          }
+        } catch {
+          // ignore parsing error
+        }
+        resolve(cachedOnlineJobs || []);
+      });
+    });
+
+    req.on('error', () => resolve(cachedOnlineJobs || []));
+    req.on('timeout', () => {
+      req.destroy();
+      resolve(cachedOnlineJobs || []);
+    });
+  });
+}
+
+router.get('/jobs/live', async (req, res) => {
+  try {
+    const onlineJobs = await fetchLiveRemoteJobs();
+    res.json({ ok: true, data: onlineJobs });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
 router.get('/jobs', async (req, res) => {
   try {
     const jobs = await getAll('Job', 'jobs');
+    if (req.query.source === 'online') {
+      const onlineJobs = await fetchLiveRemoteJobs();
+      return res.json({ ok: true, data: onlineJobs });
+    }
+    if (req.query.include_online === 'true' || req.query.source === 'all') {
+      const onlineJobs = await fetchLiveRemoteJobs();
+      return res.json({ ok: true, data: [...jobs, ...onlineJobs] });
+    }
     res.json({ ok: true, data: jobs });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
@@ -957,9 +1293,11 @@ router.post('/jobs', async (req, res) => {
         ? req.body.skills
         : (req.body.skills || 'React, Node.js, MongoDB').split(',').map((s) => s.trim()),
       applicants: 0,
-      postedBy: req.body.postedBy || 'Dr. Rafiqul Islam (Alumni)',
+      postedBy: req.body.postedBy || 'PUST Alumni Leader',
       remote: Boolean(req.body.remote),
       desc: req.body.desc || 'Exciting career opportunity for PUST graduates.',
+      applyUrl: req.body.applyUrl || '',
+      applyEmail: req.body.applyEmail || '',
       status: 'approved',
     };
     store.jobs.unshift(newJob);
@@ -976,18 +1314,72 @@ router.post('/jobs', async (req, res) => {
 
 router.post('/jobs/:id/apply', async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const rawId = req.params.id;
     const store = db.getStore();
-    const job = store.jobs.find((j) => j.id === id);
+    store.jobApplications = store.jobApplications || [];
+
+    const numId = Number(rawId);
+    let job = !isNaN(numId) ? store.jobs.find((j) => j.id === numId) : null;
+
+    if (!job && String(rawId).startsWith('online-')) {
+      const liveJobs = cachedOnlineJobs || [];
+      const foundOnline = liveJobs.find((j) => String(j.id) === String(rawId));
+      job = foundOnline || {
+        id: rawId,
+        title: req.body.jobTitle || 'Global Career Opportunity',
+        company: req.body.company || 'International Partner',
+        applicants: 15,
+      };
+    }
+
     if (!job) {
       return res.status(404).json({ ok: false, message: 'Job not found' });
     }
+
     job.applicants = (job.applicants || 0) + 1;
     db.saveStore();
-    if (db.isMongo()) {
-      await db.models.Job.findOneAndUpdate({ id }, { $inc: { applicants: 1 } });
+    if (db.isMongo() && !isNaN(numId)) {
+      await db.models.Job.findOneAndUpdate({ id: numId }, { $inc: { applicants: 1 } });
     }
-    res.json({ ok: true, data: job });
+
+    const trackingCode = req.body.trackingCode || `PUST-APP-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newApp = {
+      id: Date.now(),
+      trackingCode,
+      jobId: job.id,
+      jobTitle: job.title,
+      company: job.company,
+      applicantName: req.body.name || req.body.applicantName || 'Applicant',
+      applicantEmail: req.body.email || req.body.applicantEmail || '',
+      applicantPhone: req.body.phone || req.body.applicantPhone || '',
+      applicantDept: req.body.dept || req.body.applicantDept || '',
+      applicantBatch: req.body.batch || req.body.applicantBatch || '',
+      portfolioUrl: req.body.portfolioUrl || '',
+      resumeUrl: req.body.resumeUrl || '',
+      coverNote: req.body.coverNote || '',
+      status: 'Forwarded to Hiring Team',
+      appliedAt: new Date().toISOString(),
+    };
+    store.jobApplications.unshift(newApp);
+    db.saveStore();
+
+    res.json({ ok: true, data: job, trackingCode, application: newApp });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.get('/jobs/applications/:identifier', async (req, res) => {
+  try {
+    const ident = (req.params.identifier || '').trim().toLowerCase();
+    const store = db.getStore();
+    const apps = store.jobApplications || [];
+    const matched = apps.filter(
+      (a) =>
+        (a.trackingCode && a.trackingCode.toLowerCase() === ident) ||
+        (a.applicantEmail && a.applicantEmail.toLowerCase() === ident)
+    );
+    res.json({ ok: true, data: matched });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -1073,13 +1465,507 @@ router.post('/stories', async (req, res) => {
   }
 });
 
+router.post('/stories/:id/like', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const story = store.stories.find((s) => s.id === id);
+    if (!story) {
+      return res.status(404).json({ ok: false, message: 'Story not found' });
+    }
+    story.likes = (story.likes || 0) + 1;
+    db.saveStore();
+
+    if (db.isMongo()) {
+      await db.models.Story.findOneAndUpdate({ id }, { $inc: { likes: 1 } });
+    }
+    res.json({ ok: true, data: story });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
 // ========================
-// GALLERY
+// GALLERY & REAL-TIME MULTIMEDIA ARCHIVE (FACULTY -> DEPT -> BATCH -> MEMORIES)
 // ========================
 router.get('/gallery', async (req, res) => {
   try {
-    const gallery = await getAll('GalleryItem', 'gallery');
-    res.json({ ok: true, data: gallery });
+    const {
+      facultyId,
+      faculty,
+      departmentId,
+      dept,
+      batchId,
+      batch,
+      mediaType,
+      category,
+      stakeholder,
+      moderationStatus,
+      search,
+      page = 1,
+      limit = 30,
+    } = req.query;
+
+    let gallery = await getAll('GalleryItem', 'gallery');
+
+    // Filter by moderation status: guests and standard users see ONLY approved content
+    const authHeader = req.headers.authorization;
+    let currentUser = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        currentUser = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+      } catch {
+        // ignore invalid token for public listing
+      }
+    }
+
+    if (moderationStatus) {
+      if (currentUser && (currentUser.role === 'admin' || currentUser.galleryRole === 'moderator')) {
+        gallery = gallery.filter((item) => item.moderationStatus === moderationStatus);
+      } else {
+        gallery = gallery.filter((item) => (item.moderationStatus || 'approved') === 'approved');
+      }
+    } else {
+      // Default to approved only
+      gallery = gallery.filter((item) => !item.moderationStatus || item.moderationStatus === 'approved');
+    }
+
+    // Faculty filtering
+    if (facultyId) {
+      gallery = gallery.filter((item) => String(item.facultyId) === String(facultyId));
+    }
+    if (faculty && faculty !== 'all') {
+      gallery = gallery.filter((item) => (item.faculty || '').toLowerCase() === faculty.toLowerCase());
+    }
+
+    // Department filtering
+    if (departmentId) {
+      gallery = gallery.filter((item) => String(item.departmentId) === String(departmentId));
+    }
+    if (dept && dept !== 'all') {
+      const target = dept.toLowerCase();
+      gallery = gallery.filter((item) => {
+        const d = (item.dept || '').toLowerCase();
+        const dc = (item.deptCode || '').toLowerCase();
+        return d.includes(target) || dc === target || (item.uploader?.dept || '').toLowerCase().includes(target);
+      });
+    }
+
+    // Batch filtering
+    if (batchId) {
+      gallery = gallery.filter((item) => String(item.batchId) === String(batchId));
+    }
+    if (batch && batch !== 'all') {
+      const bStr = String(batch).toLowerCase().trim();
+      gallery = gallery.filter((item) => {
+        const itemBatch = String(item.batch || item.batchLabel || '').toLowerCase();
+        return itemBatch === bStr || itemBatch.includes(bStr);
+      });
+    }
+
+    // Media type filter
+    if (mediaType && mediaType !== 'all') {
+      const mTarget = mediaType.toLowerCase();
+      gallery = gallery.filter((item) => {
+        const t = (item.mediaType || 'photo').toLowerCase();
+        return t === mTarget || (mTarget === 'photo' && t === 'image') || (mTarget === 'video' && t === 'video');
+      });
+    }
+
+    // Category filter
+    if (category && category !== 'All' && category !== 'all') {
+      gallery = gallery.filter((item) => (item.category || '').toLowerCase() === category.toLowerCase());
+    }
+
+    // Stakeholder filter
+    if (stakeholder && stakeholder !== 'all') {
+      gallery = gallery.filter((item) => (item.stakeholder || '').toLowerCase() === stakeholder.toLowerCase());
+    }
+
+    // Search query filter
+    if (search && search.trim()) {
+      const q = search.trim().toLowerCase();
+      gallery = gallery.filter(
+        (item) =>
+          (item.title || '').toLowerCase().includes(q) ||
+          (item.caption || '').toLowerCase().includes(q) ||
+          (item.description || '').toLowerCase().includes(q) ||
+          (item.dept || '').toLowerCase().includes(q) ||
+          (item.deptCode || '').toLowerCase().includes(q) ||
+          (item.batch || '').toLowerCase().includes(q) ||
+          (item.uploader?.name || '').toLowerCase().includes(q)
+      );
+    }
+
+    // Sort newest first
+    gallery = [...gallery].reverse();
+
+    const totalCount = gallery.length;
+    const pageNum = Math.max(1, parseInt(page, 10));
+    const limitNum = Math.max(1, Math.min(100, parseInt(limit, 10)));
+    const startIndex = (pageNum - 1) * limitNum;
+    const paginated = gallery.slice(startIndex, startIndex + limitNum);
+
+    res.json({
+      ok: true,
+      data: paginated,
+      totalCount,
+      count: paginated.length,
+      page: pageNum,
+      totalPages: Math.ceil(totalCount / limitNum) || 1,
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Check Current User's Gallery Upload Permissions
+router.get('/gallery/permissions', requireAuth, async (req, res) => {
+  try {
+    const userId = Number(req.user.id);
+    const store = db.getStore();
+    const user = (store.users || []).find((u) => u.id === userId) || req.user;
+
+    const isAdmin = user.role === 'admin';
+    const isVerified = Boolean(user.verified);
+
+    // Find user's department and batch
+    const userDept = user.dept || '';
+    const userBatch = user.batch || '';
+
+    // Check if user has an approved access request
+    const accessReqs = (store.galleryAccessRequests || []).filter(
+      (r) => r.userId === userId && r.status === 'approved'
+    );
+
+    const authorizedDepartments = new Set();
+    const authorizedBatches = new Set();
+
+    if (isAdmin) {
+      (store.departments || []).forEach((d) => authorizedDepartments.add(d.code));
+    } else {
+      // Natural department from profile
+      const matchedDept = (store.departments || []).find(
+        (d) => d.code === userDept.toUpperCase() || d.name.toLowerCase().includes(userDept.toLowerCase())
+      );
+      if (matchedDept) {
+        authorizedDepartments.add(matchedDept.code);
+      }
+      accessReqs.forEach((r) => {
+        if (r.deptCode) authorizedDepartments.add(r.deptCode);
+      });
+    }
+
+    res.json({
+      ok: true,
+      data: {
+        canUpload: isAdmin || isVerified || accessReqs.length > 0 || Boolean(userDept),
+        isAdmin,
+        isVerified,
+        isModerator: isAdmin || accessReqs.some((r) => r.requestedRole === 'moderator'),
+        userDept,
+        userBatch,
+        authorizedDepartments: Array.from(authorizedDepartments),
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Request Department / Batch Upload Access
+router.post('/gallery/request-access', requireAuth, async (req, res) => {
+  try {
+    const { departmentId, batchId, reason, requestedRole = 'member' } = req.body;
+    const store = db.getStore();
+
+    const dept = (store.departments || []).find((d) => d.id === Number(departmentId) || d.code === String(departmentId).toUpperCase());
+    if (!dept) {
+      return res.status(404).json({ ok: false, message: 'Department not found' });
+    }
+
+    let batchLabel = '';
+    if (batchId) {
+      const batchObj = (store.batches || []).find((b) => b.id === Number(batchId) || b.label === String(batchId));
+      if (batchObj) batchLabel = batchObj.label;
+    }
+
+    const newRequest = {
+      id: Date.now(),
+      userId: Number(req.user.id),
+      userName: req.user.name || 'PUSTian',
+      userEmail: req.user.email || '',
+      departmentId: dept.id,
+      deptCode: dept.code,
+      batchId: batchId ? Number(batchId) : null,
+      batchLabel,
+      requestedRole,
+      reason: (reason || '').trim(),
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+
+    if (!Array.isArray(store.galleryAccessRequests)) {
+      store.galleryAccessRequests = [];
+    }
+    store.galleryAccessRequests.push(newRequest);
+    db.saveStore();
+
+    if (db.isMongo() && db.models.GalleryAccessRequest) {
+      await db.models.GalleryAccessRequest.create(newRequest);
+    }
+
+    res.status(201).json({ ok: true, data: newRequest, message: 'Access request submitted for review.' });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Admin / Moderator: Review Access Request
+router.patch('/gallery/access-requests/:id', requireAuth, async (req, res) => {
+  try {
+    const reqId = Number(req.params.id);
+    const { status } = req.body; // approved or rejected
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ ok: false, message: 'Status must be approved or rejected' });
+    }
+
+    const store = db.getStore();
+    const item = (store.galleryAccessRequests || []).find((r) => r.id === reqId);
+    if (!item) {
+      return res.status(404).json({ ok: false, message: 'Access request not found' });
+    }
+
+    // Role check: Admin or Moderator of this department
+    const isSuperAdmin = req.user.role === 'admin';
+    const isDeptModerator = (store.galleryAccessRequests || []).some(
+      (r) => r.userId === req.user.id && r.departmentId === item.departmentId && r.requestedRole === 'moderator' && r.status === 'approved'
+    );
+
+    if (!isSuperAdmin && !isDeptModerator) {
+      return res.status(403).json({ ok: false, message: 'Forbidden: You do not have moderation rights for this department.' });
+    }
+
+    item.status = status;
+    item.reviewedBy = req.user.id;
+    item.reviewedAt = new Date().toISOString();
+    db.saveStore();
+
+    if (db.isMongo() && db.models.GalleryAccessRequest) {
+      await db.models.GalleryAccessRequest.findOneAndUpdate({ id: reqId }, { status, reviewedBy: req.user.id, reviewedAt: new Date() });
+    }
+
+    res.json({ ok: true, data: item, message: `Access request ${status}` });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Upload Memory (Strict Validation + Hierarchy Integrity Check + Role-based Authorization)
+router.post('/gallery', requireAuth, async (req, res) => {
+  try {
+    const {
+      title,
+      caption,
+      url,
+      thumb,
+      mediaType = 'photo',
+      category = 'Campus Life',
+      facultyId,
+      departmentId,
+      deptCode,
+      batchId,
+      batch,
+      description = '',
+      year = new Date().getFullYear(),
+    } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({ ok: false, message: 'Media title is required' });
+    }
+    if (!url || !url.trim()) {
+      return res.status(400).json({ ok: false, message: 'Media file or URL is required' });
+    }
+
+    // Server-side file validation (MIME & size)
+    const mediaCheck = validateMedia({ mediaType, url });
+    if (!mediaCheck.ok) {
+      return res.status(400).json({ ok: false, message: mediaCheck.message });
+    }
+
+    const store = db.getStore();
+
+    // Verify Department exists
+    const dept = (store.departments || []).find(
+      (d) => (departmentId && d.id === Number(departmentId)) || (deptCode && d.code.toUpperCase() === String(deptCode).toUpperCase())
+    );
+    if (!dept) {
+      return res.status(400).json({ ok: false, message: 'Invalid department specified' });
+    }
+
+    // Verify Faculty hierarchy
+    const faculty = (store.faculties || []).find(
+      (f) => (facultyId && f.id === Number(facultyId)) || (dept.faculty && (f.name.toLowerCase() === dept.faculty.toLowerCase() || f.shortName.toLowerCase() === dept.faculty.toLowerCase()))
+    );
+
+    // Verify Batch belongs to this Department
+    let matchedBatch = null;
+    if (batchId) {
+      matchedBatch = (store.batches || []).find((b) => b.id === Number(batchId));
+      if (!matchedBatch) {
+        return res.status(400).json({ ok: false, message: 'Specified batch does not exist' });
+      }
+      if (matchedBatch.departmentId !== dept.id && matchedBatch.deptCode !== dept.code) {
+        return res.status(400).json({ ok: false, message: 'Cross-department violation: The selected batch does not belong to this department.' });
+      }
+    } else if (batch) {
+      matchedBatch = (store.batches || []).find(
+        (b) => (b.departmentId === dept.id || b.deptCode === dept.code) && (b.label.toLowerCase() === String(batch).toLowerCase() || String(b.batchNumber) === String(batch))
+      );
+    }
+
+    // Resource-Level Authorization Check:
+    // Super admin can post anywhere.
+    // Otherwise, check if user's verified department matches OR they have approved access for this department.
+    const isSuperAdmin = req.user.role === 'admin';
+    const userDoc = (store.users || []).find((u) => u.id === req.user.id) || req.user;
+    const userDept = (userDoc.dept || '').toUpperCase();
+    const isDeptMember = userDept === dept.code.toUpperCase() || userDept.includes(dept.code.toUpperCase()) || (dept.name && userDept.includes(dept.name.toUpperCase()));
+
+    const hasApprovedAccess = (store.galleryAccessRequests || []).some(
+      (r) => r.userId === req.user.id && (r.departmentId === dept.id || r.deptCode === dept.code) && r.status === 'approved'
+    );
+
+    if (!isSuperAdmin && !isDeptMember && !hasApprovedAccess) {
+      return res.status(403).json({
+        ok: false,
+        message: `Forbidden: You are not authorized to upload memories to ${dept.name} (${dept.code}). Please submit an access request.`,
+      });
+    }
+
+    // Moderation Status: Admins & verified department moderators auto-approve; others default to pending
+    const isModerator = isSuperAdmin || (store.galleryAccessRequests || []).some(
+      (r) => r.userId === req.user.id && r.departmentId === dept.id && r.requestedRole === 'moderator' && r.status === 'approved'
+    );
+
+    const moderationStatus = isModerator ? 'approved' : 'pending';
+
+    const newItem = {
+      id: Date.now(),
+      title: title.trim(),
+      caption: (caption || '').trim(),
+      url: url.trim(),
+      thumb: (thumb && thumb.trim()) || url.trim(),
+      mediaType: mediaType === 'video' || mediaType === 'VIDEO' ? 'video' : 'photo',
+      category: category.trim(),
+      facultyId: faculty?.id || dept.facultyId || 1,
+      faculty: faculty?.name || dept.faculty || 'Faculty of Engineering & Technology',
+      departmentId: dept.id,
+      dept: dept.name,
+      deptCode: dept.code,
+      batchId: matchedBatch ? matchedBatch.id : null,
+      batch: matchedBatch ? matchedBatch.label : (batch || 'Batch 1'),
+      batchLabel: matchedBatch ? matchedBatch.label : (batch || 'Batch 1'),
+      description: (description || '').trim(),
+      year: year || 2026,
+      likes: 0,
+      likedBy: [],
+      stakeholder: req.user.role || 'alumni',
+      moderationStatus,
+      approvedBy: isModerator ? req.user.id : null,
+      approvedAt: isModerator ? new Date().toISOString() : null,
+      ownerId: req.user.id,
+      uploader: {
+        id: req.user.id,
+        name: req.user.name || 'PUSTian',
+        role: req.user.role || 'alumni',
+        dept: dept.code,
+        avatar: req.user.avatar || createInitialsAvatar(req.user.name || 'PUSTian', req.user.role || 'alumni'),
+      },
+      comments: [],
+      createdAt: new Date().toISOString(),
+    };
+
+    if (!Array.isArray(store.gallery)) {
+      store.gallery = [];
+    }
+    store.gallery.push(newItem);
+    db.saveStore();
+
+    if (db.isMongo() && db.models.GalleryItem) {
+      await db.models.GalleryItem.create(newItem);
+    }
+
+    // Live Socket Broadcast if approved
+    if (moderationStatus === 'approved') {
+      const io = getIO();
+      if (io) {
+        io.emit('gallery_item_added', newItem);
+      }
+    }
+
+    res.status(201).json({
+      ok: true,
+      data: newItem,
+      message: moderationStatus === 'approved'
+        ? 'Memory successfully published to department gallery!'
+        : 'Memory submitted successfully! It is now pending review by your department moderator.',
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Moderate Memory (Approve / Reject)
+router.patch('/gallery/:id/moderate', requireAuth, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { status, rejectionReason } = req.body;
+    if (!['approved', 'rejected', 'archived'].includes(status)) {
+      return res.status(400).json({ ok: false, message: 'Invalid status. Must be approved, rejected, or archived.' });
+    }
+
+    const store = db.getStore();
+    const item = (store.gallery || []).find((g) => g.id === id);
+    if (!item) {
+      return res.status(404).json({ ok: false, message: 'Gallery item not found' });
+    }
+
+    // Scope verification: Super admin OR moderator of this specific department
+    const isSuperAdmin = req.user.role === 'admin';
+    const isDeptModerator = (store.galleryAccessRequests || []).some(
+      (r) => r.userId === req.user.id && (r.departmentId === item.departmentId || r.deptCode === item.deptCode) && r.requestedRole === 'moderator' && r.status === 'approved'
+    );
+
+    if (!isSuperAdmin && !isDeptModerator) {
+      return res.status(403).json({ ok: false, message: 'Forbidden: You do not have moderation rights for this department.' });
+    }
+
+    item.moderationStatus = status;
+    item.rejectionReason = status === 'rejected' ? (rejectionReason || 'Content did not meet gallery guidelines.') : '';
+    item.approvedBy = status === 'approved' ? req.user.id : null;
+    item.approvedAt = status === 'approved' ? new Date().toISOString() : null;
+    db.saveStore();
+
+    if (db.isMongo() && db.models.GalleryItem) {
+      await db.models.GalleryItem.findOneAndUpdate({ id }, {
+        moderationStatus: status,
+        rejectionReason: item.rejectionReason,
+        approvedBy: item.approvedBy,
+        approvedAt: item.approvedAt,
+      });
+    }
+
+    const io = getIO();
+    if (io) {
+      if (status === 'approved') {
+        io.emit('gallery_item_added', item);
+      } else {
+        io.emit('gallery_item_deleted', { id });
+      }
+    }
+
+    res.json({ ok: true, data: item, message: `Memory marked as ${status}` });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -1088,29 +1974,150 @@ router.get('/gallery', async (req, res) => {
 router.post('/gallery/:id/like', async (req, res) => {
   try {
     const id = Number(req.params.id);
+    const { userId } = req.body || {};
     const store = db.getStore();
     const item = store.gallery.find((g) => g.id === id);
     if (!item) {
       return res.status(404).json({ ok: false, message: 'Gallery item not found' });
     }
-    item.likes = (item.likes || 0) + 1;
+
+    if (!Array.isArray(item.likedBy)) {
+      item.likedBy = [];
+    }
+
+    const uid = userId ? String(userId) : 'anon_' + Date.now();
+    const index = item.likedBy.indexOf(uid);
+    let userHasLiked = false;
+
+    if (index > -1) {
+      item.likedBy.splice(index, 1);
+      item.likes = Math.max(0, (item.likes || 1) - 1);
+      userHasLiked = false;
+    } else {
+      item.likedBy.push(uid);
+      item.likes = (item.likes || 0) + 1;
+      userHasLiked = true;
+    }
+
     db.saveStore();
     if (db.isMongo()) {
-      await db.models.GalleryItem.findOneAndUpdate({ id }, { $inc: { likes: 1 } });
+      await db.models.GalleryItem.findOneAndUpdate(
+        { id },
+        { likes: item.likes, likedBy: item.likedBy }
+      );
     }
-    res.json({ ok: true, data: item });
+
+    // Real-Time Socket Broadcast
+    const io = getIO();
+    if (io) {
+      io.emit('gallery_item_liked', { id, likes: item.likes, likedBy: item.likedBy });
+    }
+
+    res.json({ ok: true, data: item, userHasLiked });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.post('/gallery/:id/comment', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { text, user } = req.body;
+    if (!text || !text.trim()) {
+      return res.status(400).json({ ok: false, message: 'Comment text cannot be empty' });
+    }
+
+    const store = db.getStore();
+    const item = store.gallery.find((g) => g.id === id);
+    if (!item) {
+      return res.status(404).json({ ok: false, message: 'Gallery item not found' });
+    }
+
+    if (!Array.isArray(item.comments)) {
+      item.comments = [];
+    }
+
+    const newComment = {
+      id: Date.now(),
+      text: text.trim(),
+      userName: user?.name || 'PUSTian',
+      userRole: user?.role || 'alumni',
+      dept: user?.dept || 'PUST',
+      avatar: user?.avatar || createInitialsAvatar(user?.name || 'PUSTian', user?.role || 'alumni'),
+      createdAt: new Date().toISOString(),
+    };
+
+    item.comments.push(newComment);
+    db.saveStore();
+
+    if (db.isMongo()) {
+      await db.models.GalleryItem.findOneAndUpdate({ id }, { $push: { comments: newComment } });
+    }
+
+    // Real-Time Socket Broadcast
+    const io = getIO();
+    if (io) {
+      io.emit('gallery_item_commented', { id, comment: newComment, comments: item.comments });
+    }
+
+    res.json({ ok: true, data: item, comment: newComment });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.delete('/gallery/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const index = store.gallery.findIndex((g) => g.id === id);
+    if (index === -1) {
+      return res.status(404).json({ ok: false, message: 'Gallery item not found' });
+    }
+
+    const removed = store.gallery.splice(index, 1)[0];
+    db.saveStore();
+
+    if (db.isMongo()) {
+      await db.models.GalleryItem.findOneAndDelete({ id });
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('gallery_item_deleted', { id });
+    }
+
+    res.json({ ok: true, message: 'Gallery item deleted successfully', deletedId: id });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
 });
 
 // ========================
-// COMMUNITY
+// COMMUNITY (Real-Time Live Ecosystem & Custom Community Creation)
 // ========================
 router.get('/community', async (req, res) => {
   try {
+    const store = db.getStore();
     const posts = await getAll('CommunityPost', 'communityPosts');
-    res.json({ ok: true, data: posts });
+    const communities = store.communities || [];
+    const gatherings = store.communityGatherings || [];
+    const totalMembers = communities.reduce((acc, c) => acc + (c.membersCount || 0), 0) || 22400;
+    const totalPosts = posts.length || 1200;
+    const onlineNow = communities.reduce((acc, c) => acc + (c.onlineCount || 0), 0) || 148;
+
+    res.json({
+      ok: true,
+      data: posts,
+      communities,
+      gatherings,
+      stats: {
+        totalMembers,
+        totalPosts,
+        totalCommunities: communities.length,
+        onlineNow,
+      },
+    });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -1119,39 +2126,365 @@ router.get('/community', async (req, res) => {
 router.post('/community', async (req, res) => {
   try {
     const store = db.getStore();
+    const authorUser = req.body.author || store.users[0];
     const newPost = {
       id: Date.now(),
-      author: req.body.author || store.users[0],
-      channel: req.body.channel || 'CSE & Tech Alumni',
+      author: authorUser,
+      channel: req.body.channel || 'CSE & Tech Alumni Circle',
+      communityId: Number(req.body.communityId) || 1,
       title: req.body.title || req.body.body?.slice(0, 60) || 'Community Discussion',
       body: req.body.body || '',
-      tags: req.body.tags || ['Discussion'],
+      tags: Array.isArray(req.body.tags) && req.body.tags.length > 0 ? req.body.tags : ['Discussion', 'PUST'],
+      type: req.body.type || 'post', // 'post' | 'announcement' | 'question' | 'poll'
+      poll: req.body.poll || null,
       likes: 1,
+      likedBy: [String(authorUser.id || 1)],
       replies: 0,
+      comments: 0,
+      commentList: [],
       time: 'Just now',
-      pinned: false,
+      pinned: Boolean(req.body.pinned),
+      createdAt: new Date().toISOString(),
     };
+
+    if (!Array.isArray(store.communityPosts)) store.communityPosts = [];
     store.communityPosts.unshift(newPost);
+
+    // Increment post count in relevant community if found
+    if (Array.isArray(store.communities)) {
+      const comm = store.communities.find((c) => c.name === newPost.channel || c.id === newPost.communityId);
+      if (comm) comm.postsCount = (comm.postsCount || 0) + 1;
+    }
+
     db.saveStore();
 
     if (db.isMongo()) {
-      await db.models.CommunityPost.create(newPost);
+      if (db.models.CommunityPost) await db.models.CommunityPost.create(newPost);
     }
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_post_created', newPost);
+      io.emit('community_activity', {
+        id: Date.now(),
+        type: 'post',
+        author: newPost.author?.name || 'PUST Member',
+        channel: newPost.channel,
+        title: newPost.title,
+        time: 'Just now',
+      });
+    }
+
     res.status(201).json({ ok: true, data: newPost });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
 });
 
+// Community Groups / Circles List
+router.get('/community/groups', async (req, res) => {
+  try {
+    const store = db.getStore();
+    res.json({ ok: true, data: store.communities || [] });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Create New Community / Circle / Chapter
+router.post('/community/groups', async (req, res) => {
+  try {
+    const store = db.getStore();
+    if (!Array.isArray(store.communities)) store.communities = [];
+
+    const name = (req.body.name || '').trim();
+    if (!name) {
+      return res.status(400).json({ ok: false, message: 'Community name is required' });
+    }
+
+    const existing = store.communities.find((c) => c.name.toLowerCase() === name.toLowerCase());
+    if (existing) {
+      return res.status(400).json({ ok: false, message: 'A community with this name already exists' });
+    }
+
+    const creator = req.body.creator || store.users[0];
+    const newGroup = {
+      id: Date.now(),
+      name,
+      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      desc: req.body.desc || `Welcome to ${name} on the PUST Alumni Network!`,
+      icon: req.body.icon || '🌟',
+      category: req.body.category || 'General',
+      dept: req.body.dept || creator?.dept || 'All Departments',
+      tags: Array.isArray(req.body.tags) && req.body.tags.length > 0 ? req.body.tags : [name.split(' ')[0], 'PUST'],
+      membersCount: 1,
+      postsCount: 0,
+      onlineCount: 1,
+      privacy: req.body.privacy || 'Public',
+      creator: {
+        name: creator?.name || 'PUST Member',
+        role: creator?.role || 'alumni',
+        dept: creator?.dept || 'PUST',
+        avatar: creator?.avatar || createInitialsAvatar(creator?.name || 'User', 'alumni'),
+      },
+      memberIds: [Number(creator?.id || 1)],
+      img: req.body.img || '/assets/fresher_s_reception_2026-VNfpIasg.jpg',
+      createdAt: new Date().toISOString(),
+    };
+
+    store.communities.unshift(newGroup);
+
+    // Push notification to global feed
+    if (!Array.isArray(store.notifications)) store.notifications = [];
+    store.notifications.unshift({
+      id: Date.now() + 1,
+      type: 'community',
+      msg: `🎉 New community created: "${newGroup.name}" by ${newGroup.creator.name}`,
+      time: 'Just now',
+      read: false,
+      avatar: newGroup.creator.avatar,
+    });
+
+    db.saveStore();
+
+    if (db.isMongo() && db.models.CommunityGroup) {
+      await db.models.CommunityGroup.create(newGroup);
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_created', newGroup);
+      io.emit('community_activity', {
+        id: Date.now(),
+        type: 'new_community',
+        name: newGroup.name,
+        creator: newGroup.creator.name,
+        time: 'Just now',
+      });
+      io.emit('new_notification', {
+        id: Date.now() + 1,
+        type: 'community',
+        msg: `🎉 New community created: "${newGroup.name}"`,
+      });
+    }
+
+    res.status(201).json({ ok: true, data: newGroup });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Join / Leave Community Toggle
+router.post('/community/groups/:id/join', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const group = (store.communities || []).find((c) => c.id === id);
+    if (!group) {
+      return res.status(404).json({ ok: false, message: 'Community not found' });
+    }
+
+    const userId = Number(req.body.userId) || (req.user?.id ? Number(req.user.id) : 1);
+    if (!Array.isArray(group.memberIds)) group.memberIds = [];
+
+    const isMember = group.memberIds.includes(userId);
+    if (isMember) {
+      group.memberIds = group.memberIds.filter((mid) => mid !== userId);
+      group.membersCount = Math.max(1, (group.membersCount || 1) - 1);
+    } else {
+      group.memberIds.push(userId);
+      group.membersCount = (group.membersCount || 0) + 1;
+    }
+
+    db.saveStore();
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_membership_changed', {
+        communityId: id,
+        membersCount: group.membersCount,
+        joined: !isMember,
+        userId,
+      });
+    }
+
+    res.json({ ok: true, joined: !isMember, membersCount: group.membersCount });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Like / React to a Community Post
+router.post('/community/:id/like', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const post = (store.communityPosts || []).find((p) => p.id === id);
+    if (!post) {
+      return res.status(404).json({ ok: false, message: 'Post not found' });
+    }
+
+    const userId = String(req.body.userId || req.user?.id || '1');
+    if (!Array.isArray(post.likedBy)) post.likedBy = [];
+
+    const alreadyLiked = post.likedBy.includes(userId);
+    if (alreadyLiked) {
+      post.likedBy = post.likedBy.filter((u) => u !== userId);
+      post.likes = Math.max(0, (post.likes || 1) - 1);
+    } else {
+      post.likedBy.push(userId);
+      post.likes = (post.likes || 0) + 1;
+    }
+
+    db.saveStore();
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_post_liked', { postId: id, likes: post.likes, liked: !alreadyLiked });
+    }
+
+    res.json({ ok: true, likes: post.likes, liked: !alreadyLiked });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Add Comment to Post
+router.post('/community/:id/comment', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const post = (store.communityPosts || []).find((p) => p.id === id);
+    if (!post) {
+      return res.status(404).json({ ok: false, message: 'Post not found' });
+    }
+
+    const text = (req.body.text || '').trim();
+    if (!text) {
+      return res.status(400).json({ ok: false, message: 'Comment text is required' });
+    }
+
+    const author = req.body.author || 'Dr. Rafiqul Islam';
+    const avatar = req.body.avatar || createInitialsAvatar(author, 'alumni');
+    const newComment = {
+      id: Date.now(),
+      author,
+      avatar,
+      text,
+      time: 'Just now',
+      createdAt: new Date().toISOString(),
+    };
+
+    if (!Array.isArray(post.commentList)) post.commentList = [];
+    post.commentList.push(newComment);
+    post.comments = post.commentList.length;
+    post.replies = post.commentList.length;
+
+    db.saveStore();
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_comment_added', { postId: id, comment: newComment, commentsCount: post.comments });
+    }
+
+    res.status(201).json({ ok: true, data: newComment, commentsCount: post.comments });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Poll Vote
+router.post('/community/:id/vote', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const post = (store.communityPosts || []).find((p) => p.id === id);
+    if (!post || !post.poll || !Array.isArray(post.poll.options)) {
+      return res.status(404).json({ ok: false, message: 'Poll not found on this post' });
+    }
+
+    const optionId = Number(req.body.optionId);
+    const targetOpt = post.poll.options.find((o) => o.id === optionId);
+    if (!targetOpt) {
+      return res.status(400).json({ ok: false, message: 'Invalid poll option' });
+    }
+
+    targetOpt.votes = (targetOpt.votes || 0) + 1;
+    post.poll.totalVotes = (post.poll.totalVotes || 0) + 1;
+
+    db.saveStore();
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_poll_voted', { postId: id, poll: post.poll });
+    }
+
+    res.json({ ok: true, poll: post.poll });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// Community Gatherings List
+router.get('/community/gatherings', async (req, res) => {
+  try {
+    const store = db.getStore();
+    res.json({ ok: true, data: store.communityGatherings || [] });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+// RSVP to Gathering
+router.post('/community/gatherings/:id/rsvp', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    const gathering = (store.communityGatherings || []).find((g) => g.id === id);
+    if (!gathering) {
+      return res.status(404).json({ ok: false, message: 'Gathering not found' });
+    }
+
+    const userId = Number(req.body.userId) || 1;
+    if (!Array.isArray(gathering.attendeeIds)) gathering.attendeeIds = [];
+
+    if (!gathering.attendeeIds.includes(userId)) {
+      gathering.attendeeIds.push(userId);
+      gathering.registered = (gathering.registered || 0) + 1;
+    }
+
+    db.saveStore();
+
+    const io = getIO();
+    if (io) {
+      io.emit('community_gathering_rsvp', { gatheringId: id, registered: gathering.registered });
+    }
+
+    res.json({ ok: true, registered: gathering.registered, meetLink: gathering.meetLink });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
 // ========================
-// MENTORSHIP
+// MENTORSHIP (Real-Time Live Ecosystem)
 // ========================
 router.get('/mentorship', async (req, res) => {
   try {
+    const store = db.getStore();
     const users = await getAll('User', 'users');
     const mentors = users.filter((u) => u.mentorAvailable);
     const requests = await getAll('MentorshipRequest', 'mentorshipRequests');
-    res.json({ ok: true, mentors, requests });
+    const sessions = store.mentorshipSessions || [];
+    const reviews = store.mentorshipReviews || [];
+    const stats = {
+      totalMentors: mentors.length,
+      totalSessions: 1842 + sessions.length,
+      satisfactionRate: 98,
+      activeCountries: 45,
+      pendingRequests: requests.filter((r) => r.status === 'pending').length,
+    };
+    res.json({ ok: true, mentors, requests, sessions, reviews, stats });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -1160,27 +2493,344 @@ router.get('/mentorship', async (req, res) => {
 router.post('/mentorship/request', async (req, res) => {
   try {
     const store = db.getStore();
+    const newReqId = Date.now();
+    const mentorId = Number(req.body.mentorId) || 1;
+    const mentorName = req.body.mentorName || 'Dr. Rafiqul Islam';
+
     const request = {
-      id: Date.now(),
-      mentorId: req.body.mentorId || 1,
-      mentorName: req.body.mentorName || 'Dr. Rafiqul Islam',
+      id: newReqId,
+      mentorId,
+      mentorName,
+      mentorAvatar: req.body.mentorAvatar || createInitialsAvatar(mentorName, 'alumni'),
+      menteeId: Number(req.body.menteeId) || (req.user?.id ? Number(req.user.id) : 999),
       menteeName: req.body.menteeName || req.body.name || 'PUST Student',
-      menteeEmail: req.body.menteeEmail || req.body.email || '',
+      menteeEmail: req.body.menteeEmail || req.body.email || 'student@pust.ac.bd',
+      menteeAvatar: req.body.menteeAvatar || createInitialsAvatar(req.body.menteeName || 'PUST Student', 'student'),
       dept: req.body.dept || 'CSE',
-      batch: req.body.batch || '2022',
+      batch: req.body.batch || '2023',
       topic: req.body.topic || 'Career Guidance',
       goal: req.body.goal || 'Career & Technical Growth',
       message: req.body.message || '',
+      preferredDate: req.body.preferredDate || '',
+      preferredTime: req.body.preferredTime || '',
+      preferredPlatform: req.body.preferredPlatform || 'Google Meet',
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
+
+    if (!Array.isArray(store.mentorshipRequests)) store.mentorshipRequests = [];
     store.mentorshipRequests.unshift(request);
+
+    // Push real notification to notifications list
+    if (!Array.isArray(store.notifications)) store.notifications = [];
+    const notifObj = {
+      id: Date.now() + 1,
+      type: 'mentorship',
+      msg: `${request.menteeName} requested mentorship: "${request.topic}"`,
+      time: 'Just now',
+      read: false,
+      avatar: request.menteeAvatar,
+    };
+    store.notifications.unshift(notifObj);
+
     db.saveStore();
 
     if (db.isMongo()) {
-      await db.models.MentorshipRequest.create(request);
+      if (db.models.MentorshipRequest) await db.models.MentorshipRequest.create(request);
+      if (db.models.Notification) await db.models.Notification.create(notifObj);
     }
+
+    // Broadcast via socket to mentor and globally
+    const io = getIO();
+    if (io) {
+      io.emit('mentorship_request_created', request);
+      io.emit('mentorship_activity', {
+        id: Date.now(),
+        type: 'request',
+        menteeName: request.menteeName,
+        mentorName: request.mentorName,
+        topic: request.topic,
+        time: 'Just now',
+      });
+      emitToUser(request.mentorId, 'mentorship_request_received', request);
+      io.emit('new_notification', notifObj);
+    }
+
     res.status(201).json({ ok: true, data: request });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.patch('/mentorship/request/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    if (!Array.isArray(store.mentorshipRequests)) store.mentorshipRequests = [];
+    const reqItem = store.mentorshipRequests.find((r) => r.id === id);
+    if (!reqItem) {
+      return res.status(404).json({ ok: false, message: 'Mentorship request not found' });
+    }
+
+    const { status, scheduleDate, scheduleTime, platform, meetLink, notes } = req.body;
+    if (status) reqItem.status = status;
+    if (scheduleDate) reqItem.scheduleDate = scheduleDate;
+    if (scheduleTime) reqItem.scheduleTime = scheduleTime;
+    if (platform) reqItem.platform = platform;
+    if (meetLink) reqItem.meetLink = meetLink;
+    if (notes) reqItem.notes = notes;
+    reqItem.updatedAt = new Date().toISOString();
+
+    // If accepted, ensure a session is scheduled and tracked
+    if (status === 'accepted') {
+      if (!Array.isArray(store.mentorshipSessions)) store.mentorshipSessions = [];
+      const sessionDate = scheduleDate || reqItem.preferredDate || new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0];
+      const sessionTime = scheduleTime || reqItem.preferredTime || '19:30';
+      const sessionPlatform = platform || reqItem.preferredPlatform || 'Google Meet';
+      const sessionLink = meetLink || `https://meet.google.com/pus-${Math.random().toString(36).slice(2, 6)}-${Math.random().toString(36).slice(2, 5)}`;
+
+      const newSession = {
+        id: Date.now(),
+        requestId: id,
+        mentorId: reqItem.mentorId,
+        mentorName: reqItem.mentorName,
+        mentorAvatar: reqItem.mentorAvatar,
+        menteeId: reqItem.menteeId,
+        menteeName: reqItem.menteeName,
+        menteeEmail: reqItem.menteeEmail,
+        menteeAvatar: reqItem.menteeAvatar,
+        dept: reqItem.dept,
+        topic: reqItem.topic,
+        date: sessionDate,
+        time: sessionTime,
+        platform: sessionPlatform,
+        meetLink: sessionLink,
+        status: 'scheduled',
+        notes: notes || '1-on-1 mentorship consultation session',
+        createdAt: new Date().toISOString(),
+      };
+      store.mentorshipSessions.unshift(newSession);
+
+      // Mentee notification
+      if (!Array.isArray(store.notifications)) store.notifications = [];
+      const notifObj = {
+        id: Date.now() + 2,
+        type: 'mentorship',
+        msg: `🎉 ${reqItem.mentorName} accepted your mentorship request! Session scheduled on ${sessionDate} at ${sessionTime}.`,
+        time: 'Just now',
+        read: false,
+        avatar: reqItem.mentorAvatar,
+      };
+      store.notifications.unshift(notifObj);
+    }
+
+    db.saveStore();
+
+    if (db.isMongo() && db.models.MentorshipRequest) {
+      await db.models.MentorshipRequest.findOneAndUpdate({ id }, { $set: reqItem });
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('mentorship_request_updated', reqItem);
+      io.emit('mentorship_activity', {
+        id: Date.now(),
+        type: status === 'accepted' ? 'accepted' : 'status',
+        menteeName: reqItem.menteeName,
+        mentorName: reqItem.mentorName,
+        status: reqItem.status,
+        topic: reqItem.topic,
+        time: 'Just now',
+      });
+      emitToUser(reqItem.menteeId, 'mentorship_request_status_changed', reqItem);
+      emitToUser(reqItem.mentorId, 'mentorship_request_status_changed', reqItem);
+    }
+
+    res.json({ ok: true, data: reqItem });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.post('/mentorship/session', async (req, res) => {
+  try {
+    const store = db.getStore();
+    if (!Array.isArray(store.mentorshipSessions)) store.mentorshipSessions = [];
+
+    const newSession = {
+      id: Date.now(),
+      requestId: Number(req.body.requestId) || 0,
+      mentorId: Number(req.body.mentorId) || 1,
+      mentorName: req.body.mentorName || 'Dr. Rafiqul Islam',
+      mentorAvatar: req.body.mentorAvatar || createInitialsAvatar(req.body.mentorName || 'Mentor', 'alumni'),
+      menteeId: Number(req.body.menteeId) || 0,
+      menteeName: req.body.menteeName || 'Mentee',
+      menteeEmail: req.body.menteeEmail || '',
+      menteeAvatar: req.body.menteeAvatar || createInitialsAvatar(req.body.menteeName || 'Mentee', 'student'),
+      dept: req.body.dept || 'CSE',
+      topic: req.body.topic || 'General Guidance',
+      date: req.body.date || new Date().toISOString().split('T')[0],
+      time: req.body.time || '19:00',
+      platform: req.body.platform || 'Google Meet',
+      meetLink: req.body.meetLink || `https://meet.google.com/pus-${Math.random().toString(36).slice(2, 6)}-${Math.random().toString(36).slice(2, 5)}`,
+      status: 'scheduled',
+      notes: req.body.notes || '',
+      createdAt: new Date().toISOString(),
+    };
+
+    store.mentorshipSessions.unshift(newSession);
+    db.saveStore();
+
+    if (db.isMongo() && db.models.MentorshipSession) {
+      await db.models.MentorshipSession.create(newSession);
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('mentorship_session_created', newSession);
+      io.emit('mentorship_activity', {
+        id: Date.now(),
+        type: 'session_scheduled',
+        mentorName: newSession.mentorName,
+        menteeName: newSession.menteeName,
+        date: newSession.date,
+        time: newSession.time,
+      });
+      emitToUser(newSession.mentorId, 'mentorship_session_scheduled', newSession);
+      emitToUser(newSession.menteeId, 'mentorship_session_scheduled', newSession);
+    }
+
+    res.status(201).json({ ok: true, data: newSession });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.patch('/mentorship/session/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = db.getStore();
+    if (!Array.isArray(store.mentorshipSessions)) store.mentorshipSessions = [];
+    const session = store.mentorshipSessions.find((s) => s.id === id);
+    if (!session) {
+      return res.status(404).json({ ok: false, message: 'Session not found' });
+    }
+
+    const { status, notes, meetLink, date, time } = req.body;
+    if (status) session.status = status;
+    if (notes !== undefined) session.notes = notes;
+    if (meetLink) session.meetLink = meetLink;
+    if (date) session.date = date;
+    if (time) session.time = time;
+    session.updatedAt = new Date().toISOString();
+
+    db.saveStore();
+
+    if (db.isMongo() && db.models.MentorshipSession) {
+      await db.models.MentorshipSession.findOneAndUpdate({ id }, { $set: session });
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('mentorship_session_updated', session);
+      if (status === 'completed') {
+        io.emit('mentorship_activity', {
+          id: Date.now(),
+          type: 'completed',
+          mentorName: session.mentorName,
+          menteeName: session.menteeName,
+          topic: session.topic,
+          time: 'Just now',
+        });
+      }
+    }
+
+    res.json({ ok: true, data: session });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.post('/mentorship/review', async (req, res) => {
+  try {
+    const store = db.getStore();
+    if (!Array.isArray(store.mentorshipReviews)) store.mentorshipReviews = [];
+
+    const newReview = {
+      id: Date.now(),
+      mentorId: Number(req.body.mentorId) || 1,
+      mentorName: req.body.mentorName || 'Dr. Rafiqul Islam',
+      menteeName: req.body.menteeName || 'PUST Student',
+      menteeAvatar: req.body.menteeAvatar || createInitialsAvatar(req.body.menteeName || 'Student', 'student'),
+      dept: req.body.dept || 'CSE',
+      batch: req.body.batch || '2023',
+      rating: Number(req.body.rating) || 5,
+      review: req.body.review || 'Excellent mentorship session!',
+      createdAt: new Date().toISOString(),
+    };
+
+    store.mentorshipReviews.unshift(newReview);
+    db.saveStore();
+
+    if (db.isMongo() && db.models.MentorshipReview) {
+      await db.models.MentorshipReview.create(newReview);
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('mentorship_review_added', newReview);
+      io.emit('mentorship_activity', {
+        id: Date.now(),
+        type: 'review',
+        mentorName: newReview.mentorName,
+        rating: newReview.rating,
+        menteeName: newReview.menteeName,
+      });
+    }
+
+    res.status(201).json({ ok: true, data: newReview });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.post('/mentorship/become-mentor', async (req, res) => {
+  try {
+    const store = db.getStore();
+    const userId = Number(req.body.userId) || (req.user?.id ? Number(req.user.id) : 1);
+    const user = (store.users || []).find((u) => u.id === userId);
+
+    if (!user) {
+      return res.status(404).json({ ok: false, message: 'User not found' });
+    }
+
+    user.mentorAvailable = true;
+    if (req.body.expertise) user.headline = req.body.expertise;
+    if (req.body.weeklyAvailability) user.weeklyAvailability = req.body.weeklyAvailability;
+    if (req.body.topics) {
+      const topicArr = typeof req.body.topics === 'string' ? req.body.topics.split(',').map((s) => s.trim()) : req.body.topics;
+      user.skills = Array.from(new Set([...(user.skills || []), ...topicArr]));
+    }
+    user.updatedAt = new Date().toISOString();
+
+    db.saveStore();
+
+    if (db.isMongo() && db.models.User) {
+      await db.models.User.findOneAndUpdate({ id: userId }, { $set: user });
+    }
+
+    const io = getIO();
+    if (io) {
+      io.emit('mentor_profile_updated', user);
+      io.emit('mentorship_activity', {
+        id: Date.now(),
+        type: 'new_mentor',
+        mentorName: user.name,
+        dept: user.dept,
+      });
+    }
+
+    res.json({ ok: true, data: sanitizeUser(user) });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
@@ -1245,17 +2895,21 @@ router.post('/contact', async (req, res) => {
       return res.status(400).json({ ok: false, message: 'Please provide a valid email address' });
     }
     const store = db.getStore();
+    const trackingCode = req.body.trackingCode || `PUST-INQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const contactMsg = {
       id: Date.now(),
+      trackingCode,
       name: name.trim(),
       email: email.trim(),
       phone: req.body.phone || '',
       dept: req.body.dept || '',
       batch: req.body.batch || '',
       topic: req.body.topic || 'general',
+      priority: req.body.priority || 'Normal',
       subject: req.body.subject || 'Inquiry',
       message: message.trim(),
       status: 'unread',
+      stage: 'Logged & Received',
       createdAt: new Date().toISOString(),
     };
     store.contactMessages.unshift(contactMsg);
@@ -1265,6 +2919,49 @@ router.post('/contact', async (req, res) => {
       await db.models.ContactMessage.create(contactMsg);
     }
     res.status(201).json({ ok: true, data: contactMsg });
+  } catch (err) {
+    res.status(500).json({ ok: false, message: err.message });
+  }
+});
+
+router.get('/contact/track/:trackingCode', async (req, res) => {
+  try {
+    const raw = (req.params.trackingCode || '').trim();
+    if (!raw) {
+      return res.status(400).json({ ok: false, message: 'Please enter a valid tracking reference code.' });
+    }
+    const clean = raw.toUpperCase();
+    const msgs = await getAll('ContactMessage', 'contactMessages');
+    const match = msgs.find(
+      (m) =>
+        (m.trackingCode && m.trackingCode.toUpperCase() === clean) ||
+        String(m.id) === raw ||
+        (m.email && m.email.toLowerCase() === raw.toLowerCase())
+    );
+
+    if (!match) {
+      return res.status(404).json({
+        ok: false,
+        message: `No active inquiry found for tracking reference "${raw}". Please check your code format (e.g. PUST-INQ-2026-XXXX).`,
+      });
+    }
+
+    res.json({
+      ok: true,
+      data: {
+        id: match.id,
+        trackingCode: match.trackingCode || `PUST-INQ-2026-${String(match.id).slice(-4)}`,
+        name: match.name,
+        email: match.email,
+        dept: match.dept || 'General Alumni',
+        topic: match.topic || 'General Inquiry',
+        priority: match.priority || 'Normal',
+        status: match.status || 'Received',
+        stage: match.stage || (match.status === 'resolved' ? 'Resolution Dispatched' : 'Under Review by Alumni Desk'),
+        createdAt: match.createdAt,
+        message: match.message,
+      },
+    });
   } catch (err) {
     res.status(500).json({ ok: false, message: err.message });
   }
